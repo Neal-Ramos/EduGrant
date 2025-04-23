@@ -1,0 +1,248 @@
+[
+  {
+    "id": 1,
+    "name": "Juan Dela Cruz",
+    "age": 20,
+    "course": "BS Information Technology",
+    "yearLevel": "2nd Year",
+    "email": "juan.delacruz@example.com",
+    "contactNumber": "09123456789",
+    "address": "123 Mabini St., Malolos, Bulacan",
+    "guardianName": "Maria Dela Cruz",
+    "guardianContact": "09987654321",
+    "gpa": 1.75,
+    "scholarships": [
+      {
+        "name": "Academic Scholarship",
+        "status": "Pending",
+        "applicationDate": "2025-04-01",
+        "reviewingRequirements": true,
+        "missingRequirements": false
+      },
+      {
+        "name": "Win Gatchalian",
+        "status": "Missing",
+        "applicationDate": "2025-03-15",
+        "reviewingRequirements": false,
+        "missingRequirements": true
+      },
+      {
+        "name": "Farmer's Child Program",
+        "status": "Pending",
+        "applicationDate": "2025-04-03",
+        "reviewingRequirements": false,
+        "missingRequirements": false
+      }
+    ],
+    "notifications": [
+      {
+        "message": "Your application for Athletic Scholarship has been approved.",
+        "date": "2025-03-15",
+        "type": "success",
+        "read": false
+      },
+      {
+        "message": "Your application for Academic Scholarship is still pending.",
+        "date": "2025-04-01",
+        "type": "info",
+        "read": false
+      },
+      {
+        "message": "Your application for Farmer's Child Program is still pending.",
+        "date": "2025-04-03",
+        "type": "info",
+        "read": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Maria Santos",
+    "age": 21,
+    "course": "BS Education",
+    "yearLevel": "3rd Year",
+    "email": "maria.santos@example.com",
+    "contactNumber": "09127894561",
+    "address": "456 Rizal Ave., Baliwag, Bulacan",
+    "guardianName": "Carlos Santos",
+    "guardianContact": "09129874563",
+    "gpa": 1.88,
+    "scholarships": [
+      {
+        "name": "Leadership Grant",
+        "status": "Approved",
+        "applicationDate": "2025-03-28"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Pedro Ramirez",
+    "age": 19,
+    "course": "BS Agriculture",
+    "yearLevel": "1st Year",
+    "email": "pedro.ramirez@example.com",
+    "contactNumber": "09987654321",
+    "address": "789 Mabuhay Rd., San Rafael, Bulacan",
+    "guardianName": "Ana Ramirez",
+    "guardianContact": "09091234567",
+    "gpa": 2.1,
+    "scholarships": [
+      {
+        "name": "Farmer's Child Program",
+        "status": "Pending",
+        "applicationDate": "2025-04-03"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Angelica Cruz",
+    "age": 22,
+    "course": "BS Accountancy",
+    "yearLevel": "4th Year",
+    "email": "angelica.cruz@example.com",
+    "contactNumber": "09097864531",
+    "address": "San Ildefonso, Bulacan",
+    "guardianName": "Melanie Cruz",
+    "guardianContact": "09123411234",
+    "gpa": 1.5,
+    "scholarships": [
+      {
+        "name": "Academic Scholarship",
+        "status": "Rejected",
+        "applicationDate": "2025-02-20"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Luis Gomez",
+    "age": 23,
+    "course": "BS Criminology",
+    "yearLevel": "4th Year",
+    "email": "luis.gomez@example.com",
+    "contactNumber": "09238765290",
+    "address": "Doña Remedios Trinidad, Bulacan",
+    "guardianName": "Ricardo Gomez",
+    "guardianContact": "09432197654",
+    "gpa": 2.25,
+    "scholarships": [
+      {
+        "name": "Government Assistance",
+        "status": "Approved",
+        "applicationDate": "2025-01-12"
+      },
+      {
+        "name": "Barangay Scholarship",
+        "status": "Pending",
+        "applicationDate": "2025-03-01"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Kristine Villanueva",
+    "age": 20,
+    "course": "BS Nursing",
+    "yearLevel": "2nd Year",
+    "email": "kristine.v@example.com",
+    "contactNumber": "09347281910",
+    "address": "Meycauayan, Bulacan",
+    "guardianName": "Linda Villanueva",
+    "guardianContact": "09181726345",
+    "gpa": 1.9,
+    "scholarships": [
+      {
+        "name": "Health Science Grant",
+        "status": "Pending",
+        "applicationDate": "2025-04-05"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Rafael Tan",
+    "age": 18,
+    "course": "BS Computer Engineering",
+    "yearLevel": "1st Year",
+    "email": "rafael.tan@example.com",
+    "contactNumber": "09124567890",
+    "address": "Santa Maria, Bulacan",
+    "guardianName": "Teresa Tan",
+    "guardianContact": "09334567891",
+    "gpa": 1.85,
+    "scholarships": [
+      {
+        "name": "STEM Grant",
+        "status": "Approved",
+        "applicationDate": "2025-02-15"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Clarisse Lim",
+    "age": 19,
+    "course": "BS Psychology",
+    "yearLevel": "2nd Year",
+    "email": "clarisse.lim@example.com",
+    "contactNumber": "09094567123",
+    "address": "Guiguinto, Bulacan",
+    "guardianName": "Patricia Lim",
+    "guardianContact": "09213456789",
+    "gpa": 2.0,
+    "scholarships": [
+      {
+        "name": "Mental Health Advocate Fund",
+        "status": "Pending",
+        "applicationDate": "2025-04-02"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Joseph Reyes",
+    "age": 22,
+    "course": "BS Mechanical Engineering",
+    "yearLevel": "4th Year",
+    "email": "joseph.reyes@example.com",
+    "contactNumber": "09921234567",
+    "address": "San Miguel, Bulacan",
+    "guardianName": "Esther Reyes",
+    "guardianContact": "09176543210",
+    "gpa": 2.3,
+    "scholarships": [
+      {
+        "name": "Engineering Grant",
+        "status": "Rejected",
+        "applicationDate": "2025-03-10"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Bianca Flores",
+    "age": 20,
+    "course": "BS Food Technology",
+    "yearLevel": "3rd Year",
+    "email": "bianca.flores@example.com",
+    "contactNumber": "09382347655",
+    "address": "Pulilan, Bulacan",
+    "guardianName": "Julieta Flores",
+    "guardianContact": "09452347655",
+    "gpa": 1.68,
+    "scholarships": [
+      {
+        "name": "Nutritional Science Fund",
+        "status": "Approved",
+        "applicationDate": "2025-02-27"
+      },
+      {
+        "name": "Academic Scholarship",
+        "status": "Pending",
+        "applicationDate": "2025-04-01"
+      }
+    ]
+  }
+]
