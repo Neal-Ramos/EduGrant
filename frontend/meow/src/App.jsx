@@ -13,11 +13,13 @@ import Application from "./admin/admin-application";
 import Dashboard from "./admin/admin-dashboard";
 import Scholarships from "./admin/admin-scholarships";
 import Announcements from "./admin/admin-announcements";
+import VerificationPage from "./client/verify-email";
 function App() {
   return (
     <Routes>
       {/* CLIENT ROUTES */}
       <Route path="/" element={<ClientLogin />} />
+      <Route path="/verify-email" element={<VerificationPage />} />
       <Route path="/home" element={<ClientHome />}>
         <Route index element={<Navigate to="dashboard" />} />
         <Route path="dashboard" element={<ClientDashboard />} />

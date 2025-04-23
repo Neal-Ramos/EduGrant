@@ -2,12 +2,18 @@ import { Button } from "@/components/ui/button";
 
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
-
+import { Send } from "lucide-react";
 import bascLogo from "../assets/basclogo.png";
 import bascImage from "../assets/BASCjf5989_03 copy.jpg";
 
 import edugrantlogo from "@/assets/greenlogo.png";
-
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
 import {
   Drawer,
@@ -23,15 +29,29 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 function DrawerDemo() {
+  const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+  });
 
   const validateForm = () => {
     let valid = true;
-    let errors = { email: "", password: "" };
+    let errors = {
+      email: "",
+      password: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+    };
 
-    // Email validation
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!email) {
       errors.email = "Email is required";
@@ -41,7 +61,19 @@ function DrawerDemo() {
       valid = false;
     }
 
-    // Password validation
+    if (!firstName) {
+      errors.firstName = "First Name is required";
+      valid = false;
+    }
+    if (!middleName) {
+      errors.middleName = "Middle Name is required";
+      valid = false;
+    }
+    if (!lastName) {
+      errors.lastName = "Last Name is required";
+      valid = false;
+    }
+
     if (!password) {
       errors.password = "Password is required";
       valid = false;
@@ -54,63 +86,389 @@ function DrawerDemo() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Submit form logic here
-      console.log("Form submitted");
+      window.alert("Form submitted");
     }
   };
 
+  const [showOTP, setShowOTP] = useState(false);
+  const [slideLogin, setslideLogin] = useState(true);
+  const [showLogin, setshowLogin] = useState(true);
+  const [showRegister, setshowRegister] = useState(false);
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
         <Button size="lg">Login</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Login Your Account</DrawerTitle>
-            <DrawerDescription>
-              Enter your credentials to access your account.
-            </DrawerDescription>
-          </DrawerHeader>
-          <form onSubmit={handleSubmit}>
-            <div className="p-4 flex gap-3 flex-col">
-              <span className="flex gap-2 flex-col">
-                <Label>Email</Label>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={errors.email ? "border-red-500" : ""}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email}</p>
-                )}
-              </span>
-              <span className="flex gap-2 flex-col">
-                <Label>Password</Label>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={errors.password ? "border-red-500" : ""}
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-sm">{errors.password}</p>
-                )}
-              </span>
-            </div>
-            <DrawerFooter>
-              <Button type="submit">Login</Button>
-              <span className="relative text-center flex justify-center items-center mt-3">
-                <p className="bg-white z-1 p-1 text-xs">OR CONTINUE WITH</p>
-                <div className="absolute border-1 border-black/50 w-full"></div>
-              </span>
-              <Button className="mt-2" variant="outline">
-                Google
-              </Button>
-            </DrawerFooter>
-          </form>
-        </div>
+        {showLogin && (
+          <AnimatePresence mode="wait">
+            {slideLogin && (
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.3 }}
+                className="mx-auto w-full max-w-sm "
+              >
+                <DrawerHeader>
+                  <div className="bg-gray-200 flex justify-center items-center p-[3px] gap-2 rounded-sm">
+                    <span className="w-full text-center bg-white p-1 rounded-xs">
+                      Login
+                    </span>
+                    <span className="w-full text-center p-1 rounded-xs text-black/50">
+                      Verification
+                    </span>
+                  </div>
+                  <DrawerTitle className="mt-3">Login Your Account</DrawerTitle>
+                  <DrawerDescription>
+                    Enter your credentials to access your account.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <form onSubmit={handleSubmit}>
+                  <div className="p-4 flex gap-3 flex-col">
+                    <span className="flex gap-2 flex-col">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className={errors.email ? "border-red-500" : ""}
+                      />
+                      {errors.email && (
+                        <p className="text-red-500 text-sm bg-red-50 p-1">
+                          {errors.email}
+                        </p>
+                      )}
+                    </span>
+                    <span className="flex gap-2 flex-col">
+                      <Label htmlFor="password">Password</Label>
+                      <Input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className={errors.password ? "border-red-500" : ""}
+                      />
+                      {errors.password && (
+                        <p className="text-red-500 text-sm bg-red-50 p-1">
+                          {errors.password}
+                        </p>
+                      )}
+                    </span>
+                  </div>
+                  <DrawerFooter>
+                    <Button
+                      onClick={() => {
+                        setShowOTP(true);
+                        setslideLogin(false);
+                      }}
+                      type="submit"
+                    >
+                      Login
+                    </Button>
+                    <span className="relative text-center flex justify-center items-center mt-3">
+                      <p className="bg-white z-1 p-1 text-xs">
+                        OR CONTINUE WITH
+                      </p>
+                      <div className="absolute border-1 border-black/50 w-full"></div>
+                    </span>
+
+                    <Button className="mt-2" variant="outline">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="30"
+                        height="30"
+                        viewBox="0 0 20 20"
+                        style={{ fill: "green" }}
+                      >
+                        <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path>
+                      </svg>
+                      Google
+                    </Button>
+                    <p className="text-center">
+                      Don't have an account?{" "}
+                      <span
+                        className="underline"
+                        onClick={() => {
+                          setshowLogin(false);
+                          setshowRegister(true);
+                        }}
+                      >
+                        Register here
+                      </span>
+                    </p>
+                  </DrawerFooter>
+                </form>
+              </motion.div>
+            )}
+
+            {showOTP && (
+              <motion.div
+                key="otp"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.3 }}
+                className="mx-auto w-full max-w-sm "
+              >
+                <DrawerHeader>
+                  <div className="bg-gray-200 flex justify-center items-center p-[3px] gap-2 rounded-sm">
+                    <span className="w-full text-center  p-1 rounded-xs text-black/50">
+                      Login
+                    </span>
+                    <span className="w-full text-center bg-white p-1 rounded-xs ">
+                      Verification
+                    </span>
+                  </div>
+                  <DrawerTitle className="flex justify-center items-center flex-col gap-3 mt-3">
+                    <Send size={50} strokeWidth={1.5} />
+                    OTP VERIFICATION
+                  </DrawerTitle>
+                  <DrawerDescription className="text-center">
+                    We sent a code to you gmail.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <form onSubmit={handleSubmit}>
+                  <div className="p-4 flex gap-3 justify-center items-center">
+                    <InputOTP maxLength={6}>
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </div>
+                  <DrawerFooter>
+                    <Button onClick={() => setShowOTP(true)} type="submit">
+                      Login
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowOTP(false);
+                        setslideLogin(true);
+                      }}
+                    >
+                      Back
+                    </Button>
+                  </DrawerFooter>
+                </form>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
+        {showRegister && (
+          <AnimatePresence mode="wait">
+            {slideLogin && (
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.3 }}
+                className="mx-auto w-full max-w-sm "
+              >
+                <DrawerHeader>
+                  <div className="bg-gray-200 flex justify-center items-center p-[3px] gap-2 rounded-sm">
+                    <span className="w-full text-center bg-white p-1 rounded-xs">
+                      Register
+                    </span>
+                    <span className="w-full text-center p-1 rounded-xs text-black/50">
+                      Verification
+                    </span>
+                  </div>
+                  <DrawerTitle className="mt-3">Create An Account</DrawerTitle>
+                  <DrawerDescription>
+                    Enter your details to create a new account.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <form onSubmit={handleSubmit}>
+                  <div className="p-4 flex gap-3 flex-col">
+                    <span className="flex flex-col items-end justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full">
+                        <Label className="w-[40%]" htmlFor="firstName">
+                          First Name
+                        </Label>
+                        <Input
+                          type="text"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          className={errors.firstName ? "border-red-500" : ""}
+                        />
+                      </div>
+                      {errors.firstName && (
+                        <p className="text-red-500 text-xs bg-red-50 p-1">
+                          {errors.firstName}
+                        </p>
+                      )}
+                    </span>
+                    <span className="flex flex-col items-end justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full">
+                        <Label className="w-[40%]" htmlFor="middleName">
+                          Middle Name
+                        </Label>
+                        <Input
+                          type="text"
+                          value={middleName}
+                          onChange={(e) => setMiddleName(e.target.value)}
+                          className={errors.middleName ? "border-red-500" : ""}
+                        />
+                      </div>
+                      {errors.middleName && (
+                        <p className="text-red-500 text-xs bg-red-50 p-1">
+                          {errors.middleName}
+                        </p>
+                      )}
+                    </span>
+                    <span className="flex flex-col items-end justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full">
+                        <Label className="w-[40%]" htmlFor="lastName">
+                          Last Name
+                        </Label>
+                        <Input
+                          type="text"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          className={errors.lastName ? "border-red-500" : ""}
+                        />
+                      </div>
+                      {errors.lastName && (
+                        <p className="text-red-500 text-xs bg-red-50 p-1">
+                          {errors.lastName}
+                        </p>
+                      )}
+                    </span>
+                    <span className="flex flex-col items-end justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full">
+                        <Label className="w-[40%]" htmlFor="email">
+                          Email
+                        </Label>
+                        <Input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className={errors.email ? "border-red-500" : ""}
+                        />
+                      </div>
+                      {errors.email && (
+                        <p className="text-red-500 text-xs bg-red-50 p-1">
+                          {errors.email}
+                        </p>
+                      )}
+                    </span>
+                    <span className="flex flex-col items-end justify-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full">
+                        <Label className="w-[40%]" htmlFor="password">
+                          Password
+                        </Label>
+                        <Input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className={errors.password ? "border-red-500" : ""}
+                        />
+                      </div>
+                      {errors.password && (
+                        <p className="text-red-500 text-xs bg-red-50 p-1">
+                          {errors.password}
+                        </p>
+                      )}
+                    </span>
+                  </div>
+                  <DrawerFooter>
+                    <Button
+                      onClick={() => {
+                        setShowOTP(true);
+                        setslideLogin(false);
+                      }}
+                      type="submit"
+                    >
+                      Login
+                    </Button>
+                    <p className="text-center">
+                      Already have an account?{" "}
+                      <span
+                        className="underline"
+                        onClick={() => {
+                          setshowLogin(true);
+                          setshowRegister(false);
+                        }}
+                      >
+                        Login here
+                      </span>
+                    </p>
+                  </DrawerFooter>
+                </form>
+              </motion.div>
+            )}
+
+            {showOTP && (
+              <motion.div
+                key="otp"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.3 }}
+                className="mx-auto w-full max-w-sm "
+              >
+                <DrawerHeader>
+                  <div className="bg-gray-200 flex justify-center items-center p-[3px] gap-2 rounded-sm">
+                    <span className="w-full text-center  p-1 rounded-xs text-black/50">
+                      Login
+                    </span>
+                    <span className="w-full text-center bg-white p-1 rounded-xs ">
+                      Verification
+                    </span>
+                  </div>
+                  <DrawerTitle className="flex justify-center items-center flex-col gap-3 mt-3">
+                    <Send size={50} strokeWidth={1.5} />
+                    OTP VERIFICATION
+                  </DrawerTitle>
+                  <DrawerDescription className="text-center">
+                    We sent a code to you gmail.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <form onSubmit={handleSubmit}>
+                  <div className="p-4 flex gap-3 justify-center items-center">
+                    <InputOTP maxLength={6}>
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </div>
+                  <DrawerFooter>
+                    <Button onClick={() => setShowOTP(true)} type="submit">
+                      Login
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowOTP(false);
+                        setslideLogin(true);
+                      }}
+                    >
+                      Back
+                    </Button>
+                  </DrawerFooter>
+                </form>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
       </DrawerContent>
     </Drawer>
   );
