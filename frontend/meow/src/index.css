@@ -14,7 +14,8 @@
 .swiper-button-next::after,
 .swiper-button-prev::after {
   color: rgb(0, 147, 64);
-  font-size: 1rem;
+  font-size: 1.5rem !important;
+  font-weight: 700;
 }
 
 @font-face {

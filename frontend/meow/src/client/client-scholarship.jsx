@@ -32,7 +32,7 @@ export default function ClientScholarship() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">General</BreadcrumbLink>
+                <BreadcrumbLink href="#">Navigation</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
@@ -48,7 +48,7 @@ export default function ClientScholarship() {
 
       <main className="w-full px-6 py-10 min-h-screen">
         <section className="mb-10">
-          <h1 className="text-4xl font-bold text-zinc-800 mb-2">
+          <h1 className="text-4xl zxc tracking-[-4px] font-bold text-zinc-800 mb-2">
             Available Scholarships
           </h1>
           <p className="text-gray-600 max-w-2xl text-base">
@@ -59,22 +59,22 @@ export default function ClientScholarship() {
 
         {student ? (
           student.scholars.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
               {student.scholars.map((scholar) => (
                 <Link
                   to={`/home/scholarship/${encodeURIComponent(scholar.name)}`}
                   key={scholar.name}
-                  className="group relative bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-gray-200"
+                  className="group relative bg-white rounded-md overflow-hidden shadow-md hover:shadow-xl transition-all border border-gray-200 p-2"
                 >
-                  <div className="overflow-hidden">
+                  <div className="overflow-hidden rounded-sm">
                     <img
                       src={scholar.image}
                       alt={scholar.name}
-                      className="w-full h-52 object-cover transform transition-transform duration-300 group-hover:scale-105"
+                      className="w-full h-52 object-cover  transform  transition-transform duration-300 group-hover:scale-103"
                     />
                   </div>
 
-                  <div className="p-5">
+                  <div className="p-3">
                     <h3 className="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">
                       {scholar.name}
                     </h3>

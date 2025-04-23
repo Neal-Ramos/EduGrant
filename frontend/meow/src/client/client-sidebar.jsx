@@ -152,7 +152,7 @@ function NavProjects({ projects }) {
           const isActive = location.pathname === item.url;
 
           return (
-            <SidebarMenuItem key={item.name} defaultOpen={isActive}>
+            <SidebarMenuItem key={item.name}>
               <SidebarMenuButton asChild data-active={isActive}>
                 <Link to={item.url}>
                   <item.icon />
@@ -186,7 +186,7 @@ function TeamSwitcher({ teams }) {
       <SidebarMenuItem>
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground bg-sidebar-accent"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-primary-foreground">
             <activeTeam.logo className="size-6" />
