@@ -420,7 +420,7 @@ function DrawerDemo() {
                 <DrawerHeader>
                   <div className="bg-gray-200 flex justify-center items-center p-[3px] gap-2 rounded-sm">
                     <span className="w-full text-center  p-1 rounded-xs text-black/50">
-                      Login
+                      Register
                     </span>
                     <span className="w-full text-center bg-white p-1 rounded-xs ">
                       Verification
