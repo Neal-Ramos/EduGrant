@@ -1,13 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Notification from "./notif";
@@ -21,53 +13,196 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-// ...imports remain unchanged
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ScholarshipDetail() {
   const { id } = useParams();
   const [scholarDetails, setScholarDetails] = useState(null);
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    studentId: "",
-    yearsection: "",
-  });
-
-  const [documents, setDocuments] = useState([{ label: "", file: null }]);
-  const [submitStatus, setSubmitStatus] = useState(null); // success | error | null
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchScholarDetails() {
-      const response = await fetch("/scho.json");
-      const data = await response.json();
-      const scholar = data.scholars.find((s) => s.name === id);
-      setScholarDetails(scholar);
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch("/scho.json");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const data = await response.json();
+        const scholar = data.scholars.find((s) => s.name === id);
+
+        if (!scholar) {
+          throw new Error("Scholarship not found");
+        }
+
+        setScholarDetails(scholar);
+      } catch (err) {
+        setError(err.message);
+        setScholarDetails(null);
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchScholarDetails();
   }, [id]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const [documents, setDocuments] = useState([{ name: "", file: null }]);
+  const handleAddDocument = () => {
+    setDocuments([...documents, { name: "", file: null }]);
+  };
+  const handleDocChange = (index, key, value) => {
+    const updatedDocs = [...documents];
+    updatedDocs[index][key] = value;
+    setDocuments(updatedDocs);
   };
 
-  const handleSubmit = () => {
-    if (formData.firstName && formData.lastName && formData.studentId) {
-      setSubmitStatus("success");
-    } else {
-      setSubmitStatus("error");
+  function BirthdaySelect() {
+    const currentYear = new Date().getFullYear();
+
+    const months = useMemo(
+      () => Array.from({ length: 12 }, (_, index) => index + 1),
+      []
+    );
+
+    const years = useMemo(
+      () =>
+        Array.from(
+          { length: currentYear - 1900 + 1 },
+          (_, index) => currentYear - index
+        ),
+      [currentYear]
+    );
+
+    const [month, setMonth] = useState("");
+    const [day, setDay] = useState("");
+    const [year, setYear] = useState("");
+
+    // Generate days based on the selected month
+    const daysInMonth = useMemo(() => {
+      if (!month) return [];
+      const daysInMonthMap = {
+        1: 31,
+        2:
+          currentYear % 4 === 0 &&
+          (currentYear % 100 !== 0 || currentYear % 400 === 0)
+            ? 29
+            : 28,
+        3: 31,
+        4: 30,
+        5: 31,
+        6: 30,
+        7: 31,
+        8: 31,
+        9: 30,
+        10: 31,
+        11: 30,
+        12: 31,
+      };
+      const days = Array.from(
+        { length: daysInMonthMap[month] },
+        (_, index) => index + 1
+      );
+      return days;
+    }, [month, currentYear]);
+
+    return (
+      <div className="w-full space-y-2">
+        <Label htmlFor="birthday">Birthday</Label>
+        <div className="flex gap-1">
+          {/* Month Select */}
+          <Select value={month} onValueChange={setMonth}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Month" />
+            </SelectTrigger>
+            <SelectContent>
+              {months.map((m) => (
+                <SelectItem key={m} value={m}>
+                  {m}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Date Select */}
+          <Select value={day} onValueChange={setDay}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Date" />
+            </SelectTrigger>
+            <SelectContent>
+              {daysInMonth.map((d) => (
+                <SelectItem key={d} value={d}>
+                  {d}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Year Select */}
+          <Select value={year} onValueChange={setYear}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Year" />
+            </SelectTrigger>
+            <SelectContent>
+              {years.map((y) => (
+                <SelectItem key={y} value={y}>
+                  {y}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    );
+  }
+
+  const [address, setAddress] = useState([]);
+
+  useEffect(() => {
+    async function fetchAddress() {
+      try {
+        const response = await fetch("/setAddress.json");
+        if (!response.ok) {
+          throw new Error("Failed to fetch address");
+        }
+        const data = await response.json();
+        setAddress(data.cities_and_municipalities);
+      } catch (error) {
+        console.error("Error fetching address:", error);
+      }
     }
-  };
 
-  if (!scholarDetails)
-    return <p className="text-center mt-10">Loading details...</p>;
+    fetchAddress();
+  }, []);
+
+  console.log(address);
 
   return (
-    <div className="h-screen">
+    <>
       <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
         <div className="flex items-center gap-3">
           <SidebarTrigger />
@@ -75,7 +210,7 @@ export default function ScholarshipDetail() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">General</BreadcrumbLink>
+                <BreadcrumbLink href="#">Navigation</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
@@ -86,7 +221,7 @@ export default function ScholarshipDetail() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
-                  {scholarDetails.name}
+                  {scholarDetails?.name || "Loading..."}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -95,146 +230,180 @@ export default function ScholarshipDetail() {
         <Notification />
       </header>
 
-      <div className="max-w-5xl mx-auto p-6 bg-zinc-200 shadow-md dark:bg-zinc-900 rounded-2xl mt-10 shadow-md space-y-6">
-        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">
-          {scholarDetails.name}
-        </h1>
-
-        <img
-          src={scholarDetails.requireImage}
-          alt={scholarDetails.name}
-          className="w-full max-h-[300px] object-contain rounded-lg border border-gray-200 dark:border-zinc-700 shadow"
-        />
-
-        <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-          {scholarDetails.details}
-        </p>
-
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md transition">
-                Apply Now
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] bg-white dark:bg-zinc-900 rounded-xl shadow-xl p-6">
-              <DialogHeader>
-                <DialogTitle className="text-lg font-bold text-gray-800 dark:text-white">
-                  Apply for {scholarDetails.name}
-                </DialogTitle>
-              </DialogHeader>
-
-              <div className="grid gap-4">
-                <Input
-                  name="studentId"
-                  placeholder="Student ID"
-                  value={formData.studentId}
-                  onChange={handleChange}
-                />
-                <Input
-                  name="firstName"
-                  placeholder="First Name"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                />
-                <Input
-                  name="middleName"
-                  placeholder="Middle Name"
-                  value={formData.middleName}
-                  onChange={handleChange}
-                />
-                <Input
-                  name="lastName"
-                  placeholder="Last Name"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                />
-                <Input
-                  name="yearsection"
-                  placeholder="Year&Section"
-                  value={formData.yearsection}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="space-y-3 mt-4">
-                <label className="font-semibold text-sm text-gray-700 dark:text-gray-300">
-                  Supporting Documents
-                </label>
-                {documents.map((doc, index) => (
-                  <div key={index} className="flex gap-2 items-center">
-                    <Input
-                      type="text"
-                      placeholder="Document Label"
-                      value={doc.label}
-                      onChange={(e) => {
-                        const updatedDocs = [...documents];
-                        updatedDocs[index].label = e.target.value;
-                        setDocuments(updatedDocs);
-                      }}
-                    />
-                    <Input
-                      type="file"
-                      onChange={(e) => {
-                        const updatedDocs = [...documents];
-                        updatedDocs[index].file = e.target.files[0];
-                        setDocuments(updatedDocs);
-                      }}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() =>
-                        setDocuments(documents.filter((_, i) => i !== index))
-                      }
-                      className="text-red-500"
-                    >
-                      ❌
-                    </Button>
+      <div className="flex items-center justify-center p-5">
+        <Tabs defaultValue="details" className="w-3/4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="details">Scholarship Details</TabsTrigger>
+            <TabsTrigger value="form">Scholarship Form</TabsTrigger>
+          </TabsList>
+          <TabsContent value="details">
+            {loading ? (
+              <p className="text-center mt-10">Loading details...</p>
+            ) : error ? (
+              <p className="text-center mt-10 text-red-500">Error: {error}</p>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle> {scholarDetails.name}</CardTitle>
+                  <CardDescription>{scholarDetails.details}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2 flex items-center justify-center">
+                  <img
+                    src={scholarDetails.requireImage}
+                    alt={scholarDetails.name}
+                    className="h-1/2 w-w-1/2 object-contain rounded-md shadow-lg"
+                  />
+                </CardContent>
+                <CardFooter className="flex justify-end">
+                  <Button>Download Form</Button>
+                </CardFooter>
+              </Card>
+            )}
+          </TabsContent>
+          <TabsContent value="form">
+            <Card>
+              <CardHeader>
+                <CardTitle>Scholarship Form</CardTitle>
+                <CardDescription>
+                  Enter your information to apply scholarship
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                <div className="flex w-full gap-2">
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="firstName">First name</Label>
+                    <Input id="firstName" type="text" />
                   </div>
-                ))}
-                <Button
-                  variant="outline"
-                  className="w-full text-sm"
-                  onClick={() =>
-                    setDocuments([...documents, { label: "", file: null }])
-                  }
-                >
-                  ➕ Add Document
-                </Button>
-              </div>
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="middleName">Middle name</Label>
+                    <Input id="middleName" type="text" />
+                  </div>
+                </div>
+                <div className="flex w-full gap-2">
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="lastName">Last name</Label>
+                    <Input id="lastName" type="text" />
+                  </div>
+                  <div
+                    className="w-full space-y-2 flex justify-center
+                  items-center gap-4 mt-6"
+                  >
+                    <RadioGroup
+                      defaultValue="option-one"
+                      className="flex w-full justify-around"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="ip" id="ip" />
+                        <Label htmlFor="ip">Indigenous People</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="pwd" id="pwd" />
+                        <Label htmlFor="pwd">PWD</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                </div>
+                <div className="flex w-full gap-2 mt-3">
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="lastName">Sex</Label>
+                    <Select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choose" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="bulacan">Female</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <BirthdaySelect />
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="lastName">Contact</Label>
+                    <Input id="lastName" type="text" />
+                  </div>
+                </div>
+                <div className="flex w-full gap-2 mt-3">
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="province">Province</Label>
+                    <Select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Province" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="bulacan">Bulacan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="municipality">Municipality</Label>
+                    <Select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Municipality" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {address.map((meow, index) => (
+                          <SelectItem key={index} value="bulacan">
+                            {meow}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="flex w-full gap-2 mt-3">
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="course">Course</Label>
+                    <Input id="course" type="text" />
+                  </div>
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="year">Year</Label>
+                    <Input id="year" type="text" />
+                  </div>
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="section">Section</Label>
+                    <Input id="section" type="text" />
+                  </div>
+                </div>
+              </CardContent>
 
-              <DialogFooter className="mt-4">
-                <Button
-                  onClick={handleSubmit}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                >
-                  Submit Application
-                </Button>
-              </DialogFooter>
+              <CardHeader>
+                <CardTitle>Documents</CardTitle>
+                <CardDescription>Upload the required documents</CardDescription>
 
-              {submitStatus === "success" && (
-                <p className="text-green-600 text-sm mt-3 text-center animate-pulse">
-                  ✅ Application submitted successfully!
-                </p>
-              )}
-              {submitStatus === "error" && (
-                <p className="text-red-600 text-sm mt-3 text-center">
-                  ⚠️ Please complete all required fields.
-                </p>
-              )}
-            </DialogContent>
-          </Dialog>
-
-          <Button
-            variant="outline"
-            onClick={() => alert("Download your application form.")}
-            className="hover:bg-gray-100 dark:hover:bg-zinc-800 transition"
-          >
-            📥 Download Application Form
-          </Button>
-        </div>
+                <div className="mt-3 flex flex-col gap-4">
+                  {documents.map((doc, index) => (
+                    <div key={index} className="flex flex-col gap-2">
+                      <Label>Document Name</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Document Name"
+                          value={doc.name}
+                          onChange={(e) =>
+                            handleChange(index, "name", e.target.value)
+                          }
+                        />
+                        <Input
+                          type="file"
+                          onChange={(e) =>
+                            handleChange(index, "file", e.target.files[0])
+                          }
+                        />
+                        <Button type="button">Submit</Button>
+                      </div>
+                    </div>
+                  ))}
+                  <Button type="button" onClick={handleAddDocument}>
+                    + Add More
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardFooter>
+                <Button>Apply Now</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>
+    </>
   );
 }

@@ -69,13 +69,13 @@ export default function ClientDashboard() {
   return (
     <>
       <header className="flex bg-green-800 h-16 shrink-0 items-center justify-between gap-2 border-b bg-light-green text-sidebar-foreground px-5 text-white">
-        <div className="flex items-center gap-2 px-3">
+        <div className="flex items-center gap-2 ">
           <SidebarTrigger />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">General</BreadcrumbLink>
+                <BreadcrumbLink href="#">Navigation</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
@@ -111,7 +111,9 @@ export default function ClientDashboard() {
               </span>
               <span>
                 <p> TOTAL</p>
-                <p className="text-5xl">{student?.applications?.length}</p>
+                <p className="text-5xl text-center">
+                  {student?.applications?.length}
+                </p>
               </span>
             </span>
             <span className="p-3 bg-green-200  flex items-center gap-3 shadow-md rounded-md">
@@ -120,7 +122,7 @@ export default function ClientDashboard() {
               </span>
               <span>
                 <p>APPROVED</p>
-                <p className="text-5xl">{approvedCount}</p>
+                <p className="text-5xl text-center">{approvedCount}</p>
               </span>
             </span>
 
@@ -130,7 +132,7 @@ export default function ClientDashboard() {
               </span>
               <span>
                 <p>PENDING</p>
-                <p className="text-5xl">{pendingCount}</p>
+                <p className="text-5xl text-center">{pendingCount}</p>
               </span>
             </span>
             <span className="p-3 bg-red-200  flex items-center gap-3 shadow-md rounded-md">
@@ -139,7 +141,7 @@ export default function ClientDashboard() {
               </span>
               <span>
                 <p>REJECTED</p>
-                <p className="text-5xl"> {rejectedCount}</p>
+                <p className="text-5xl text-center"> {rejectedCount}</p>
               </span>
             </span>
           </div>
