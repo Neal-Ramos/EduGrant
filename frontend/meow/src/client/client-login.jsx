@@ -28,6 +28,9 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 function DrawerDemo() {
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
@@ -41,7 +44,6 @@ function DrawerDemo() {
     middleName: "",
     lastName: "",
   });
-
   const validateForm = () => {
     let valid = true;
     let errors = {
@@ -82,21 +84,121 @@ function DrawerDemo() {
     setErrors(errors);
     return valid;
   };
+  const [loading, setLoading] = useState(false)
 
-  const LoginhandleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      window.alert("LoginForm submitted");
+  const validateFormLogin = () => {
+    let valid = true;
+    let errors = {
+      email: "",
+      password: ""
+    };
+
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!email) {
+      errors.email = "Email is required";
+      valid = false;
+    } else if (!emailRegex.test(email)) {
+      errors.email = "Enter a valid email";
+      valid = false;
     }
+
+    if (!password) {
+      errors.password = "Password is required";
+      valid = false;
+    }
+
+    setErrors(errors);
+    return valid;
+  };
+  const [otp, setOtp] = useState("");
+
+  const handleOtpChange = (value) => {
+    setOtp(value);
   };
 
-  const RegisterhandleSubmit = (e) => {
+  const navigate = useNavigate()
+
+  const handleLoginButton = async (e) => {
+    setLoading(true)
+    e.preventDefault()
+    const data = {userEmail:email, userPassword:password}
+    try {
+      if(validateFormLogin()){
+        console.log(data)
+        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/login`,data,{withCredentials:true})
+        if(res.status === 200){
+          setShowOTP(true);
+          setslideLogin(false);
+          setLoading(false)
+        }
+        setLoading(false)
+      }
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+  const handleOTPVerificationLogin = async () => {
+    setLoading(true)
+    const data = {code:otp, origin:"login", userEmail:email, userPassword:password}
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/codeAuthenticationLogin`,data,{withCredentials:true})
+      if(res.status === 200){
+        console.log(res)
+        navigate("/home")
+        setLoading(false)
+      }
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+  const RegisterhandleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     if (validateForm()) {
-      window.alert("RegisterForm submitted");
+      const data = {firstName:firstName, middleName:middleName, lastName:lastName, userEmail:email, userPassword:password}
+      try {
+        const res =await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/registerAccount`,data)
+        if(res.status === 200){
+          console.log(res)
+          setShowOTP(true);
+          setslideLogin(false);
+          setLoading(false)
+        }
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+        setLoading(false)
+      }
     }
   };
-
+  const handleOTPVerificationRegister = async () => {
+    setLoading(true)
+    const data = {code:otp, origin:"registration", firstName:firstName, middleName:middleName, lastName:lastName, userEmail:email, userPassword:password}
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/codeAuthenticationRegistration`,data)
+      if(res.status === 201){
+        setFirstName("")
+        setMiddleName("")
+        setLastName("")
+        setEmail("")
+        setPassword("")
+        setOtp("")
+        alert(res.data.message)
+        setShowOTP(false)
+        setslideLogin(true)
+        setshowRegister(false);
+        setshowLogin(true);
+        setLoading(false)
+      }
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
   const [showOTP, setShowOTP] = useState(false);
   const [slideLogin, setslideLogin] = useState(true);
   const [showLogin, setshowLogin] = useState(true);
@@ -132,7 +234,7 @@ function DrawerDemo() {
                     Enter your credentials to access your account.
                   </DrawerDescription>
                 </DrawerHeader>
-                <form onSubmit={LoginhandleSubmit}>
+                <form>
                   <div className="p-4 flex gap-3 flex-col">
                     <span className="flex gap-2 flex-col">
                       <Label htmlFor="email">Email</Label>
@@ -165,13 +267,11 @@ function DrawerDemo() {
                   </div>
                   <DrawerFooter>
                     <Button
-                      onClick={() => {
-                        setShowOTP(true);
-                        setslideLogin(false);
-                      }}
+                      onClick={handleLoginButton}
                       type="submit"
+                      disabled={loading}
                     >
-                      Login
+                      {loading ? "Loading..." : "Login"}
                     </Button>
                     <span className="relative text-center flex justify-center items-center mt-3">
                       <p className="bg-white z-1 p-1 text-xs">
@@ -237,7 +337,7 @@ function DrawerDemo() {
                 </DrawerHeader>
                 <div>
                   <div className="p-4 flex gap-3 justify-center items-center">
-                    <InputOTP maxLength={6}>
+                    <InputOTP maxLength={6} onChange={handleOtpChange}>
                       <InputOTPGroup>
                         <InputOTPSlot index={0} />
                         <InputOTPSlot index={1} />
@@ -252,8 +352,8 @@ function DrawerDemo() {
                     </InputOTP>
                   </div>
                   <DrawerFooter>
-                    <Button onClick={() => setShowOTP(true)} type="submit">
-                      Login
+                    <Button onClick={handleOTPVerificationLogin} type="submit" disabled={loading}>
+                      {loading ? "Login" : "Loading..."}
                     </Button>
                     <Button
                       variant="outline"
@@ -390,13 +490,10 @@ function DrawerDemo() {
                   </div>
                   <DrawerFooter>
                     <Button
-                      onClick={() => {
-                        setShowOTP(true);
-                        setslideLogin(false);
-                      }}
+                      disabled={loading}
                       type="submit"
                     >
-                      Register
+                      {loading ? "Loading.." : "Register"}
                     </Button>
                     <p className="text-center">
                       Already have an account?{" "}
@@ -443,9 +540,9 @@ function DrawerDemo() {
                 </DrawerHeader>
                 <div>
                   <div className="p-4 flex gap-3 justify-center items-center">
-                    <InputOTP maxLength={6}>
+                    <InputOTP maxLength={6} value={otp} onChange={handleOtpChange}>
                       <InputOTPGroup>
-                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={0}/>
                         <InputOTPSlot index={1} />
                         <InputOTPSlot index={2} />
                       </InputOTPGroup>
@@ -458,8 +555,8 @@ function DrawerDemo() {
                     </InputOTP>
                   </div>
                   <DrawerFooter>
-                    <Button onClick={() => setShowOTP(true)} type="submit">
-                      Register
+                    <Button onClick={handleOTPVerificationRegister} type="submit" disabled={loading}>
+                      {loading ? "Loading..." : "Register"}
                     </Button>
                     <Button
                       variant="outline"
