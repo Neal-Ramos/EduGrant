@@ -353,7 +353,7 @@ function DrawerDemo() {
                   </div>
                   <DrawerFooter>
                     <Button onClick={handleOTPVerificationLogin} type="submit" disabled={loading}>
-                      {loading ? "Login" : "Loading..."}
+                      {loading ? "Loading..." : "Login"}
                     </Button>
                     <Button
                       variant="outline"

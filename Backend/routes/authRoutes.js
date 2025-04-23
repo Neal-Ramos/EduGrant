@@ -147,15 +147,17 @@ router.post("/codeAuthenticationLogin",async (req, res) => {
             const expiryDate = new Date(row[0].expiryDate).getTime();
             if(expiryDate > Date.now()){
                 const result = await query("SELECT * FROM useraccount WHERE BINARY userEmail = ?", [userEmail])
-                // const userID = result[0].userID
-                // const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "2h"})//expires TOKEN
-                // res.cookie("token", token, {
-                //     httpOnly:true,
-                //     secure:process.env.NODE_ENV === "production",
-                //     sameSite:"strict",
-                //     maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
-                //     path:"/"
-                // })
+                const userID = result[0].userID
+                const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "2h"})//expires TOKEN
+                res.cookie("token", token, {
+                    httpOnly:true,
+                    secure:process.env.NODE_ENV === "production",
+                    sameSite:"strict",
+                    maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
+                    path:"/"
+                })
+                await query("DELETE FROM security_code WHERE receiver = ? AND origin = ?",
+                    [userEmail, origin])
                 const userData = result[0]
                 return res.status(200).json({success:true, message:"Login Success!", userData})
             }
