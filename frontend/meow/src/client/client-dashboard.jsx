@@ -219,7 +219,7 @@ export default function ClientDashboard() {
           </div>
         </div>
 
-        <div className="w-[25%] h-screen sticky top-0 p-2">
+        <div className="fixed md:min-w-0 right-0 md:sticky top-0 md:right-auto min-w-[360px] w-[25%] h-screen p-2 bg-white z-1">
           <h1 className="text-center p-2 zxc tracking-[-0.5px] bg-green-800 text-white font-bold rounded-xs">
             Announcements
           </h1>

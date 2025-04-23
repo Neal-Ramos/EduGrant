@@ -1,6 +1,16 @@
 import * as React from "react";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Notification from "./notif";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
@@ -45,138 +55,100 @@ export default function ClientProfile() {
         </div>
         <Notification />
       </header>
+      <div className="h-full w-full flex justify-center items-start mt-5">
+        <Tabs defaultValue="account" className="w-3/4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="account">Account</TabsTrigger>
+            <TabsTrigger value="password">Password</TabsTrigger>
+          </TabsList>
+          <TabsContent value="account">
+            <Card>
+              <CardHeader>
+                <CardTitle>Account</CardTitle>
+                <CardDescription>
+                  Make changes to your account here. Click save when you're
+                  done.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="bg-white rounded-md shadow-md p-6 max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
+                  {/* Profile Image Section */}
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="relative flex justify-center items-end">
+                      <img
+                        src={
+                          profilePic ||
+                          "https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8="
+                        }
+                        alt="Profile"
+                        className="h-48 w-48 rounded-full object-cover ring-4 ring-indigo-200 hover:scale-105 transition-transform"
+                      />
 
-      <main className="p-6">
-        <div className="bg-white rounded-md shadow-md p-6 max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
-          {/* Profile Image Section */}
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative flex justify-center items-end">
-              <img
-                src={
-                  profilePic ||
-                  "https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8="
-                }
-                alt="Profile"
-                className="h-48 w-48 rounded-full object-cover ring-4 ring-indigo-200 hover:scale-105 transition-transform"
-              />
+                      {/* Hidden file input */}
+                      <input
+                        id="upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleProfileChange}
+                        className="hidden"
+                      />
 
-              {/* Hidden file input */}
-              <input
-                id="upload"
-                type="file"
-                accept="image/*"
-                onChange={handleProfileChange}
-                className="hidden"
-              />
+                      {/* Custom label button */}
+                      <label
+                        htmlFor="upload"
+                        className="absolute  bg-zinc-600 text-white text-sm py-2 px-3 rounded-md shadow-md hover:bg-indigo-700 cursor-pointer transition"
+                      >
+                        Change Photo
+                      </label>
+                    </div>
 
-              {/* Custom label button */}
-              <label
-                htmlFor="upload"
-                className="absolute  bg-zinc-600 text-white text-sm py-2 px-3 rounded-md shadow-md hover:bg-indigo-700 cursor-pointer transition"
-              >
-                Change Photo
-              </label>
-            </div>
+                    <h2 className="font-semibold text-gray-700">
+                      Student ID: 20251001
+                    </h2>
+                  </div>
 
-            <h2 className="font-semibold text-gray-700">
-              Student ID: 20251001
-            </h2>
-          </div>
-
-          {/* Info Section */}
-          <div className="flex-1 space-y-3">
-            <h1 className="text-4xl font-bold text-gray-800">Juan Dela Cruz</h1>
-            <h3 className="text-lg font-medium text-green-600">BSIT - 3A</h3>
-            <p className="text-gray-600">juandelacruz@gmail.com</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-md shadow-md p-6 max-w-5xl mx-auto flex flex-col md:flex-row gap-8 mt-7">
-          <form className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Gender */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Gender
-              </label>
-              <select className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            {/* Date of Birth */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-
-            {/* Contact Number */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Contact Number
-              </label>
-              <input
-                type="tel"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                placeholder="e.g. 09123456789"
-              />
-            </div>
-
-            {/* Address */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Address
-              </label>
-              <input
-                type="text"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                placeholder="Enter your address"
-              />
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                placeholder="Enter password"
-              />
-            </div>
-
-            {/* Change Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Change Password
-              </label>
-              <input
-                type="password"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                placeholder="New password"
-              />
-            </div>
-
-            {/* Submit Button (Optional) */}
-            <div className="md:col-span-2 text-right">
-              <button
-                type="submit"
-                className="mt-4 bg-green-600 text-white py-2 px-6 rounded-md hover:bg-green-700 transition"
-              >
-                Update Profile
-              </button>
-            </div>
-          </form>
-        </div>
-      </main>
+                  {/* Info Section */}
+                  <div className="flex-1 space-y-3">
+                    <h1 className="text-4xl font-bold text-gray-800">
+                      Juan Dela Cruz
+                    </h1>
+                    <h3 className="text-lg font-medium text-green-600">
+                      BSIT - 3A
+                    </h3>
+                    <p className="text-gray-600">juandelacruz@gmail.com</p>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button>Save changes</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          <TabsContent value="password">
+            <Card>
+              <CardHeader>
+                <CardTitle>Password</CardTitle>
+                <CardDescription>
+                  Change your password here. After saving, you'll be logged out.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="current">Current password</Label>
+                  <Input id="current" type="password" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="new">New password</Label>
+                  <Input id="new" type="password" />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button>Save password</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </>
   );
 }
