@@ -83,10 +83,17 @@ function DrawerDemo() {
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const LoginhandleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      window.alert("Form submitted");
+      window.alert("LoginForm submitted");
+    }
+  };
+
+  const RegisterhandleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      window.alert("RegisterForm submitted");
     }
   };
 
@@ -125,7 +132,7 @@ function DrawerDemo() {
                     Enter your credentials to access your account.
                   </DrawerDescription>
                 </DrawerHeader>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={LoginhandleSubmit}>
                   <div className="p-4 flex gap-3 flex-col">
                     <span className="flex gap-2 flex-col">
                       <Label htmlFor="email">Email</Label>
@@ -228,7 +235,7 @@ function DrawerDemo() {
                     We sent a code to you gmail.
                   </DrawerDescription>
                 </DrawerHeader>
-                <form onSubmit={handleSubmit}>
+                <div>
                   <div className="p-4 flex gap-3 justify-center items-center">
                     <InputOTP maxLength={6}>
                       <InputOTPGroup>
@@ -258,7 +265,7 @@ function DrawerDemo() {
                       Back
                     </Button>
                   </DrawerFooter>
-                </form>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -288,7 +295,7 @@ function DrawerDemo() {
                     Enter your details to create a new account.
                   </DrawerDescription>
                 </DrawerHeader>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={RegisterhandleSubmit}>
                   <div className="p-4 flex gap-3 flex-col">
                     <span className="flex flex-col items-end justify-center gap-2">
                       <div className="flex items-center justify-center gap-2 w-full">
@@ -389,7 +396,7 @@ function DrawerDemo() {
                       }}
                       type="submit"
                     >
-                      Login
+                      Register
                     </Button>
                     <p className="text-center">
                       Already have an account?{" "}
@@ -434,7 +441,7 @@ function DrawerDemo() {
                     We sent a code to you gmail.
                   </DrawerDescription>
                 </DrawerHeader>
-                <form onSubmit={handleSubmit}>
+                <div>
                   <div className="p-4 flex gap-3 justify-center items-center">
                     <InputOTP maxLength={6}>
                       <InputOTPGroup>
@@ -452,7 +459,7 @@ function DrawerDemo() {
                   </div>
                   <DrawerFooter>
                     <Button onClick={() => setShowOTP(true)} type="submit">
-                      Login
+                      Register
                     </Button>
                     <Button
                       variant="outline"
@@ -464,7 +471,7 @@ function DrawerDemo() {
                       Back
                     </Button>
                   </DrawerFooter>
-                </form>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -475,14 +482,6 @@ function DrawerDemo() {
 }
 
 export default function ClientLogin() {
-  const [openLogin, setOpenLogin] = useState(false);
-  const [openRegister, setOpenRegister] = useState(false);
-  const [bg, setBg] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showOTP, setShowOTP] = useState(false);
-  const handleSignInClick = () => {
-    setShowOTP(true);
-  };
   return (
     <>
       <div className="h-screen w-full flex flex-col justify-start items-center bg-background rounded-xs gap-5">
@@ -504,7 +503,7 @@ export default function ClientLogin() {
               <li className="font-semibold text-md">How it Works</li>
               <li className="font-semibold text-md">About</li>
               <li>
-                <DrawerDemo />
+                <DrawerDemo>fdfdfdf</DrawerDemo>
               </li>
             </ul>
           </nav>
