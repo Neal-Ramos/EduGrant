@@ -148,7 +148,7 @@ router.post("/codeAuthenticationLogin",async (req, res) => {
             if(expiryDate > Date.now()){
                 const result = await query("SELECT * FROM useraccount WHERE BINARY userEmail = ?", [userEmail])
                 const userID = result[0].userID
-                const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "2h"})//expires TOKEN
+                const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "7d"})//expires TOKEN
                 res.cookie("token", token, {
                     httpOnly:true,
                     secure:process.env.NODE_ENV === "production",
