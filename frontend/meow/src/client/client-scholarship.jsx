@@ -10,7 +10,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Notification from "./notif";
+import Notification from "./breadcrumbs-widget";
 export default function ClientScholarship() {
   const [student, setStudent] = useState(null);
 

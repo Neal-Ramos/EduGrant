@@ -9,7 +9,7 @@ import {
 import { SidebarTrigger } from "../components/ui/sidebar";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import Notification from "./notif";
+import Notification from "./breadcrumbs-widget";
 import { Link } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

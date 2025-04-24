@@ -6,7 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
-import Notification from "./notif";
+import Notification from "./breadcrumbs-widget";
 import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
 import { useEffect, useState } from "react";
@@ -86,7 +86,7 @@ export default function ClientDashboard() {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        
+
         <Notification />
       </header>
 
