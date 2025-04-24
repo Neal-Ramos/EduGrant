@@ -19,6 +19,8 @@ import ScholarshipsArchive from "./admin/admin-scholarships-archive";
 
 import { ThemeProvider } from "./components/ui/darkmode";
 import { Toaster } from "@/components/ui/sonner";
+
+import ProtectedRoutes from "./ProtectedRoutes";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -27,13 +29,15 @@ function App() {
         {/* CLIENT ROUTES */}
         <Route path="/" element={<ClientLogin />} />
         <Route path="/verify-email" element={<VerificationPage />} />
-        <Route path="/home" element={<ClientHome />}>
-          <Route index element={<Navigate to="dashboard" />} />
-          <Route path="dashboard" element={<ClientDashboard />} />
-          <Route path="applications" element={<ClientApplication />} />
-          <Route path="scholarships" element={<ClientScholarship />} />
-          <Route path="scholarship/:id" element={<ScholarshipDetail />} />
-          <Route path="profile" element={<ClientProfile />} />
+        <Route element={<ProtectedRoutes/>}>
+          <Route path="/home" element={<ClientHome />}>
+            <Route index element={<Navigate to="dashboard" />} />
+            <Route path="dashboard" element={<ClientDashboard />} />
+            <Route path="applications" element={<ClientApplication />} />
+            <Route path="scholarships" element={<ClientScholarship />} />
+            <Route path="scholarship/:id" element={<ScholarshipDetail />} />
+            <Route path="profile" element={<ClientProfile />} />
+          </Route>
         </Route>
 
         {/* ADMIN ROUTES */}
