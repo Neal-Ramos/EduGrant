@@ -1,16 +1,27 @@
 import { useState, useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
-import { Button } from "../components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import {
-  Dialog,
-  DialogDescription,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../components/ui/dialog";
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,67 +30,54 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
-import { FixedSizeList as List } from "react-window";
+import { Textarea } from "@/components/ui/textarea";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "../components/ui/label";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Scholarships() {
-  const [scholar, setScholar] = useState([]);
-  const [filteredScholar, setFilteredScholar] = useState([]);
-  const [selectedScholar, setSelectedScholar] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAddOpen, setIsAddOpen] = useState(false);
-  const [filterText, setFilterText] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result); // Set the preview to the file's data URL
-      };
-      reader.readAsDataURL(file); // Read the file as a data URL
-    }
-  };
-
-  useEffect(() => {
-    async function fetchScholar() {
-      const response = await fetch("/meow.json");
-      const data = await response.json();
-      setScholar(data);
-    }
-    fetchScholar();
-  }, []);
-
-  useEffect(() => {
-    const filtered = scholar.filter((s) =>
-      s.name.toLowerCase().includes(filterText.toLowerCase())
-    );
-    setFilteredScholar(filtered);
-  }, [filterText, scholar]);
-
-  function handleViewClick(item) {
-    setSelectedScholar(item);
-    setIsModalOpen(true);
-  }
-
-  // Step 1: State for edit mode
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableScholar, setEditableScholar] = useState(selectedScholar);
-
-  // Step 2: Handle Edit/Save button
-  const handleEditSave = () => {
-    if (isEditing) {
-      // Save changes (you can add logic to save the changes here, e.g., API call)
-      console.log("Saving changes:", editableScholar);
-    }
-    setIsEditing(!isEditing); // Toggle between edit and view mode
-  };
-
-  useEffect(() => {
-    setEditableScholar(selectedScholar); // Reset editableScholar when selectedScholar changes
-  }, [selectedScholar]);
+  const scholarships = [
+    {
+      name: "STEM Scholars Grant",
+      totalApplicants: 120,
+      totalApproved: 45,
+      endDate: "2025-05-30",
+    },
+    {
+      name: "Future Leaders Scholarship",
+      totalApplicants: 200,
+      totalApproved: 80,
+      endDate: "2025-06-15",
+    },
+    {
+      name: "Community Impact Award",
+      totalApplicants: 150,
+      totalApproved: 60,
+      endDate: "2025-05-20",
+    },
+    {
+      name: "Merit-Based Excellence Fund",
+      totalApplicants: 180,
+      totalApproved: 70,
+      endDate: "2025-06-01",
+    },
+    {
+      name: "Diversity & Inclusion Scholarship",
+      totalApplicants: 90,
+      totalApproved: 30,
+      endDate: "2025-05-28",
+    },
+  ];
 
   return (
     <>
@@ -92,7 +90,6 @@ export default function Scholarships() {
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href="#">Scholarship Management</BreadcrumbLink>
               </BreadcrumbItem>
-
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
@@ -103,196 +100,274 @@ export default function Scholarships() {
           </Breadcrumb>
         </div>
       </header>
+      <div className="p-5">
+        <Tabs defaultValue="list">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="list">Active Scholarships</TabsTrigger>
+            <TabsTrigger value="add">Add Scholarship</TabsTrigger>
+            <TabsTrigger value="expired">Archived</TabsTrigger>
+          </TabsList>
+          <TabsContent value="list">
+            <Card>
+              <CardHeader>
+                <CardTitle>Scholarships</CardTitle>
+                <CardDescription>
+                  This are the list of available scholarships
+                </CardDescription>
+              </CardHeader>
+              <CardContent></CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Scholarship Name</TableHead>
+                    <TableHead>Total Applicants</TableHead>
+                    <TableHead>Total Approved</TableHead>
 
-      <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="flex justify-between items-center">
-          <Button className="bg-green-700" onClick={() => setIsAddOpen(true)}>
-            Add Scholarships
-          </Button>
-          <input
-            type="text"
-            placeholder="Search scholarship..."
-            className="border px-3 py-2 rounded-md w-full md:w-1/3 bg-white"
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-          />
-        </div>
+                    <TableHead className="text-right">End Date</TableHead>
+                    <TableHead className="w-[300px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {scholarships.map((scholarship) => (
+                    <TableRow key={scholarship.name}>
+                      <TableCell className="font-medium">
+                        {scholarship.name}
+                      </TableCell>
+                      <TableCell>{scholarship.totalApplicants}</TableCell>
+                      <TableCell>{scholarship.totalApproved}</TableCell>
+                      <TableCell className="text-right">
+                        {scholarship.endDate}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Drawer direction="right">
+                          <DrawerTrigger asChild>
+                            <Button variant="outline">View</Button>
+                          </DrawerTrigger>
+                          <DrawerContent>
+                            <div className="mx-auto w-full max-w-sm">
+                              <Tabs defaultValue="details" className="w-full">
+                                <TabsList className="grid w-full grid-cols-2">
+                                  <TabsTrigger value="details">
+                                    Scholarship Details
+                                  </TabsTrigger>
+                                  <TabsTrigger value="report">
+                                    Scholarship Report
+                                  </TabsTrigger>
+                                </TabsList>
 
-        <div className="overflow-x-auto">
-          <div className="grid grid-cols-2 p-3 font-semibold text-sm border-b bg-green-700 text-white dark:bg-zinc-800 sticky top-0 z-10">
-            <div>Name</div>
-            <div></div>
-          </div>
-          {filteredScholar.length === 0 ? (
-            <p className="text-center p-3">No scholarships found.</p>
-          ) : (
-            <div className="min-w-full text-left border overflow-hidden">
-              <List
-                height={490}
-                itemCount={filteredScholar.length}
-                itemSize={60}
-                width="100%"
-              >
-                {({ index, style }) => {
-                  const item = filteredScholar[index];
-                  return (
-                    <div
-                      style={style}
-                      key={index}
-                      className="grid grid-cols-2 px-3 py-2 text-sm border-b hover:bg-muted transition-colors bg-white"
-                    >
-                      <span className="flex items-center truncate">
-                        {item.name}
-                      </span>
-                      <span
-                        className="flex items-center justify-center text-green-600 hover:underline cursor-pointer"
-                        onClick={() => handleViewClick(item)}
-                      >
-                        View
-                      </span>
-                    </div>
-                  );
-                }}
-              </List>
-            </div>
-          )}
-        </div>
-      </div>
+                                <TabsContent value="details">
+                                  <DrawerHeader>
+                                    <DrawerTitle>
+                                      Scholarship details
+                                    </DrawerTitle>
+                                    <DrawerDescription>
+                                      Can edit and delete
+                                    </DrawerDescription>
+                                  </DrawerHeader>
 
-      {isModalOpen && selectedScholar && (
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle className="text-xl font-semibold text-primary">
-                {selectedScholar.name}
-              </DialogTitle>
-              <DialogDescription>
-                Scholarship Details Overview
-              </DialogDescription>
-            </DialogHeader>
+                                  <div className="p-4 pb-0 space-y-6">
+                                    <Input placeholder="Scholarship name" />
+                                    <Textarea placeholder="Scholarship details" />
+                                    <Input placeholder="Scholarship expiry" />
+                                    <Input placeholder="Scholarship requirements" />
+                                  </div>
 
-            {/* Scholarship Image */}
-            {selectedScholar.banner ? (
-              <div className="mt-4">
-                <img
-                  src={selectedScholar.banner}
-                  alt="Scholarship Banner"
-                  className="w-48 h-48 object-cover rounded-lg shadow-md"
-                />
-              </div>
-            ) : (
-              <div className="mt-4 text-center text-gray-500">
-                No image available
-              </div>
-            )}
+                                  <DrawerFooter className="mt-5">
+                                    <Button>Edit</Button>
+                                    <DrawerClose asChild>
+                                      <Button variant="destructive">
+                                        Delete
+                                      </Button>
+                                    </DrawerClose>
+                                  </DrawerFooter>
+                                </TabsContent>
 
-            {/* Image Upload (visible in edit mode) */}
-            {isEditing && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-muted-foreground">
-                  Upload New Image
-                </label>
-                <input
-                  type="file"
-                  className="mt-1 block w-full text-sm text-gray-500"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </div>
-            )}
+                                <TabsContent value="report">
+                                  <DrawerHeader>
+                                    <DrawerTitle>
+                                      Scholarship REPORT
+                                    </DrawerTitle>
+                                    <DrawerDescription>
+                                      This are the generated report of selected
+                                      scholarship
+                                    </DrawerDescription>
+                                  </DrawerHeader>
 
-            <div className="mt-4 space-y-3 text-sm">
-              <div className="flex">
-                <span className="w-40 font-medium text-muted-foreground">
-                  Details:
-                </span>
-                {isEditing ? (
-                  <textarea
-                    className="w-full text-foreground border p-2 rounded h-45"
-                    value={editableScholar.details}
-                    onChange={(e) =>
-                      setEditableScholar({
-                        ...editableScholar,
-                        details: e.target.value,
-                      })
-                    }
-                  />
-                ) : (
-                  <span className="text-foreground">
-                    {selectedScholar.details}
-                  </span>
-                )}
-              </div>
-            </div>
+                                  <div className="p-4 pb-0 space-y-6">
+                                    <div>
+                                      Scholarship name:{" "}
+                                      <span className="text-xl font-semibold">
+                                        Diwata
+                                      </span>
+                                    </div>
+                                    <div>
+                                      Total Applicants:{" "}
+                                      <span className="text-xl font-semibold">
+                                        354
+                                      </span>
+                                    </div>
+                                    <div>
+                                      Total Approved:{" "}
+                                      <span className="text-xl font-semibold">
+                                        311
+                                      </span>
+                                    </div>
+                                    <div>
+                                      Total Rejected:{" "}
+                                      <span className="text-xl font-semibold">
+                                        43
+                                      </span>
+                                    </div>
+                                    <div>
+                                      Start Date:{" "}
+                                      <span className="text-xl font-semibold">
+                                        02-13-2030
+                                      </span>
+                                    </div>
+                                    <div>
+                                      End Date:{" "}
+                                      <span className="text-xl font-semibold">
+                                        02-30-2050
+                                      </span>
+                                    </div>
+                                  </div>
 
-            <div className="mt-6 flex justify-end">
-              <Button className="bg-green-700" onClick={handleEditSave}>
-                {isEditing ? "Save" : "Edit"}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {isAddOpen && (
-        <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Scholarship</DialogTitle>
-              <DialogDescription>
-                Enter the scholarship name, details, and upload a banner image.
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="flex flex-col mt-3 gap-4">
-              <div>
-                <Label className="mb-1" htmlFor="scholarship-name">
-                  Scholarship Name
-                </Label>
-                <Input id="scholarship-name" className="rounded-none" />
-              </div>
-
-              <div>
-                <Label className="mb-1" htmlFor="scholarship-details">
-                  Details
-                </Label>
-                <textarea
-                  id="scholarship-details"
-                  className="w-full h-32 border px-3 py-2 rounded-none resize-none bg-background text-foreground"
-                  placeholder="Enter scholarship details..."
-                ></textarea>
-              </div>
-
-              <div>
-                <Label className="mb-1" htmlFor="scholarship-banner">
-                  Scholarship Banner
-                </Label>
-                <Input
-                  type="file"
-                  id="scholarship-banner"
-                  accept="image/*"
-                  className="rounded-none"
-                  onChange={handleImageChange}
-                />
-              </div>
-
-              {imagePreview && (
-                <div className="mt-4">
-                  <img
-                    src={imagePreview}
-                    alt="Banner Preview"
-                    className="w-full h-28 object-cover rounded-lg shadow-md"
-                  />
+                                  <DrawerFooter className="mt-5">
+                                    <Button>Download</Button>
+                                    <DrawerClose asChild>
+                                      <Button variant="outline">Close</Button>
+                                    </DrawerClose>
+                                  </DrawerFooter>
+                                </TabsContent>
+                              </Tabs>
+                            </div>
+                          </DrawerContent>
+                        </Drawer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell colSpan={4} className="font-medium">
+                      Total Scholarships
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {scholarships.length}
+                    </TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </Card>
+          </TabsContent>
+          <TabsContent value="add">
+            <Card>
+              <CardHeader>
+                <CardTitle>Add Scholarships</CardTitle>
+                <CardDescription>
+                  Add scholarships on active list
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="curnamerent">Scholarship name</Label>
+                  <Input id="name" type="text" />
                 </div>
-              )}
+                <div className="space-y-1">
+                  <Label htmlFor="curnamerent">Scholarship details</Label>
+                  <Textarea placeholder="Type your message here" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="curnamerent">Scholarship expiry</Label>
+                  <Input id="name" type="text" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="curnamerent">Scholarship Requirements</Label>
+                  <Input id="name" type="text" />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button>Add Scholarship</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          <TabsContent value="expired">
+            <Card>
+              <CardHeader>
+                <CardTitle>Archived Scholarships</CardTitle>
+                <CardDescription>
+                  This are the list of ended scholarships
+                </CardDescription>
+              </CardHeader>
+              <CardContent></CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Scholarship Name</TableHead>
+                    <TableHead>Total Applicants</TableHead>
+                    <TableHead>Total Approved</TableHead>
 
-              <div className="text-right">
-                <Button className="mt-4">Submit</Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+                    <TableHead className="text-right">Date Ended</TableHead>
+                    <TableHead className="w-[300px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {scholarships.map((scholarship) => (
+                    <TableRow key={scholarship.name}>
+                      <TableCell className="font-medium">
+                        {scholarship.name}
+                      </TableCell>
+                      <TableCell>{scholarship.totalApplicants}</TableCell>
+                      <TableCell>{scholarship.totalApproved}</TableCell>
+                      <TableCell className="text-right">
+                        {scholarship.endDate}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Drawer direction="right">
+                          <DrawerTrigger asChild>
+                            <Button variant="outline">View</Button>
+                          </DrawerTrigger>
+                          <DrawerContent>
+                            <div className="mx-auto w-full max-w-sm">
+                              <DrawerHeader>
+                                <DrawerTitle>Archived Scholarship</DrawerTitle>
+                                <DrawerDescription>
+                                  Can View and delete
+                                </DrawerDescription>
+                              </DrawerHeader>
+                              <div className="p-4 pb-0 space-y-6">
+                                <Input placeholder="Scholarship name" />
+                                <Textarea placeholder="Scholarship details" />
+                                <Input placeholder="Scholarship expiry" />
+                                <Input placeholder="Scholarship requiirements" />
+                              </div>
+                              <DrawerFooter className="mt-5">
+                                <DrawerClose asChild>
+                                  <Button variant="destructive">Delete</Button>
+                                </DrawerClose>
+                              </DrawerFooter>
+                            </div>
+                          </DrawerContent>
+                        </Drawer>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell colSpan={4} className="font-medium">
+                      Total Archived Scholarships
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {scholarships.length}
+                    </TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </>
   );
 }

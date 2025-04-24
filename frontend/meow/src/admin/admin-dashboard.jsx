@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
+import { FileBarChart2, Users2 } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -30,6 +31,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
 
 import { CheckCheck, GraduationCap, Layers, Timer, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
   const applications = [
@@ -91,8 +93,8 @@ export default function Dashboard() {
         className="flex justify-center
       gap-2"
       >
-        <div className="w-3/4p-3 flex flex-col gap-5 justify-between">
-          <div className="grid grid-cols-4 text-center p-2 text-left zxc gap-5 tracking-[-2px]">
+        <div className="w-3/4p-3 flex flex-col gap-0 justify-between">
+          <div className="grid grid-cols-4 text-center p-2 text-left zxc gap-3 tracking-[-2px]">
             <span className="p-3 bg-blue-100 rounded-md flex items-center gap-3">
               <span className="bg-blue-300 p-3 rounded-md">
                 <Layers size={44} absoluteStrokeWidth />
@@ -126,7 +128,7 @@ export default function Dashboard() {
                 <GraduationCap size={44} absoluteStrokeWidth />
               </span>
               <span>
-                <p>ACTIVE SCHOLAR</p>
+                <p className="whitespace-nowrap">ACTIVE SCHOLAR</p>
                 <p className="text-5xl">0</p>
               </span>
             </span>
@@ -187,13 +189,40 @@ export default function Dashboard() {
             </Pagination>
           </div>
         </div>
-        <div className="w-1/4 flex flex-col bg-green-800 h-[calc(100vh-65px)] px-0.5 gap-0.5">
-          <div className="h-3/4  bg-white"></div>
+        <div className="w-1/4 flex flex-col h-[calc(100vh-65px)] px-1 py-1 gap-1">
+          <div className="h-1/2 bg-white rounded shadow p-4 flex flex-col justify-center items-center">
+            <h2 className="text-xl font-semibold text-green-800">
+              Add Announcements
+            </h2>
+            <p className="text-sm text-gray-600 mt-2 text-center">
+              Overview of scholarship announcements
+            </p>
+          </div>
 
-          
-          <div className="h-1/2 bg-green-800">
-            <div className="h-full bg-white"></div>
-            <div className="h-full bg-white"></div>
+          <div className="h-1/2  flex flex-col justify-center items-center gap-1">
+            <div className="w-full h-full bg-white rounded shadow p-4 flex flex-col items-start gap-3">
+              <div className="flex items-center gap-2">
+                <FileBarChart2 size={55} strokeWidth={1} className="" />
+                <h1 className="text-lg font-semibold zxc tracking-[-2px]">
+                  Scholarships Report
+                </h1>
+              </div>
+              <Button variant="default" className="w-full">
+                Generate
+              </Button>
+            </div>
+
+            <div className="w-full h-full bg-white rounded shadow p-4 flex flex-col items-start gap-3">
+              <div className="flex items-center gap-2">
+                <Users2 size={55} strokeWidth={1} className="text-green-800" />
+                <h1 className="text-lg font-semibold zxc tracking-[-2px]">
+                  Applicants Report
+                </h1>
+              </div>
+              <Button variant="default" className="w-full">
+                Generate
+              </Button>
+            </div>
           </div>
         </div>
       </div>
