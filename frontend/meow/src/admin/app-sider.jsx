@@ -78,7 +78,7 @@ const data = {
       title: "Scholarships",
       url: "/admin-home/scholarships",
       icon: ListOrdered,
-      isActive: true,
+ 
     },
     {
       title: "Applications",
@@ -153,7 +153,7 @@ function NavProjects({ projects }) {
           const isActive = location.pathname === item.url;
 
           return (
-            <SidebarMenuItem key={item.name} defaultOpen={isActive}>
+            <SidebarMenuItem key={item.name} >
               <SidebarMenuButton asChild data-active={isActive}>
                 <Link to={item.url}>
                   <item.icon />
