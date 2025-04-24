@@ -77,7 +77,7 @@ const data = {
       title: "Scholarships",
       url: "/home/scholarships",
       icon: ListOrdered,
-      isActive: true,
+  
     },
     {
       title: "My Applications",

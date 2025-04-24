@@ -25,14 +25,13 @@ export default function ClientScholarship() {
 
   return (
     <>
-      <header className="w-full flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
+      <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
         <div className="flex items-center gap-3">
           <SidebarTrigger />
-          <Separator orientation="vertical" className="h-4" />
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Navigation</BreadcrumbLink>
+                Navigation
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>

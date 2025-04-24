@@ -8,6 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,16 +45,15 @@ export default function ClientProfile() {
       <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
         <div className="flex items-center gap-3">
           <SidebarTrigger />
-          <Separator orientation="vertical" className="h-4" />
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">General</BreadcrumbLink>
+                Navigation
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
-                  Student Profile
+                  Profile
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -63,59 +69,100 @@ export default function ClientProfile() {
           </TabsList>
           <TabsContent value="account">
             <Card>
-              <CardHeader>
-                <CardTitle>Account</CardTitle>
-                <CardDescription>
-                  Make changes to your account here. Click save when you're
-                  done.
-                </CardDescription>
-              </CardHeader>
               <CardContent className="space-y-2">
-                <div className="bg-white rounded-md shadow-md p-6 max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
-                  {/* Profile Image Section */}
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="relative flex justify-center items-end">
-                      <img
-                        src={
-                          profilePic ||
-                          "https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8="
-                        }
-                        alt="Profile"
-                        className="h-48 w-48 rounded-full object-cover ring-4 ring-indigo-200 hover:scale-105 transition-transform"
-                      />
-
-                      {/* Hidden file input */}
-                      <input
-                        id="upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleProfileChange}
-                        className="hidden"
-                      />
-
-                      {/* Custom label button */}
-                      <label
-                        htmlFor="upload"
-                        className="absolute  bg-zinc-600 text-white text-sm py-2 px-3 rounded-md shadow-md hover:bg-indigo-700 cursor-pointer transition"
-                      >
-                        Change Photo
-                      </label>
-                    </div>
-
-                    <h2 className="font-semibold text-gray-700">
-                      Student ID: 20251001
-                    </h2>
+                <div className="flex flex-col items-center">
+                  <div className="relative flex justify-center items-end">
+                    <img
+                      src={
+                        profilePic ||
+                        "https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8="
+                      }
+                      alt="Profile"
+                      className="h-48 w-48 rounded-full object-cover ring-4 ring-green-800 hover:scale-105 transition-transform"
+                    />
+                    <input
+                      id="upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProfileChange}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="upload"
+                      className="absolute  text-white text-sm py-2 px-3 rounded-md shadow-md bg-green-800 hover:bg-green-700 cursor-pointer transition"
+                    >
+                      Change Photo
+                    </label>
                   </div>
 
-                  {/* Info Section */}
-                  <div className="flex-1 space-y-3">
-                    <h1 className="text-4xl font-bold text-gray-800">
-                      Juan Dela Cruz
-                    </h1>
-                    <h3 className="text-lg font-medium text-green-600">
-                      BSIT - 3A
-                    </h3>
-                    <p className="text-gray-600">juandelacruz@gmail.com</p>
+                  <h2 className="font-semibold text-black mt-5 text-2xl">
+                    2022000510
+                  </h2>
+                  <h2 className="font-semibold text-black text-4xl">
+                    Jerome L. Tecson
+                  </h2>
+                  <h2 className="font-semibold text-black/50">
+                    jerometecson@gmail.com
+                  </h2>
+                  <div className="w-full flex flex-col gap-4 mt-20">
+                    <div className=" w-full">
+                      <div className="flex gap-3">
+                        <div className="w-full">
+                          <Label></Label>
+                          <Select>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Gender" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="male">Male</SelectItem>
+                              <SelectItem value="bulacan">Female</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="w-full flex gap-2">
+                          <Label></Label>
+                          <Select>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Month" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="male">Male</SelectItem>
+                              <SelectItem value="bulacan">Female</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Select>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Day" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="male">Male</SelectItem>
+                              <SelectItem value="bulacan">Female</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Select>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Year" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="male">Male</SelectItem>
+                              <SelectItem value="bulacan">Female</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className=" w-full">
+                      <Label></Label>
+                      <Input placeholder="Contact Number" />
+                    </div>
+                    <div className=" w-full">
+                      <Label></Label>
+                      <Input placeholder="Address" />
+                    </div>
+                    <div className=" w-full">
+                      <Label></Label>
+                      <Input />
+                    </div>
                   </div>
                 </div>
               </CardContent>

@@ -3,6 +3,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import { ModeToggle } from "./dark-light-toggle";
 import { Bell, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -52,6 +53,7 @@ export default function Notification() {
           </div>
         </PopoverContent>
       </Popover>
+      <ModeToggle />
     </div>
   );
 }

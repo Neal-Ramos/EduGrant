@@ -14,31 +14,35 @@ import Dashboard from "./admin/admin-dashboard";
 import Scholarships from "./admin/admin-scholarships";
 import Announcements from "./admin/admin-announcements";
 import VerificationPage from "./client/verify-email";
+
+import { ThemeProvider } from "./components/ui/darkmode";
 function App() {
   return (
-    <Routes>
-      {/* CLIENT ROUTES */}
-      <Route path="/" element={<ClientLogin />} />
-      <Route path="/verify-email" element={<VerificationPage />} />
-      <Route path="/home" element={<ClientHome />}>
-        <Route index element={<Navigate to="dashboard" />} />
-        <Route path="dashboard" element={<ClientDashboard />} />
-        <Route path="applications" element={<ClientApplication />} />
-        <Route path="scholarships" element={<ClientScholarship />} />
-        <Route path="scholarship/:id" element={<ScholarshipDetail />} />
-        <Route path="profile" element={<ClientProfile />} />
-      </Route>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Routes>
+        {/* CLIENT ROUTES */}
+        <Route path="/" element={<ClientLogin />} />
+        <Route path="/verify-email" element={<VerificationPage />} />
+        <Route path="/home" element={<ClientHome />}>
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<ClientDashboard />} />
+          <Route path="applications" element={<ClientApplication />} />
+          <Route path="scholarships" element={<ClientScholarship />} />
+          <Route path="scholarship/:id" element={<ScholarshipDetail />} />
+          <Route path="profile" element={<ClientProfile />} />
+        </Route>
 
-      {/* ADMIN ROUTES */}
-      <Route path="/admin-login" element={<LoginAdmin />} />
-      <Route path="/admin-home" element={<Home />}>
-        <Route index element={<Navigate to="dashboard" />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="applications" element={<Application />} />
-        <Route path="scholarships" element={<Scholarships />} />
-        <Route path="announcements" element={<Announcements />} />
-      </Route>
-    </Routes>
+        {/* ADMIN ROUTES */}
+        <Route path="/admin-login" element={<LoginAdmin />} />
+        <Route path="/admin-home" element={<Home />}>
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="applications" element={<Application />} />
+          <Route path="scholarships" element={<Scholarships />} />
+          <Route path="announcements" element={<Announcements />} />
+        </Route>
+      </Routes>
+    </ThemeProvider>
   );
 }
 

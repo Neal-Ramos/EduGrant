@@ -10,6 +10,7 @@ import Notification from "./notif";
 import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
 import { useEffect, useState } from "react";
+
 import {
   CheckCheck,
   GraduationCap,
@@ -68,43 +69,43 @@ export default function ClientDashboard() {
 
   return (
     <>
-      <header className="flex bg-green-800 h-16 shrink-0 items-center justify-between gap-2 border-b bg-light-green text-sidebar-foreground px-5 text-white">
-        <div className="flex items-center gap-2 ">
+      <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
+        <div className="flex items-center gap-3">
           <SidebarTrigger />
-          <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Navigation</BreadcrumbLink>
+                Navigation
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                <BreadcrumbPage className="text-white">
+                  Dashboard
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        <div>
-          <Notification />
-        </div>
+        
+        <Notification />
       </header>
 
       <div className="flex gap-2">
         <div className="w-[calc(100%-25%)]">
-          <div className="p-3">
+          <div className="p-3 flex justify-between items-center">
             <div className="text-4xl zxc tracking-[-5px]">WELCOME JEROME!</div>
             <span className="flex gap-3 mt-3">
-              <p className="flex items-center gap-1.5 border py-2 px-3 rounded-xs bg-green-800 text-white">
-                <SquarePen size={20} />
+              <p className="flex items-center gap-1.5 border py-2 px-3 rounded-md bg-green-800 text-white text-sm">
+                <SquarePen size={18} />
                 Start New Application
               </p>
-              <p className="flex items-center gap-1.5 border py-2 px-3  rounded-xs">
+              <p className="flex items-center gap-1.5 border py-2 px-3  rounded-md  text-sm">
                 <FileChartColumn size={20} />
                 Track Application Status
               </p>
             </span>
           </div>
-          <div className=" z-10 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-2 text-left zxc gap-2  tracking-[-2px]">
+          <div className=" z-10 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-2 text-left zxc gap-3  tracking-[-2px] mt-3">
             <span className="p-3 bg-blue-200  flex items-center gap-3 shadow-md rounded-md">
               <span className="bg-blue-400 text-white p-3 rounded-md">
                 <Layers size={44} absoluteStrokeWidth />
@@ -116,7 +117,7 @@ export default function ClientDashboard() {
                 </p>
               </span>
             </span>
-            <span className="p-3 bg-green-200  flex items-center gap-3 shadow-md rounded-md">
+            <span className="p-3 bg-green-200  flex items-center gap-3 shadow-sm rounded-md">
               <span className="bg-green-400 text-white p-3 rounded-md">
                 <CheckCheck size={44} absoluteStrokeWidth />
               </span>
@@ -126,7 +127,7 @@ export default function ClientDashboard() {
               </span>
             </span>
 
-            <span className="p-3 bg-amber-200  flex items-center gap-3 shadow-md rounded-md">
+            <span className="p-3 bg-amber-200  flex items-center gap-3 shadow-sm rounded-md">
               <span className="bg-amber-400 text-white p-3 rounded-md">
                 <Timer size={44} absoluteStrokeWidth />
               </span>
@@ -135,7 +136,7 @@ export default function ClientDashboard() {
                 <p className="text-5xl text-center">{pendingCount}</p>
               </span>
             </span>
-            <span className="p-3 bg-red-200  flex items-center gap-3 shadow-md rounded-md">
+            <span className="p-3 bg-red-200  flex items-center gap-3 shadow-sm rounded-md">
               <span className="bg-red-400 p-3 text-white rounded-md">
                 <X size={44} absoluteStrokeWidth />
               </span>
@@ -151,7 +152,7 @@ export default function ClientDashboard() {
               loop={true}
               modules={[Navigation]}
               navigation={true}
-              className="h-50 w-full bg-zinc-900 relative rounded-lg shadow-md"
+              className="h-50 w-full bg-zinc-900 relative rounded-lg shadow-sm"
             >
               <SwiperSlide>
                 <div className="relative h-full flex justify-center items-center  ">
