@@ -6,8 +6,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ChevronsUpDown } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -16,6 +18,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -26,6 +33,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "../components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
@@ -36,32 +55,66 @@ export default function ScholarshipsReport() {
       totalApplicants: 120,
       totalApproved: 45,
       endDate: "2025-05-30",
+      approvedStudents: [
+        {
+          name: "Alice Johnson",
+          course: "Biology",
+          approvedDate: "2025-04-10",
+        },
+        {
+          name: "Brian Lee",
+          course: "Computer Science",
+          approvedDate: "2025-04-12",
+        },
+        {
+          name: "Clara Smith",
+          course: "Engineering",
+          approvedDate: "2025-04-14",
+        },
+        {
+          name: "David Kim",
+          course: "Mathematics",
+          approvedDate: "2025-04-15",
+        },
+        { name: "Ella Brown", course: "Physics", approvedDate: "2025-04-17" },
+      ],
     },
     {
       name: "Future Leaders Scholarship",
       totalApplicants: 200,
       totalApproved: 80,
       endDate: "2025-06-15",
-    },
-    {
-      name: "Community Impact Award",
-      totalApplicants: 150,
-      totalApproved: 60,
-      endDate: "2025-05-20",
-    },
-    {
-      name: "Merit-Based Excellence Fund",
-      totalApplicants: 180,
-      totalApproved: 70,
-      endDate: "2025-06-01",
-    },
-    {
-      name: "Diversity & Inclusion Scholarship",
-      totalApplicants: 90,
-      totalApproved: 30,
-      endDate: "2025-05-28",
+      approvedStudents: [
+        {
+          name: "James Carter",
+          course: "Political Science",
+          approvedDate: "2025-04-18",
+        },
+        {
+          name: "Maria Gonzales",
+          course: "Business",
+          approvedDate: "2025-04-19",
+        },
+        {
+          name: "Noah Patel",
+          course: "International Relations",
+          approvedDate: "2025-04-20",
+        },
+        {
+          name: "Olivia Wang",
+          course: "Economics",
+          approvedDate: "2025-04-21",
+        },
+        {
+          name: "Liam Davis",
+          course: "Public Administration",
+          approvedDate: "2025-04-22",
+        },
+      ],
     },
   ];
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
   return (
     <>
       <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
@@ -95,16 +148,33 @@ export default function ScholarshipsReport() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Scholarship Name</TableHead>
-                <TableHead>Total Applicants</TableHead>
-                <TableHead>Total Approved</TableHead>
-
-                <TableHead className="text-right">Date Ended</TableHead>
-                <TableHead className="w-[300px]"></TableHead>
+                <TableHead>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="w-[200px] justify-between"
+                      >
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Search framework..." />
+                        <CommandList>
+                          <CommandEmpty>No framework found.</CommandEmpty>
+                          <CommandGroup></CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {scholarships.map((scholarship) => (
+              {/* {scholarships.map((scholarship) => (
                 <TableRow key={scholarship.name}>
                   <TableCell className="font-medium">
                     {scholarship.name}
@@ -118,7 +188,7 @@ export default function ScholarshipsReport() {
                     <Button>View</Button>
                   </TableCell>
                 </TableRow>
-              ))}
+              ))} */}
             </TableBody>
             <TableFooter>
               <TableRow>
