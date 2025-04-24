@@ -67,7 +67,14 @@ export default function Application() {
   }, []);
   console.log(student);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [activeReject, setActiveReject] = useState(null);
+  const toggleText = (id) => {
+    setTextVisible((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   return (
     <>
       <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
@@ -127,37 +134,50 @@ export default function Application() {
             </CardContent>
             <CardFooter className="">
               <Sheet>
-                <SheetTrigger>
-                  <Button className="w-full">Review Student</Button>
+                <SheetTrigger className="bg-green-800 px-3 py-2 font-semibold text-sm rounded-md text-white">
+                  Review Student
                 </SheetTrigger>
                 <DrawerContent>
                   <div className="mx-auto w-full max-w-md">
                     <SheetContent>
                       <SheetHeader>
-                        <SheetTitle>{meow.name}</SheetTitle>
-                        <SheetDescription>{meow.email}</SheetDescription>
+                        <SheetTitle className="text-center">
+                          {meow.name}
+                        </SheetTitle>
+                        <SheetDescription className="text-center">
+                          {meow.email}
+                        </SheetDescription>
                       </SheetHeader>
-                      <h1>Scholarships Applied</h1>
-                      <div className="flex gap-3 p-3 justify-center items-center">
+
+                      <div className="flex gap-3 p-5 justify-center items-center">
                         {meow.scholarships.map((arf) => (
-                          <div className="p-3 flex flex-col gap-5 border">
+                          <div className="p-3 flex flex-col gap-5">
                             <h1>{arf.name}</h1>
                             <div className="font-semibold">
                               NO DOCUMENTS FOUND ...
                             </div>
                             <div className="grid grid-cols-3 gap-2">
                               <Button className="w-full">Approved</Button>
-                              <Button variant="destructive" className="w-full">
+
+                              <Button className="w-full">Missing</Button>
+                              <Button
+                                onClick={() =>
+                                  setActiveReject(`${meow.id}-${arf.name}`)
+                                }
+                                variant="destructive"
+                                className="w-full"
+                              >
                                 Reject
                               </Button>
-                              <Button className="w-full bg-amber-600">
-                                Missing
-                              </Button>
                             </div>
-                            <Textarea placeholder="Enter your message here ..." />
-                            <div className="flex justify-end">
-                              <Button>Send</Button>
-                            </div>
+                            {activeReject === `${meow.id}-${arf.name}` && (
+                              <div className="space-y-2">
+                                <Textarea placeholder="Enter your message here ..." />
+                                <div className="flex justify-end">
+                                  <Button>Send</Button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
