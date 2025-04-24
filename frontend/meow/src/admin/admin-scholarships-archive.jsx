@@ -84,58 +84,59 @@ export default function ScholarshipsArchive() {
           </Breadcrumb>
         </div>
       </header>
+      <div className="p-5">
+        <Card>
+          <CardHeader>
+            <CardTitle>Archived Scholarships</CardTitle>
+            <CardDescription>
+              This are the list of ended scholarships
+            </CardDescription>
+          </CardHeader>
+          <CardContent></CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Scholarship Name</TableHead>
+                <TableHead>Total Applicants</TableHead>
+                <TableHead>Total Approved</TableHead>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Archived Scholarships</CardTitle>
-          <CardDescription>
-            This are the list of ended scholarships
-          </CardDescription>
-        </CardHeader>
-        <CardContent></CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Scholarship Name</TableHead>
-              <TableHead>Total Applicants</TableHead>
-              <TableHead>Total Approved</TableHead>
-
-              <TableHead className="text-right">Date Ended</TableHead>
-              <TableHead className="w-[300px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {scholarships.map((scholarship) => (
-              <TableRow key={scholarship.name}>
-                <TableCell className="font-medium">
-                  {scholarship.name}
-                </TableCell>
-                <TableCell>{scholarship.totalApplicants}</TableCell>
-                <TableCell>{scholarship.totalApproved}</TableCell>
-                <TableCell className="text-right">
-                  {scholarship.endDate}
+                <TableHead className="text-right">Date Ended</TableHead>
+                <TableHead className="w-[300px]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {scholarships.map((scholarship) => (
+                <TableRow key={scholarship.name}>
+                  <TableCell className="font-medium">
+                    {scholarship.name}
+                  </TableCell>
+                  <TableCell>{scholarship.totalApplicants}</TableCell>
+                  <TableCell>{scholarship.totalApproved}</TableCell>
+                  <TableCell className="text-right">
+                    {scholarship.endDate}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Button>View</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="font-semibold tracking-[-2px] zxc"
+                >
+                  Total Archived Scholarships
                 </TableCell>
                 <TableCell className="text-center">
-                  <Button>View</Button>
+                  {scholarships.length}
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell
-                colSpan={4}
-                className="font-semibold tracking-[-2px] zxc"
-              >
-                Total Archived Scholarships
-              </TableCell>
-              <TableCell className="text-center">
-                {scholarships.length}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </Card>
+            </TableFooter>
+          </Table>
+        </Card>
+      </div>
     </>
   );
 }

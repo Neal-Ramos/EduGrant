@@ -110,7 +110,7 @@ export default function Scholarships() {
           <TabsContent value="list">
             <Card>
               <CardHeader>
-                <CardTitle>Scholarships</CardTitle>
+                <CardTitle >Scholarships</CardTitle>
                 <CardDescription>
                   This are the list of available scholarships
                 </CardDescription>
