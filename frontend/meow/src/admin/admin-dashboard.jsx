@@ -30,7 +30,14 @@ import {
 import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
 
-import { CheckCheck, GraduationCap, Layers, Timer, X } from "lucide-react";
+import {
+  CheckCheck,
+  GraduationCap,
+  Layers,
+  Timer,
+  X,
+  Plus,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
@@ -93,7 +100,7 @@ export default function Dashboard() {
         className="flex justify-center
       gap-2"
       >
-        <div className="w-3/4p-3 flex flex-col gap-0 justify-between">
+        <div className="w-3/4 p-3 flex flex-col gap-0 justify-between ">
           <div className="grid grid-cols-4 text-center p-2 text-left zxc gap-3 tracking-[-2px]">
             <span className="p-3 bg-blue-100 rounded-md flex items-center gap-3">
               <span className="bg-blue-300 p-3 rounded-md">
@@ -101,35 +108,35 @@ export default function Dashboard() {
               </span>
               <span>
                 <p> TOTAL</p>
-                <p className="text-5xl">0</p>
+                <p className="text-4xl">0</p>
               </span>
             </span>
             <span className="p-3  bg-green-200 rounded-md flex items-center gap-3">
               <span className="bg-green-400 p-3 rounded-md">
-                <CheckCheck size={44} absoluteStrokeWidth />
+                <CheckCheck size={40} absoluteStrokeWidth />
               </span>
               <span>
                 <p>APPROVED</p>
-                <p className="text-5xl">0</p>
+                <p className="text-4xl">0</p>
               </span>
             </span>
 
             <span className="p-3  bg-amber-200 rounded-md flex items-center gap-3">
               <span className="bg-amber-400 p-3 rounded-md">
-                <Timer size={44} absoluteStrokeWidth />
+                <Timer size={40} absoluteStrokeWidth />
               </span>
               <span>
                 <p>PENDING</p>
-                <p className="text-5xl">0</p>
+                <p className="text-4xl">0</p>
               </span>
             </span>
-            <span className="p-3  bg-purple-200 rounded-md flex items-center gap-3">
+            <span className="p-3 bg-purple-200 rounded-md flex items-center gap-3">
               <span className="bg-purple-400 p-3 rounded-md">
-                <GraduationCap size={44} absoluteStrokeWidth />
+                <GraduationCap size={40} absoluteStrokeWidth />
               </span>
               <span>
-                <p className="whitespace-nowrap">ACTIVE SCHOLAR</p>
-                <p className="text-5xl">0</p>
+                <p className="whitespace-nowrap">ACTIVE</p>
+                <p className="text-4xl">0</p>
               </span>
             </span>
           </div>
@@ -191,7 +198,8 @@ export default function Dashboard() {
         </div>
         <div className="w-1/4 flex flex-col h-[calc(100vh-65px)] px-1 py-1 gap-1">
           <div className="h-1/2 bg-white rounded shadow p-4 flex flex-col justify-center items-center">
-            <h2 className="text-xl font-semibold text-green-800">
+            <h2 className="text-xl font-semibold text-green-800 flex items-center">
+              <Plus />
               Add Announcements
             </h2>
             <p className="text-sm text-gray-600 mt-2 text-center">

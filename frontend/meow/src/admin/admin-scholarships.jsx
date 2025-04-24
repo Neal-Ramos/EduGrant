@@ -110,154 +110,155 @@ export default function Scholarships() {
           <TabsContent value="list">
             <Card>
               <CardHeader>
-                <CardTitle >Scholarships</CardTitle>
+                <CardTitle>Scholarships</CardTitle>
                 <CardDescription>
                   This are the list of available scholarships
                 </CardDescription>
               </CardHeader>
-              <CardContent></CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Scholarship Name</TableHead>
-                    <TableHead>Total Applicants</TableHead>
-                    <TableHead>Total Approved</TableHead>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Scholarship Name</TableHead>
+                      <TableHead>Total Applicants</TableHead>
+                      <TableHead>Total Approved</TableHead>
 
-                    <TableHead className="text-right">End Date</TableHead>
-                    <TableHead className="w-[300px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {scholarships.map((scholarship) => (
-                    <TableRow key={scholarship.name}>
-                      <TableCell className="font-medium">
-                        {scholarship.name}
-                      </TableCell>
-                      <TableCell>{scholarship.totalApplicants}</TableCell>
-                      <TableCell>{scholarship.totalApproved}</TableCell>
-                      <TableCell className="text-right">
-                        {scholarship.endDate}
+                      <TableHead className="text-right">End Date</TableHead>
+                      <TableHead className="w-[300px]"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {scholarships.map((scholarship) => (
+                      <TableRow key={scholarship.name}>
+                        <TableCell className="font-medium">
+                          {scholarship.name}
+                        </TableCell>
+                        <TableCell>{scholarship.totalApplicants}</TableCell>
+                        <TableCell>{scholarship.totalApproved}</TableCell>
+                        <TableCell className="text-right">
+                          {scholarship.endDate}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Drawer direction="right">
+                            <DrawerTrigger asChild>
+                              <Button variant="outline">View</Button>
+                            </DrawerTrigger>
+                            <DrawerContent>
+                              <div className="mx-auto w-full max-w-sm">
+                                <Tabs defaultValue="details" className="w-full">
+                                  <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value="details">
+                                      Scholarship Details
+                                    </TabsTrigger>
+                                    <TabsTrigger value="report">
+                                      Scholarship Report
+                                    </TabsTrigger>
+                                  </TabsList>
+
+                                  <TabsContent value="details">
+                                    <DrawerHeader>
+                                      <DrawerTitle>
+                                        Scholarship details
+                                      </DrawerTitle>
+                                      <DrawerDescription>
+                                        Can edit and delete
+                                      </DrawerDescription>
+                                    </DrawerHeader>
+
+                                    <div className="p-4 pb-0 space-y-6">
+                                      <Input placeholder="Scholarship name" />
+                                      <Textarea placeholder="Scholarship details" />
+                                      <Input placeholder="Scholarship expiry" />
+                                      <Input placeholder="Scholarship requirements" />
+                                    </div>
+
+                                    <DrawerFooter className="mt-5">
+                                      <Button>Edit</Button>
+                                      <DrawerClose asChild>
+                                        <Button variant="destructive">
+                                          Delete
+                                        </Button>
+                                      </DrawerClose>
+                                    </DrawerFooter>
+                                  </TabsContent>
+
+                                  <TabsContent value="report">
+                                    <DrawerHeader>
+                                      <DrawerTitle>
+                                        Scholarship REPORT
+                                      </DrawerTitle>
+                                      <DrawerDescription>
+                                        This are the generated report of
+                                        selected scholarship
+                                      </DrawerDescription>
+                                    </DrawerHeader>
+
+                                    <div className="p-4 pb-0 space-y-6">
+                                      <div>
+                                        Scholarship name:{" "}
+                                        <span className="text-xl font-semibold">
+                                          Diwata
+                                        </span>
+                                      </div>
+                                      <div>
+                                        Total Applicants:{" "}
+                                        <span className="text-xl font-semibold">
+                                          354
+                                        </span>
+                                      </div>
+                                      <div>
+                                        Total Approved:{" "}
+                                        <span className="text-xl font-semibold">
+                                          311
+                                        </span>
+                                      </div>
+                                      <div>
+                                        Total Rejected:{" "}
+                                        <span className="text-xl font-semibold">
+                                          43
+                                        </span>
+                                      </div>
+                                      <div>
+                                        Start Date:{" "}
+                                        <span className="text-xl font-semibold">
+                                          02-13-2030
+                                        </span>
+                                      </div>
+                                      <div>
+                                        End Date:{" "}
+                                        <span className="text-xl font-semibold">
+                                          02-30-2050
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    <DrawerFooter className="mt-5">
+                                      <Button>Download</Button>
+                                      <DrawerClose asChild>
+                                        <Button variant="outline">Close</Button>
+                                      </DrawerClose>
+                                    </DrawerFooter>
+                                  </TabsContent>
+                                </Tabs>
+                              </div>
+                            </DrawerContent>
+                          </Drawer>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell colSpan={4} className="font-medium">
+                        Total Scholarships
                       </TableCell>
                       <TableCell className="text-center">
-                        <Drawer direction="right">
-                          <DrawerTrigger asChild>
-                            <Button variant="outline">View</Button>
-                          </DrawerTrigger>
-                          <DrawerContent>
-                            <div className="mx-auto w-full max-w-sm">
-                              <Tabs defaultValue="details" className="w-full">
-                                <TabsList className="grid w-full grid-cols-2">
-                                  <TabsTrigger value="details">
-                                    Scholarship Details
-                                  </TabsTrigger>
-                                  <TabsTrigger value="report">
-                                    Scholarship Report
-                                  </TabsTrigger>
-                                </TabsList>
-
-                                <TabsContent value="details">
-                                  <DrawerHeader>
-                                    <DrawerTitle>
-                                      Scholarship details
-                                    </DrawerTitle>
-                                    <DrawerDescription>
-                                      Can edit and delete
-                                    </DrawerDescription>
-                                  </DrawerHeader>
-
-                                  <div className="p-4 pb-0 space-y-6">
-                                    <Input placeholder="Scholarship name" />
-                                    <Textarea placeholder="Scholarship details" />
-                                    <Input placeholder="Scholarship expiry" />
-                                    <Input placeholder="Scholarship requirements" />
-                                  </div>
-
-                                  <DrawerFooter className="mt-5">
-                                    <Button>Edit</Button>
-                                    <DrawerClose asChild>
-                                      <Button variant="destructive">
-                                        Delete
-                                      </Button>
-                                    </DrawerClose>
-                                  </DrawerFooter>
-                                </TabsContent>
-
-                                <TabsContent value="report">
-                                  <DrawerHeader>
-                                    <DrawerTitle>
-                                      Scholarship REPORT
-                                    </DrawerTitle>
-                                    <DrawerDescription>
-                                      This are the generated report of selected
-                                      scholarship
-                                    </DrawerDescription>
-                                  </DrawerHeader>
-
-                                  <div className="p-4 pb-0 space-y-6">
-                                    <div>
-                                      Scholarship name:{" "}
-                                      <span className="text-xl font-semibold">
-                                        Diwata
-                                      </span>
-                                    </div>
-                                    <div>
-                                      Total Applicants:{" "}
-                                      <span className="text-xl font-semibold">
-                                        354
-                                      </span>
-                                    </div>
-                                    <div>
-                                      Total Approved:{" "}
-                                      <span className="text-xl font-semibold">
-                                        311
-                                      </span>
-                                    </div>
-                                    <div>
-                                      Total Rejected:{" "}
-                                      <span className="text-xl font-semibold">
-                                        43
-                                      </span>
-                                    </div>
-                                    <div>
-                                      Start Date:{" "}
-                                      <span className="text-xl font-semibold">
-                                        02-13-2030
-                                      </span>
-                                    </div>
-                                    <div>
-                                      End Date:{" "}
-                                      <span className="text-xl font-semibold">
-                                        02-30-2050
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  <DrawerFooter className="mt-5">
-                                    <Button>Download</Button>
-                                    <DrawerClose asChild>
-                                      <Button variant="outline">Close</Button>
-                                    </DrawerClose>
-                                  </DrawerFooter>
-                                </TabsContent>
-                              </Tabs>
-                            </div>
-                          </DrawerContent>
-                        </Drawer>
+                        {scholarships.length}
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={4} className="font-medium">
-                      Total Scholarships
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {scholarships.length}
-                    </TableCell>
-                  </TableRow>
-                </TableFooter>
-              </Table>
+                  </TableFooter>
+                </Table>
+              </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value="add">
