@@ -14,6 +14,8 @@ import Dashboard from "./admin/admin-dashboard";
 import Scholarships from "./admin/admin-scholarships";
 import Announcements from "./admin/admin-announcements";
 import VerificationPage from "./client/verify-email";
+import ScholarshipsReport from "./admin/admin-scholarships-report";
+import ScholarshipsArchive from "./admin/admin-scholarships-archive";
 
 import { ThemeProvider } from "./components/ui/darkmode";
 import { Toaster } from "@/components/ui/sonner";
@@ -41,6 +43,11 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="applications" element={<Application />} />
           <Route path="scholarships" element={<Scholarships />} />
+          <Route path="scholarships-report" element={<ScholarshipsReport />} />
+          <Route
+            path="scholarships-archive"
+            element={<ScholarshipsArchive />}
+          />
           <Route path="announcements" element={<Announcements />} />
         </Route>
       </Routes>

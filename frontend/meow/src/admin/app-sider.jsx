@@ -16,6 +16,8 @@ import {
   CircleHelp,
   GraduationCap,
   Megaphone,
+  Archive,
+  FileUser,
 } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -82,7 +84,12 @@ const data = {
     {
       title: "Scholarships Report",
       url: "/admin-home/scholarships-report",
-      icon: ListOrdered,
+      icon: FileUser,
+    },
+    {
+      title: "Scholarships Archive",
+      url: "/admin-home/scholarships-archive",
+      icon: Archive,
     },
     {
       title: "Applications",

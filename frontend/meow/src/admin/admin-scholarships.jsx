@@ -100,12 +100,12 @@ export default function Scholarships() {
           </Breadcrumb>
         </div>
       </header>
+
       <div className="p-5">
         <Tabs defaultValue="list">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="list">Active Scholarships</TabsTrigger>
             <TabsTrigger value="add">Add Scholarship</TabsTrigger>
-            <TabsTrigger value="expired">Archived</TabsTrigger>
           </TabsList>
           <TabsContent value="list">
             <Card>
@@ -289,81 +289,6 @@ export default function Scholarships() {
               <CardFooter>
                 <Button>Add Scholarship</Button>
               </CardFooter>
-            </Card>
-          </TabsContent>
-          <TabsContent value="expired">
-            <Card>
-              <CardHeader>
-                <CardTitle>Archived Scholarships</CardTitle>
-                <CardDescription>
-                  This are the list of ended scholarships
-                </CardDescription>
-              </CardHeader>
-              <CardContent></CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Scholarship Name</TableHead>
-                    <TableHead>Total Applicants</TableHead>
-                    <TableHead>Total Approved</TableHead>
-
-                    <TableHead className="text-right">Date Ended</TableHead>
-                    <TableHead className="w-[300px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {scholarships.map((scholarship) => (
-                    <TableRow key={scholarship.name}>
-                      <TableCell className="font-medium">
-                        {scholarship.name}
-                      </TableCell>
-                      <TableCell>{scholarship.totalApplicants}</TableCell>
-                      <TableCell>{scholarship.totalApproved}</TableCell>
-                      <TableCell className="text-right">
-                        {scholarship.endDate}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Drawer direction="right">
-                          <DrawerTrigger asChild>
-                            <Button variant="outline">View</Button>
-                          </DrawerTrigger>
-                          <DrawerContent>
-                            <div className="mx-auto w-full max-w-sm">
-                              <DrawerHeader>
-                                <DrawerTitle>Archived Scholarship</DrawerTitle>
-                                <DrawerDescription>
-                                  Can View and delete
-                                </DrawerDescription>
-                              </DrawerHeader>
-                              <div className="p-4 pb-0 space-y-6">
-                                <Input placeholder="Scholarship name" />
-                                <Textarea placeholder="Scholarship details" />
-                                <Input placeholder="Scholarship expiry" />
-                                <Input placeholder="Scholarship requiirements" />
-                              </div>
-                              <DrawerFooter className="mt-5">
-                                <DrawerClose asChild>
-                                  <Button variant="destructive">Delete</Button>
-                                </DrawerClose>
-                              </DrawerFooter>
-                            </div>
-                          </DrawerContent>
-                        </Drawer>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={4} className="font-medium">
-                      Total Archived Scholarships
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {scholarships.length}
-                    </TableCell>
-                  </TableRow>
-                </TableFooter>
-              </Table>
             </Card>
           </TabsContent>
         </Tabs>
