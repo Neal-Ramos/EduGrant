@@ -11,6 +11,16 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@radix-ui/react-separator";
 import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -116,42 +126,45 @@ export default function Application() {
               <h1>Total Application: {meow.scholarships.length}</h1>
             </CardContent>
             <CardFooter className="">
-              <Drawer direction="right">
-                <DrawerTrigger asChild>
+              <Sheet>
+                <SheetTrigger>
                   <Button className="w-full">Review Student</Button>
-                </DrawerTrigger>
+                </SheetTrigger>
                 <DrawerContent>
                   <div className="mx-auto w-full max-w-md">
-                    <DrawerHeader>
-                      <DrawerTitle>{meow.name}</DrawerTitle>
-                      <DrawerDescription>{meow.email}</DrawerDescription>
-                    </DrawerHeader>
-                    <div className="flex flex-col gap-3 p-3">
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>{meow.name}</SheetTitle>
+                        <SheetDescription>{meow.email}</SheetDescription>
+                      </SheetHeader>
                       <h1>Scholarships Applied</h1>
-                      {meow.scholarships.map((arf) => (
-                        <div className="p-3 flex flex-col gap-5 border">
-                          <h1>{arf.name}</h1>
-                          <div className="font-semibold">
-                            NO DOCUMENTS FOUND ...
+                      <div className="flex gap-3 p-3 justify-center items-center">
+                        {meow.scholarships.map((arf) => (
+                          <div className="p-3 flex flex-col gap-5 border">
+                            <h1>{arf.name}</h1>
+                            <div className="font-semibold">
+                              NO DOCUMENTS FOUND ...
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              <Button className="w-full">Approved</Button>
+                              <Button variant="destructive" className="w-full">
+                                Reject
+                              </Button>
+                              <Button className="w-full bg-amber-600">
+                                Missing
+                              </Button>
+                            </div>
+                            <Textarea placeholder="Enter your message here ..." />
+                            <div className="flex justify-end">
+                              <Button>Send</Button>
+                            </div>
                           </div>
-                          <div className="grid grid-cols-3 gap-2">
-                            <Button className="w-full">Approved</Button>
-                            <Button variant="destructive" className="w-full">
-                              Reject
-                            </Button>
-                            <Button  className="w-full bg-amber-600">Missing</Button>
-                          </div>
-                          <Textarea placeholder="Enter your message here ..." />
-                          <div className="flex justify-end">
-                            <Button>Send</Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <DrawerFooter></DrawerFooter>
+                        ))}
+                      </div>
+                    </SheetContent>
                   </div>
                 </DrawerContent>
-              </Drawer>
+              </Sheet>
             </CardFooter>
           </Card>
         ))}
