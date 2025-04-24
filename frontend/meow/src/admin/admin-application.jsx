@@ -155,7 +155,7 @@ export default function Application() {
                             <h1>{arf.name}</h1>
                             <div className="font-semibold">
                               NO DOCUMENTS FOUND ...
-                            </div>
+                            </div>  
                             <div className="grid grid-cols-3 gap-2">
                               <Button className="w-full">Approved</Button>
 
