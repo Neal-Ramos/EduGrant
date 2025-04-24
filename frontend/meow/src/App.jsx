@@ -16,9 +16,11 @@ import Announcements from "./admin/admin-announcements";
 import VerificationPage from "./client/verify-email";
 
 import { ThemeProvider } from "./components/ui/darkmode";
+import { Toaster } from "@/components/ui/sonner";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Toaster position="bottom-right" richColors />
       <Routes>
         {/* CLIENT ROUTES */}
         <Route path="/" element={<ClientLogin />} />
