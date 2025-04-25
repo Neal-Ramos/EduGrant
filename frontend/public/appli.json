@@ -1,0 +1,217 @@
+[
+  {
+    "id": 1,
+    "name": "Juan Dela Cruz",
+    "age": 20,
+    "course": "BSIT",
+    "yearLevel": "2",
+    "section": "C",
+    "email": "juan.delacruz@example.com",
+    "contactNumber": "09123456789",
+    "address": "123 Mabini St., Malolos, Bulacan",
+    "approved": true,
+    "scholarships": [
+      {
+        "name": "Kuya Wally",
+        "applicationDate": "2025-04-01",
+        "approved": true,
+        "pending": false,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "Birth Certificate"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      },
+      {
+        "name": "Win Gatchalian",
+        "applicationDate": "2025-03-15",
+        "approved": false,
+        "pending": false,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "Birth Certificate"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      },
+      {
+        "name": "Ate Diwata Pares",
+        "applicationDate": "2025-04-03",
+        "approved": false,
+        "pending": false,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "Birth Certificate"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Maria Clara",
+    "age": 19,
+    "course": "BSN",
+    "yearLevel": "1",
+    "section": "A",
+    "email": "maria.clara@example.com",
+    "contactNumber": "09223334455",
+    "address": "456 Rizal Ave., Quezon City",
+    "approved": true,
+    "scholarships": [
+      {
+        "name": "Ate Diwata Pares",
+        "applicationDate": "2025-04-02",
+        "approved": true,
+        "pending": false,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "Birth Certificate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Pedro Pineda",
+    "age": 22,
+    "course": "BSCE",
+    "yearLevel": "3",
+    "section": "B",
+    "email": "pedro.pineda@example.com",
+    "contactNumber": "09334455667",
+    "address": "789 Bonifacio St., Manila",
+    "approved": false,
+    "scholarships": [
+      {
+        "name": "Win Gatchalian",
+        "applicationDate": "2025-03-20",
+        "approved": false,
+        "pending": false,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      },
+      {
+        "name": "Kuya Wally",
+        "applicationDate": "2025-04-10",
+        "approved": false,
+        "pending": false,
+        "missingRequirements": true,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Ana Maria",
+    "age": 21,
+    "course": "BSHRM",
+    "yearLevel": "4",
+    "section": "D",
+    "email": "ana.maria@example.com",
+    "contactNumber": "09445566778",
+    "address": "321 Araullo St., Mandaluyong",
+    "approved": false,
+
+    "scholarships": [
+      {
+        "name": "Kuya Wally",
+        "applicationDate": "2025-03-25",
+        "approved": false,
+        "pending": true,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Luis Gomez",
+    "age": 20,
+    "course": "BSCpE",
+    "yearLevel": "2",
+    "section": "E",
+    "email": "luis.gomez@example.com",
+    "contactNumber": "09556677889",
+    "address": "654 Katipunan St., Quezon City",
+    "approved": false,
+    "scholarships": [
+      {
+        "name": "Ate Diwata Pares",
+        "applicationDate": "2025-03-10",
+        "approved": false,
+        "pending": true,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      },
+      {
+        "name": "Win Gatchalian",
+        "applicationDate": "2025-04-12",
+        "approved": false,
+        "pending": true,
+        "missingRequirements": false,
+        "submittedDocs": [
+          {
+            "documentLabel": "Certificate Of Registration"
+          },
+          {
+            "documentLabel": "National ID"
+          }
+        ]
+      }
+    ]
+  }
+]
