@@ -2,6 +2,15 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { ChevronsUpDown } from "lucide-react";
 import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
+
+import {
   Card,
   CardContent,
   CardDescription,
@@ -67,14 +76,92 @@ export default function Application() {
   }, []);
   console.log(student);
   const [open, setOpen] = useState(false);
-  const [activeReject, setActiveReject] = useState(null);
+
+  const [viewMode, setviewMode] = useState("card");
+
   const toggleText = (id) => {
     setTextVisible((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
+  const exportCSV = () => {
+    if (!student || student.length === 0) {
+      alert("No student data to export.");
+      return;
+    }
+    const header = ["Name", "Email", "Applications"];
+    const rows = student.map((s) => [
+      `"${s.name}"`,
+      `"${s.email}"`,
+      s.scholarships.length,
+    ]);
 
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [header, ...rows].map((e) => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "students.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  function Modal({ meow }) {
+    const [activeReject, setActiveReject] = useState(null);
+    return (
+      <Sheet>
+        <SheetTrigger className="bg-green-800 px-3 py-2 font-semibold text-sm rounded-md text-white">
+          Review Student
+        </SheetTrigger>
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-md">
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle className="text-center">{meow.name}</SheetTitle>
+                <SheetDescription className="text-center">
+                  {meow.email}
+                </SheetDescription>
+              </SheetHeader>
+
+              <div className="flex gap-3 p-5 justify-center items-center">
+                {meow.scholarships.map((arf) => (
+                  <div key={arf.name} className="p-3 flex flex-col gap-5">
+                    <h1>{arf.name}</h1>
+                    <div className="font-semibold">NO DOCUMENTS FOUND ...</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      <Button className="w-full">Approved</Button>
+                      <Button className="w-full">Missing</Button>
+                      <Button
+                        onClick={() =>
+                          setActiveReject(`${meow.id}-${arf.name}`)
+                        }
+                        variant="destructive"
+                        className="w-full"
+                      >
+                        Reject
+                      </Button>
+                    </div>
+                    {activeReject === `${meow.id}-${arf.name}` && (
+                      <div className="space-y-2">
+                        <Textarea placeholder="Enter your message here ..." />
+                        <div className="flex justify-end">
+                          <Button>Send</Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </SheetContent>
+          </div>
+        </DrawerContent>
+      </Sheet>
+    );
+  }
   return (
     <>
       <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
@@ -119,76 +206,70 @@ export default function Application() {
             </Command>
           </PopoverContent>
         </Popover>
-
         <Input type="search" placeholder="Search student name ..." />
+        <Button
+          onClick={() => setviewMode(viewMode === "card" ? "table" : "card")}
+        >
+          {viewMode === "card" ? "Table View" : "Card View"}
+        </Button>
+        <Button onClick={exportCSV}>
+          Export CSV
+        </Button>
       </div>
-      <div className="grid grid-cols-4 gap-2 p-3 ">
-        {student.map((meow) => (
-          <Card key={meow.id} className="w-full ">
+
+      {viewMode === "card" ? (
+        <div className="grid grid-cols-4 gap-2 p-4">
+          {student.map((meow) => (
+            <Card key={meow.id} className="w-full">
+              <CardHeader>
+                <CardTitle>{meow.name}</CardTitle>
+                <CardDescription>{meow.email}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <h1>Total Application: {meow.scholarships.length}</h1>
+              </CardContent>
+              <CardFooter>
+                <Modal meow={meow} />
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="p-4">
+          <Card>
             <CardHeader>
-              <CardTitle>{meow.name}</CardTitle>
-              <CardDescription>{meow.email}</CardDescription>
+              <CardTitle>Student Application</CardTitle>
+              <CardDescription>Can review and approve students</CardDescription>
             </CardHeader>
             <CardContent>
-              <h1>Total Application: {meow.scholarships.length}</h1>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead className="text-center">Applications</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {student.map((meow) => (
+                    <TableRow key={meow.id}>
+                      <TableCell>{meow.name}</TableCell>
+                      <TableCell>{meow.email}</TableCell>
+                      <TableCell className="text-center">
+                        {meow.scholarships.length}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Modal meow={meow} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
-            <CardFooter className="">
-              <Sheet>
-                <SheetTrigger className="bg-green-800 px-3 py-2 font-semibold text-sm rounded-md text-white">
-                  Review Student
-                </SheetTrigger>
-                <DrawerContent>
-                  <div className="mx-auto w-full max-w-md">
-                    <SheetContent>
-                      <SheetHeader>
-                        <SheetTitle className="text-center">
-                          {meow.name}
-                        </SheetTitle>
-                        <SheetDescription className="text-center">
-                          {meow.email}
-                        </SheetDescription>
-                      </SheetHeader>
-
-                      <div className="flex gap-3 p-5 justify-center items-center">
-                        {meow.scholarships.map((arf) => (
-                          <div className="p-3 flex flex-col gap-5">
-                            <h1>{arf.name}</h1>
-                            <div className="font-semibold">
-                              NO DOCUMENTS FOUND ...
-                            </div>  
-                            <div className="grid grid-cols-3 gap-2">
-                              <Button className="w-full">Approved</Button>
-
-                              <Button className="w-full">Missing</Button>
-                              <Button
-                                onClick={() =>
-                                  setActiveReject(`${meow.id}-${arf.name}`)
-                                }
-                                variant="destructive"
-                                className="w-full"
-                              >
-                                Reject
-                              </Button>
-                            </div>
-                            {activeReject === `${meow.id}-${arf.name}` && (
-                              <div className="space-y-2">
-                                <Textarea placeholder="Enter your message here ..." />
-                                <div className="flex justify-end">
-                                  <Button>Send</Button>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </SheetContent>
-                  </div>
-                </DrawerContent>
-              </Sheet>
-            </CardFooter>
           </Card>
-        ))}
-      </div>
+        </div>
+      )}
     </>
   );
 }
