@@ -6,8 +6,22 @@ import {
 import { ModeToggle } from "./dark-light-toggle";
 import { Bell, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Notification() {
+  const navigate = useNavigate()
+  const handleOnclickLogout =async () =>{
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/logout`,{},{withCredentials:true})
+      if(res.status === 200){
+        alert("Logout!!!")
+        navigate("/")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="flex gap-5 pr-5">
       <Popover>
@@ -47,7 +61,7 @@ export default function Notification() {
             <Button variant="ghost" className="justify-start">
               👤 Profile
             </Button>
-            <Button variant="ghost" className="justify-start text-red-600">
+            <Button variant="ghost" className="justify-start text-red-600" onClick={handleOnclickLogout}>
               🚪 Logout
             </Button>
           </div>

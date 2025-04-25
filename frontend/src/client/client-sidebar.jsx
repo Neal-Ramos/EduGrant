@@ -54,6 +54,8 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const data = {
   user: {
     name: "Tecson, Jerome L.",
@@ -205,6 +207,18 @@ function TeamSwitcher({ teams }) {
 
 function NavUser({ user }) {
   const { isMobile } = useSidebar();
+  const navigate = useNavigate()
+  const handleLogoutButton = async () => {
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/logout`,{},{withCredentials:true})
+      if(res.status === 200){
+        alert("Logout!!!")
+        navigate("/")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <SidebarMenu>
@@ -245,7 +259,7 @@ function NavUser({ user }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogoutButton}>
               <LogOut />
               Log out
             </DropdownMenuItem>

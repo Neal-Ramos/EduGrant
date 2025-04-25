@@ -110,7 +110,7 @@ router.post("/logIn", async (req, res) => {//For login account
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: userEmail,
-                subject: "Registration Code",
+                subject: "Login Code",
                 text: `Your Login Code is ${sendCode} if this is not you ignore this email`,
                 html:``
             };
