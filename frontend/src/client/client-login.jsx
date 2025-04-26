@@ -133,10 +133,9 @@ function DrawerDemo() {
         if (res.status === 200) {
           setShowOTP(true);
           setslideLogin(false);
-          setLoading(false);
         }
-        setLoading(false);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -152,7 +151,7 @@ function DrawerDemo() {
     };
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/codeAuthenticationLogin`,
+        `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/codeAuthentication`,
         data,
         { withCredentials: true }
       );
@@ -179,15 +178,11 @@ function DrawerDemo() {
         userPassword: password,
       };
       try {
-        const res = await axios.post(
-          `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/registerAccount`,
-          data
-        );
+        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/registerAccount`,data);
         if (res.status === 200) {
           console.log(res);
           setShowOTP(true);
           setslideLogin(false);
-          setLoading(false);
         }
         setLoading(false);
       } catch (error) {
@@ -195,6 +190,7 @@ function DrawerDemo() {
         setLoading(false);
       }
     }
+    setLoading(false);
   };
   const handleOTPVerificationRegister = async () => {
     setLoading(true);
@@ -211,7 +207,7 @@ function DrawerDemo() {
       const res = await axios.post(
         `${
           import.meta.env.VITE_EXPRESS_API_EDUGRANT
-        }/codeAuthenticationRegistration`,
+        }/codeAuthentication`,
         data
       );
       if (res.status === 201) {
