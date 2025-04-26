@@ -1,4 +1,4 @@
-const conn = require("../dbConnect")
+const conn = require("./dbConnect")
 const util = require("util")
 const query = util.promisify(conn.query).bind(conn)
 
