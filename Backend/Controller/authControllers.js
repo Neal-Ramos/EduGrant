@@ -8,8 +8,8 @@ const { json } = require("stream/consumers")
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.MAILER_EMAIL_CREDENTIAL,
+        pass: process.env.MAILER_SECRET_PASS,
     },
 });
 
