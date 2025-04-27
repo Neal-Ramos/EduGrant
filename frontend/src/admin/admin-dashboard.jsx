@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
-import { Calendar } from "@/components/ui/calendar";
 
 import {
   Activity,
@@ -369,14 +368,28 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="w-1/4 space-y-3">
-            <div className="w-full bg-white">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="rounded-md border"
-              />
-            </div>
+            <Card className="w-full z-10">
+              <CardHeader>
+                <CardTitle className="flex gap-1 items-center">
+                  <Megaphone /> Add Announcements
+                </CardTitle>
+                <CardDescription>
+                  Share important updates, deadlines, or news with all
+                  applicants.
+                </CardDescription>
+              </CardHeader>
+
+              <CardFooter className="flex justify-between">
+                <Link className="w-full" to="/admin-home/announcements">
+                  <Button
+                    className="w-full flex gap-1 items-center"
+                    variant="outline"
+                  >
+                    <Plus /> Add
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
             <div className="w-full relative">
               <Card className="w-full z-10">
                 <CardHeader>
