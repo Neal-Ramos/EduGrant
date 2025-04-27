@@ -17,6 +17,8 @@ import {
   Check,
   Minus,
   Clock,
+  FileText,
+  SendHorizontal,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -74,9 +76,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 export default function Application() {
   const [student, setStudent] = useState([]);
+  const [scholar, setScholar] = useState([]);
   useEffect(() => {
     async function fetchStudent() {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       const response = await fetch("/appli.json");
       const data = await response.json();
 
@@ -85,7 +88,19 @@ export default function Application() {
     }
     fetchStudent();
   }, []);
-  console.log(student);
+
+  useEffect(() => {
+    async function fetchScholar() {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await fetch("/ships.json");
+      const data = await response.json();
+
+      setScholar(data);
+      setLoading(false);
+    }
+    fetchScholar();
+  }, []);
+
   const [open, setOpen] = useState(false);
 
   const [viewMode, setviewMode] = useState("card");
@@ -94,6 +109,18 @@ export default function Application() {
 
   const [loading, setLoading] = useState(true);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [combo, setCombo] = useState("");
+  console.log(combo);
+
+  const filteredData = student.filter(
+    (a) =>
+      a.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      a.scholarships.some((q) =>
+        q.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  );
   const toggleText = (id) => {
     setTextVisible((prev) => ({
       ...prev,
@@ -125,50 +152,73 @@ export default function Application() {
     document.body.removeChild(link);
   };
 
-  function Modal({ meow }) {
+  function InReviewModal({ meow }) {
     const [activeReject, setActiveReject] = useState(null);
     return (
       <Sheet>
-        <SheetTrigger className="bg-green-800 px-3 py-2 font-semibold text-sm rounded-md text-white">
+        <SheetTrigger className="bg-blue-800 px-3 py-2 font-semibold text-sm rounded-md text-white w-full">
           Review Student
         </SheetTrigger>
 
         <SheetContent>
           <SheetHeader>
-            <SheetTitle className="text-center">{meow.name}</SheetTitle>
+            <SheetTitle className="text-center text-3xl zxc tracking-[-4px]">
+              {meow.name}
+            </SheetTitle>
             <SheetDescription className="text-center">
-              {meow.email}
+              <div>
+                {meow.course}-{meow.yearLevel}
+                {meow.section}
+              </div>
+              <div>{meow.email}</div>
             </SheetDescription>
           </SheetHeader>
 
-          <div className="flex gap-3 p-5 justify-center items-center  h-[400px]">
+          <div className="flex gap-3 p-5 justify-center items-center  ">
             {meow.scholarships.map((arf) => (
               <Card>
                 <CardHeader>
                   <h1>{arf.name}</h1>
+                  <CardDescription>
+                    Application Date: {arf.applicationDate}
+                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="font-semibold">NO DOCUMENTS FOUND ...</div>
+
+                <CardContent className="space-y-3">
+                  {arf.submittedDocs.map((ngi) => (
+                    <p className="underline flex items-center gap-1 cursor-pointer">
+                      <FileText size={18} />
+                      {ngi.documentLabel}
+                    </p>
+                  ))}
 
                   {activeReject === `${meow.id}-${arf.name}` && (
                     <div className="space-y-2 mt-4">
                       <Textarea placeholder="Enter your message here ..." />
                       <div className="flex justify-end">
-                        <Button>Send</Button>
+                        <Button>
+                          Send
+                          <SendHorizontal />
+                        </Button>
                       </div>
                     </div>
                   )}
                 </CardContent>
                 <CardFooter className="grid grid-cols-3 gap-2">
-                  <Button className="w-full">Approved</Button>
-                  <Button onClick={() => setActiveReject()} className="w-full">
-                    Missing
+                  <Button className="w-full bg-green-200 text-green-800 shadow-xs hover:bg-green-300 cursor-pointer">
+                    <Check className="text-white bg-green-600 rounded shadow-xs" />
+                    Approved
                   </Button>
+
                   <Button
                     onClick={() => setActiveReject(`${meow.id}-${arf.name}`)}
-                    variant="destructive"
-                    className="w-full"
+                    className="w-full bg-yellow-200 text-yellow-800 shadow-xs hover:bg-yellow-300 cursor-pointer"
                   >
+                    <Minus className="text-white bg-yellow-600 rounded shadow-xs" />{" "}
+                    Missing
+                  </Button>
+                  <Button className="w-full bg-red-200 text-red-800 shadow-xs hover:bg-red-300 cursor-pointer">
+                    <X className="text-white bg-red-600 rounded shadow-xs" />{" "}
                     Reject
                   </Button>
                 </CardFooter>
@@ -179,9 +229,197 @@ export default function Application() {
       </Sheet>
     );
   }
+  function ApprovedModal({ meow }) {
+    return (
+      <Sheet>
+        <SheetTrigger className="bg-green-800 px-3 py-2 font-semibold text-sm rounded-md text-white w-full">
+          Details
+        </SheetTrigger>
+
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle className="text-center text-3xl zxc tracking-[-4px]">
+              {meow.name}
+            </SheetTitle>
+            <SheetDescription className="text-center">
+              <div>
+                {meow.course}-{meow.yearLevel}
+                {meow.section}
+              </div>
+              <div>{meow.email}</div>
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="flex gap-3 p-5 justify-center items-center  ">
+            {meow.scholarships
+              .filter((me) => me.approved)
+              .map((me) => (
+                <Card key={me.name} className=" w-[300px]">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      {me.name}{" "}
+                      <p className="text-xs py-1 px-2 rounded-2xl bg-green-100 text-green-700 border-1 font-semibold flex items-center gap-2 shadow">
+                        Approved
+                        <Check
+                          className="bg-green-500 rounded-full text-white shadow"
+                          size={15}
+                        />
+                      </p>
+                    </CardTitle>
+                    <CardDescription>
+                      Application Date: {me.applicationDate}
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="space-y-3">
+                    {me.submittedDocs.map((ngi) => (
+                      <p className="underline flex items-center gap-1 cursor-pointer">
+                        <FileText size={18} />
+                        {ngi.documentLabel}
+                      </p>
+                    ))}
+                  </CardContent>
+                  <CardFooter className="grid grid-cols-3 gap-2"></CardFooter>
+                </Card>
+              ))}
+
+            {meow.scholarships
+              .filter((me) => me.approved === false)
+              .map((me) => (
+                <Card key={me.name} className=" w-[300px]">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-gray-500">
+                      {me.name}{" "}
+                      <p className="text-xs py-1 px-2 rounded-2xl bg-gray-100 text-gray-700 border-1 font-semibold flex items-center gap-2 shadow">
+                        Blocked
+                        <X
+                          className="bg-gray-500 rounded-full text-white shadow"
+                          size={15}
+                        />
+                      </p>
+                    </CardTitle>
+
+                    <CardDescription>
+                      Application Date: {me.applicationDate}
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="space-y-3">
+                    {me.submittedDocs.map((ngi) => (
+                      <p className="underline flex items-center gap-1  text-gray-500">
+                        <FileText size={18} />
+                        {ngi.documentLabel}
+                      </p>
+                    ))}
+                  </CardContent>
+                  <CardFooter className="grid grid-cols-3 gap-2"></CardFooter>
+                </Card>
+              ))}
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+  function MissingModal({ meow }) {
+    const [activeReject, setActiveReject] = useState(null);
+
+    return (
+      <Sheet>
+        <SheetTrigger className="bg-yellow-800 px-3 py-2 font-semibold text-sm rounded-md text-white w-full">
+          Review Student
+        </SheetTrigger>
+
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle className="text-center text-3xl zxc tracking-[-4px]">
+              {meow.name}
+            </SheetTitle>
+            <SheetDescription className="text-center">
+              <div>
+                {meow.course}-{meow.yearLevel}
+                {meow.section}
+              </div>
+              <div>{meow.email}</div>
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="flex gap-3 p-5 justify-center items-center">
+            {student.filter((z) =>
+              z.scholarships.some((c) => c.missingRequirements === true)
+            ).length > 0 ? (
+              student
+                .filter((z) =>
+                  z.scholarships.some((c) => c.missingRequirements === true)
+                )
+                .map((student) =>
+                  student.scholarships
+                    .filter((arf) => arf.missingRequirements === true)
+                    .map((arf) => (
+                      <Card
+                        key={`${student.id}-${arf.name}`}
+                        className="w-[350px]"
+                      >
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <h1>{arf.name}</h1>
+                            <p className="text-xs py-1 px-2 rounded-2xl bg-yellow-100 text-yellow-700 border-1 font-semibold flex items-center gap-2 shadow">
+                              Missing
+                              <Minus
+                                className="bg-yellow-500 rounded-full text-white shadow"
+                                size={15}
+                              />
+                            </p>
+                          </CardTitle>
+                          <CardDescription>
+                            Application Date: {arf.applicationDate}
+                          </CardDescription>
+                        </CardHeader>
+
+                        <CardContent className="space-y-3">
+                          {arf.submittedDocs.map((ngi, index) => (
+                            <p
+                              key={index}
+                              className="underline flex items-center gap-1 cursor-pointer"
+                            >
+                              <FileText size={18} />
+                              {ngi.documentLabel}
+                            </p>
+                          ))}
+
+                          {activeReject === `${student.id}-${arf.name}` && (
+                            <div className="space-y-2 mt-4">
+                              <Textarea placeholder="Enter your message here ..." />
+                              <div className="flex justify-end">
+                                <Button>Send</Button>
+                              </div>
+                            </div>
+                          )}
+                        </CardContent>
+                        <CardFooter className="flex flex-col gap-2">
+                          <Textarea placeholder="Your document is blurred, Please send another" />
+                          <Button>Edit comment</Button>
+                        </CardFooter>
+                      </Card>
+                    ))
+                )
+            ) : (
+              <p>No missing requirements</p>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+  function Loader() {
+    return (
+      <div className="flex justify-center items-center col-span-4">
+        <div className="w-8 h-8 border-4 border-t-transparent border-black border-solid rounded-full animate-spin"></div>
+      </div>
+    );
+  }
   return (
     <>
-      <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm sticky top-0 z-10">
+      <header className="flex  bg-gradient-to-bl from-green-700 to-green-900 h-16 items-center justify-between px-5 text-white border-b shadow-sm sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
@@ -201,53 +439,7 @@ export default function Application() {
         </div>
       </header>
 
-      <div className="grid grid-cols-4 text-center p-4 text-left zxc gap-3 tracking-[-2px]">
-        <span className="py-2 px-3 bg-blue-100 rounded-md flex items-center gap-3">
-          <span className="bg-blue-300 p-3 rounded-md">
-            <Layers size={40} absoluteStrokeWidth />
-          </span>
-          <span>
-            <p> TOTAL</p>
-            <p className="text-4xl">{student.length}</p>
-          </span>
-        </span>
-        <span className="py-2 px-3 bg-green-200 rounded-md flex items-center gap-3">
-          <span className="bg-green-400 p-3 rounded-md">
-            <CheckCheck size={40} absoluteStrokeWidth />
-          </span>
-          <span>
-            <p>APPROVED</p>
-            <p className="text-4xl">
-              {student.filter((student) => student.approved).length}
-            </p>
-          </span>
-        </span>
-
-        <span className="py-2 px-3 bg-amber-200 rounded-md flex items-center gap-3">
-          <span className="bg-amber-400 p-3 rounded-md">
-            <Timer size={40} absoluteStrokeWidth />
-          </span>
-          <span>
-            <p>IN REVIEW</p>
-            <p className="text-4xl">
-              {
-                student.filter((student) =>
-                  student.scholarships.some((ngi) => ngi.pending)
-                ).length
-              }
-            </p>
-          </span>
-        </span>
-        <span className="py-2 px-3 bg-purple-200 rounded-md flex items-center gap-3">
-          <span className="bg-purple-400 p-3 rounded-md">
-            <GraduationCap size={40} absoluteStrokeWidth />
-          </span>
-          <span>
-            <p className="whitespace-nowrap">ACTIVE</p>
-            <p className="text-4xl">0</p>
-          </span>
-        </span>
-      </div>
+     
 
       <div className="px-5 py-5 flex gap-3">
         <Popover open={open} onOpenChange={setOpen}>
@@ -257,7 +449,8 @@ export default function Application() {
               aria-expanded={open}
               className="w-[200px] justify-between"
             >
-              <Funnel /> Filter Scholarships
+              <Funnel />
+              {combo || "Filter Scholarships"}
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -266,7 +459,20 @@ export default function Application() {
               <CommandInput placeholder="Search Scholarship..." />
               <CommandList>
                 <CommandEmpty>No Scholarship found.</CommandEmpty>
-                <CommandGroup></CommandGroup>
+                <CommandGroup>
+                  {scholar.map((a) => (
+                    <CommandItem
+                      key={a.name}
+                      onSelect={() => {
+                        setSearchTerm(a.name);
+                        setCombo(a.name);
+                        setOpen(false);
+                      }}
+                    >
+                      {a.name}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
               </CommandList>
             </Command>
           </PopoverContent>
@@ -277,6 +483,7 @@ export default function Application() {
             className="px-9"
             type="search"
             placeholder="Search student name ..."
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <Button
@@ -307,11 +514,11 @@ export default function Application() {
             {viewMode === "card" ? (
               <div className="grid grid-cols-4 gap-2 py-4">
                 {loading ? (
-                  <div className="flex justify-center items-center col-span-4">
-                    <div className="w-8 h-8 border-4 border-t-transparent border-green-500 border-solid rounded-full animate-spin"></div>
-                  </div>
-                ) : (
-                  student
+                  <Loader />
+                ) : filteredData.filter((a) =>
+                    a.scholarships.some((b) => b.pending)
+                  ).length > 0 ? (
+                  filteredData
                     .filter((arf) =>
                       arf.scholarships.some((ngi) => ngi.pending === true)
                     )
@@ -329,24 +536,39 @@ export default function Application() {
                               />
                             </p>
                           </CardTitle>
-                          <CardDescription>
-                            {meow.course}-{meow.yearLevel}
-                            {meow.section}
+                          <CardDescription className="flex justify-between">
+                            <div>
+                              {meow.course}-{meow.yearLevel}
+                              {meow.section}
+                            </div>
+                            <div>Documents 3/3</div>
                           </CardDescription>
                         </CardHeader>
-                        <CardContent>
-                          <h1>Total Application: {meow.scholarships.length}</h1>
+
+                        <CardContent className="">
+                          <div className="flex  gap-2">
+                            <GraduationCap />
+                            <div className="">
+                              <p>Applied Scholarships</p>
+                              <p className="text-3xl font-semibold">
+                                {meow.scholarships.length}
+                              </p>
+                            </div>
+                          </div>
                         </CardContent>
+
                         <CardFooter>
-                          <Modal meow={meow} />
+                          <InReviewModal meow={meow} />
                         </CardFooter>
                       </Card>
                     ))
+                ) : (
+                  <p>No Students Found</p>
                 )}
               </div>
             ) : (
-              <div className="p-4">
-                <Card>
+              <div>
+                <Card className="mt-4">
                   <CardHeader>
                     <CardTitle>Student Application</CardTitle>
                     <CardDescription>
@@ -366,18 +588,32 @@ export default function Application() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {student.map((meow) => (
-                          <TableRow key={meow.id}>
-                            <TableCell>{meow.name}</TableCell>
-                            <TableCell>{meow.email}</TableCell>
-                            <TableCell className="text-center">
-                              {meow.scholarships.length}
-                            </TableCell>
-                            <TableCell className="text-center">
-                              <Modal meow={meow} />
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {filteredData.filter((student) =>
+                          student.scholarships.some(
+                            (scholarship) => scholarship.pending
+                          )
+                        ).length > 0 ? (
+                          filteredData
+                            .filter((student) =>
+                              student.scholarships.some(
+                                (scholarship) => scholarship.pending
+                              )
+                            )
+                            .map((meow) => (
+                              <TableRow key={meow.id}>
+                                <TableCell>{meow.name}</TableCell>
+                                <TableCell>{meow.email}</TableCell>
+                                <TableCell className="text-center">
+                                  {meow.scholarships.length}
+                                </TableCell>
+                                <TableCell className="text-center">
+                                  <InReviewModal meow={meow} />
+                                </TableCell>
+                              </TableRow>
+                            ))
+                        ) : (
+                          <p>No Students Found</p>
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
@@ -390,8 +626,9 @@ export default function Application() {
           <TabsContent value="approved">
             {viewMode === "card" ? (
               <div className="grid grid-cols-4 gap-2 py-4">
-                {student.filter((student) => student.approved).length > 0 ? (
-                  student
+                {filteredData.filter((student) => student.approved).length >
+                0 ? (
+                  filteredData
                     .filter((meow) => meow.approved)
                     .map((meow) => (
                       <Card key={meow.id} className="w-full">
@@ -414,12 +651,18 @@ export default function Application() {
                             {meow.scholarships
                               .filter((arf) => arf.approved) // Filtering scholarships once
                               .map((oink) => (
-                                <p key={oink.name}>{oink.name}</p>
+                                <div key={oink.name}>
+                                  <p className="text-md">Scholarship</p>
+                                  <p className="text-xl font-bold">
+                                    {" "}
+                                    {oink.name}
+                                  </p>
+                                </div>
                               ))}
                           </div>
                         </CardContent>
                         <CardFooter>
-                          <Modal meow={meow} />
+                          <ApprovedModal meow={meow} />
                         </CardFooter>
                       </Card>
                     ))
@@ -428,44 +671,52 @@ export default function Application() {
                 )}
               </div>
             ) : (
-              <div className="p-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Student Application</CardTitle>
-                    <CardDescription>
-                      Can review and approve students
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead className="text-center">
-                            Applications
-                          </TableHead>
-                          <TableHead></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {student.map((meow) => (
-                          <TableRow key={meow.id}>
-                            <TableCell>{meow.name}</TableCell>
-                            <TableCell>{meow.email}</TableCell>
-                            <TableCell className="text-center">
-                              {meow.scholarships.length}
-                            </TableCell>
-                            <TableCell className="text-center">
-                              <Modal meow={meow} />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card className="mt-4">
+                <CardHeader>
+                  <CardTitle>Student Application</CardTitle>
+                  <CardDescription>
+                    Can review and approve students
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Scholarship</TableHead>
+                        <TableHead></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredData.filter(
+                        (babyqatrina) => babyqatrina.approved
+                      ).length > 0 ? (
+                        filteredData
+                          .filter((meow) => meow.approved)
+                          .map((arf) => (
+                            <TableRow key={arf.id}>
+                              <TableCell>{arf.name}</TableCell>
+                              <TableCell>{arf.email}</TableCell>
+                              <TableCell>
+                                {arf.scholarships
+                                  .filter((arf) => arf.approved)
+                                  .map((oink) => (
+                                    <p key={oink.name}> {oink.name}</p>
+                                  ))}
+                              </TableCell>
+                              <TableCell className="text-center">
+                                <ApprovedModal meow={arf} />
+                              </TableCell>
+                            </TableRow>
+                          ))
+                      ) : (
+                        <p>No approved students found.</p>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             )}
           </TabsContent>
         )}
@@ -473,83 +724,101 @@ export default function Application() {
           <TabsContent value="missing">
             {viewMode === "card" ? (
               <div className="grid grid-cols-4 gap-2 py-4">
-                {student
-                  .filter((arf) =>
-                    arf.scholarships.some(
-                      (ngi) => ngi.missingRequirements === true
+                {filteredData.filter((a) =>
+                  a.scholarships.some((b) => b.missingRequirements)
+                ).length > 0 ? (
+                  filteredData
+                    .filter((arf) =>
+                      arf.scholarships.some(
+                        (ngi) => ngi.missingRequirements === true
+                      )
                     )
-                  )
-                  .map((meow) => (
-                    <Card key={meow.id} className="w-full">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-1.5">
-                          <UserRound />
-                          {meow.name}
-                          <p className="text-xs py-1 px-2 rounded-2xl bg-yellow-100 text-yellow-700 border-1 font-semibold flex items-center gap-2 shadow">
-                            Missing
-                            <Minus
-                              className="bg-yellow-500 rounded-full text-white shadow"
-                              size={15}
-                            />
-                          </p>
-                        </CardTitle>
-                        <CardDescription>{meow.email}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <h1>
-                          Missing Requirements:{" "}
-                          {
-                            meow.scholarships.filter(
-                              (s) => s.missingRequirements === true
-                            ).length
-                          }
-                        </h1>
-                      </CardContent>
-                      <CardFooter>
-                        <Modal meow={meow} />
-                      </CardFooter>
-                    </Card>
-                  ))}
+                    .map((meow) => (
+                      <Card key={meow.id} className="w-full">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-1.5">
+                            <UserRound />
+                            {meow.name}
+                            <p className="text-xs py-1 px-2 rounded-2xl bg-yellow-100 text-yellow-700 border-1 font-semibold flex items-center gap-2 shadow">
+                              Missing
+                              <Minus
+                                className="bg-yellow-500 rounded-full text-white shadow"
+                                size={15}
+                              />
+                            </p>
+                          </CardTitle>
+                          <CardDescription>{meow.email}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <h1>
+                            Missing Requirements:{" "}
+                            {
+                              meow.scholarships.filter(
+                                (s) => s.missingRequirements === true
+                              ).length
+                            }
+                          </h1>
+                        </CardContent>
+                        <CardFooter>
+                          <MissingModal meow={meow} />
+                        </CardFooter>
+                      </Card>
+                    ))
+                ) : (
+                  <p className=" text-center">No Student Found.</p>
+                )}
               </div>
             ) : (
-              <div className="p-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Student Application</CardTitle>
-                    <CardDescription>
-                      Can review and approve students
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead className="text-center">
-                            Applications
-                          </TableHead>
-                          <TableHead></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {student.map((meow) => (
-                          <TableRow key={meow.id}>
-                            <TableCell>{meow.name}</TableCell>
-                            <TableCell>{meow.email}</TableCell>
-                            <TableCell className="text-center">
-                              {meow.scholarships.length}
-                            </TableCell>
-                            <TableCell className="text-center">
-                              <Modal meow={meow} />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card className="mt-4">
+                <CardHeader>
+                  <CardTitle>Student Application</CardTitle>
+                  <CardDescription>
+                    Can review and approve students
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead className="text-center">
+                          Applications
+                        </TableHead>
+                        <TableHead></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredData.filter((a) =>
+                        a.scholarships.some(
+                          (w) => w.missingRequirements === true
+                        )
+                      ).length > 0 ? (
+                        filteredData
+                          .filter((a) =>
+                            a.scholarships.some(
+                              (b) => b.missingRequirements === true
+                            )
+                          )
+                          .map((meow) => (
+                            <TableRow key={meow.id}>
+                              <TableCell>{meow.name}</TableCell>
+                              <TableCell>{meow.email}</TableCell>
+                              <TableCell className="text-center">
+                                {meow.scholarships.length}
+                              </TableCell>
+                              <TableCell className="text-center">
+                                <MissingModal meow={meow} />
+                              </TableCell>
+                            </TableRow>
+                          ))
+                      ) : (
+                        <p className="text-center p-2">No Student Found.</p>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             )}
           </TabsContent>
         )}

@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
-import { CheckCircle, XCircle } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Check,
+  Grid2x2,
+  TableProperties,
+  FileDown,
+  Archive,
+  GraduationCap,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -17,16 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -59,130 +58,66 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function Draw() {
+function Loader() {
   return (
-    <Drawer direction="right">
-      <DrawerTrigger asChild>
-        <Button>Review Scholarship</Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <Tabs defaultValue="details" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="details">Scholarship Details</TabsTrigger>
-              <TabsTrigger value="report">Scholarship Report</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="details">
-              <DrawerHeader>
-                <DrawerTitle>Scholarship details</DrawerTitle>
-                <DrawerDescription>Can edit and delete</DrawerDescription>
-              </DrawerHeader>
-
-              <div className="p-4 pb-0 space-y-6">
-                <Input placeholder="Scholarship name" />
-                <Textarea placeholder="Scholarship details" />
-                <Input placeholder="Scholarship expiry" />
-                <Input placeholder="Scholarship requirements" />
-              </div>
-
-              <DrawerFooter className="mt-5">
-                <Button>Edit</Button>
-                <DrawerClose asChild>
-                  <Button variant="destructive">Delete</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </TabsContent>
-
-            <TabsContent value="report">
-              <DrawerHeader>
-                <DrawerTitle>Scholarship REPORT</DrawerTitle>
-                <DrawerDescription>
-                  This are the generated report of selected scholarship
-                </DrawerDescription>
-              </DrawerHeader>
-
-              <div className="p-4 pb-0 space-y-6">
-                <div>
-                  Scholarship name:{" "}
-                  <span className="text-xl font-semibold">Diwata</span>
-                </div>
-                <div>
-                  Total Applicants:{" "}
-                  <span className="text-xl font-semibold">354</span>
-                </div>
-                <div>
-                  Total Approved:{" "}
-                  <span className="text-xl font-semibold">311</span>
-                </div>
-                <div>
-                  Total Rejected:{" "}
-                  <span className="text-xl font-semibold">43</span>
-                </div>
-                <div>
-                  Start Date:{" "}
-                  <span className="text-xl font-semibold">02-13-2030</span>
-                </div>
-                <div>
-                  End Date:{" "}
-                  <span className="text-xl font-semibold">02-30-2050</span>
-                </div>
-              </div>
-
-              <DrawerFooter className="mt-5">
-                <Button>Download</Button>
-                <DrawerClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </DrawerContent>
-    </Drawer>
+    <div className="flex justify-center items-center col-span-4">
+      <div className="w-8 h-8 border-4 border-t-transparent border-black border-solid rounded-full animate-spin"></div>
+    </div>
   );
 }
-
 export default function Scholarships() {
   const [open, setOpen] = useState(false);
   const [viewMode, setviewMode] = useState("card");
-  const scholarships = [
-    {
-      name: "STEM Scholars Grant",
-      totalApplicants: 120,
-      totalApproved: 45,
-      endDate: "2025-05-30",
-    },
-    {
-      name: "Future Leaders Scholarship",
-      totalApplicants: 200,
-      totalApproved: 80,
-      endDate: "2025-06-15",
-    },
-    {
-      name: "Community Impact Award",
-      totalApplicants: 150,
-      totalApproved: 60,
-      endDate: "2025-05-20",
-    },
-    {
-      name: "Merit-Based Excellence Fund",
-      totalApplicants: 180,
-      totalApproved: 70,
-      endDate: "2025-06-01",
-    },
-    {
-      name: "Diversity & Inclusion Scholarship",
-      totalApplicants: 90,
-      totalApproved: 30,
-      endDate: "2025-05-28",
-    },
-  ];
+  const [scholarships, setScholar] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+  const moew = location.search.replace("?=", "") || "list";
 
+  useEffect(() => {
+    async function fetchScholar() {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await fetch("/ngi.json");
+      const data = await response.json();
+      setScholar(data);
+      setLoading(false);
+    }
+    fetchScholar();
+  }, []);
+
+  const exportCSV = () => {
+    if (!scholarships || scholarships.length === 0) {
+      alert("No scholarships data to export.");
+      return;
+    }
+    const header = ["Name", "totalApplicants", "totalApproved", "endDate"];
+    const rows = scholarships.map((s) => [
+      `"${s.name}"`,
+      `"${s.totalApplicants}"`,
+      `"${s.totalApproved}"`,
+      `"${s.endDate}"`,
+    ]);
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [header, ...rows].map((e) => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "students.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const filteredData = scholarships.filter((meow) =>
+    meow.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <>
-      <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
-        <div className="flex items-center gap-3">
+      <header className="flex  bg-gradient-to-bl from-green-700 to-green-900 h-16 items-center justify-between px-5 text-white border-b shadow-sm sticky top-0">
+        <div className="flex items-center gap-3 ">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
           <Breadcrumb>
@@ -201,14 +136,14 @@ export default function Scholarships() {
         </div>
       </header>
 
-      <div className="p-5">
-        <Tabs defaultValue="list">
+      <div className="p-4">
+        <Tabs defaultValue={moew}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="list">Active Scholarships</TabsTrigger>
             <TabsTrigger value="add">Add Scholarship</TabsTrigger>
           </TabsList>
           <TabsContent value="list">
-            <div className=" p-5 flex gap-3">
+            <div className=" py-5 flex gap-3">
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -230,24 +165,92 @@ export default function Scholarships() {
                   </Command>
                 </PopoverContent>
               </Popover>
-              <Input type="search" placeholder="Search Scholarship Name ..." />
+              <Input
+                type="search"
+                onChange={(text) => setSearchTerm(text.target.value)}
+                placeholder="Search Scholarship Name ..."
+              />
               <Button
+                variant="ghost"
                 onClick={() =>
                   setviewMode(viewMode === "card" ? "table" : "card")
                 }
               >
-                {viewMode === "card" ? "Table View" : "Card View"}
+                {viewMode === "card" ? <TableProperties /> : <Grid2x2 />}
               </Button>
+              <Button onClick={exportCSV}>
+                {" "}
+                Export CSV <FileDown />
+              </Button>
+              <Link to="/admin-home/scholarships/archived">
+                <Button>
+                  {" "}
+                  Archive <Archive />
+                </Button>
+              </Link>
             </div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Scholarships</CardTitle>
-                <CardDescription>
-                  This are the list of available scholarships
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {viewMode === "card" ? (
+
+            {loading ? (
+              <Loader />
+            ) : viewMode === "card" ? (
+              <div className="grid grid-cols-4 gap-2">
+                {filteredData.map((scholarship) => (
+                  <Card key={scholarship.name} className="w-full">
+                    <CardHeader>
+                      <CardTitle className="flex items-center  gap-2">
+                        <GraduationCap className="min-w-6" />
+                        <p>{scholarship.name}</p>
+                        <p className="text-xs py-1 px-2 rounded-2xl bg-green-100 text-green-700 border-1 font-semibold flex items-center gap-1 shadow">
+                          Active
+                          <Check
+                            className="bg-green-500 rounded-full text-white shadow"
+                            size={15}
+                          />
+                        </p>
+                      </CardTitle>
+                      <CardDescription>
+                        End Date: {scholarship.endDate}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex justify-around">
+                      <span className="flex items-center gap-3 flex-col">
+                        <p className="text-sm">Applicants</p>
+                        <p className="font-semibold text-3xl">
+                          {scholarship.totalApplicants}
+                        </p>
+                      </span>
+
+                      <span className="flex items-center gap-3 flex-col">
+                        <p className="text-sm"> Approved</p>
+                        <p className="text-3xl font-semibold">
+                          {scholarship.totalApproved}
+                        </p>
+                      </span>
+                    </CardContent>
+                    <CardFooter>
+                      <Link
+                        className="w-full"
+                        to={`/admin-home/scholarships/${encodeURIComponent(
+                          scholarship.name
+                        )}`}
+                      >
+                        <Button className="w-full bg-green-700 hover:bg-green-800">
+                          View
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Scholarships</CardTitle>
+                  <CardDescription>
+                    This are the list of available scholarships
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -260,7 +263,7 @@ export default function Scholarships() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {scholarships.map((scholarship) => (
+                      {filteredData.map((scholarship) => (
                         <TableRow key={scholarship.name}>
                           <TableCell className="font-medium">
                             {scholarship.name}
@@ -271,7 +274,7 @@ export default function Scholarships() {
                             {scholarship.endDate}
                           </TableCell>
                           <TableCell className="text-center">
-                            <Draw />
+                            <Button>Open Scholarship</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -287,29 +290,9 @@ export default function Scholarships() {
                       </TableRow>
                     </TableFooter>
                   </Table>
-                ) : (
-                  <div className="grid grid-cols-4 gap-2">
-                    {scholarships.map((scholarship) => (
-                      <Card key={scholarship.name} className="w-full">
-                        <CardHeader>
-                          <CardTitle>{scholarship.name}</CardTitle>
-                          <CardDescription>
-                            End Date: {scholarship.endDate}
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <p> Applicants: {scholarship.totalApplicants}</p>
-                          <p> Approved: {scholarship.totalApproved}</p>
-                        </CardContent>
-                        <CardFooter>
-                          <Draw />
-                        </CardFooter>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
           <TabsContent value="add">
             <Card>
@@ -337,7 +320,9 @@ export default function Scholarships() {
                   <Input id="name" type="text" />
                 </div>
               </CardContent>
-              <CardFooter></CardFooter>
+              <CardFooter>
+                <Button>Add Scholarship</Button>
+              </CardFooter>
             </Card>
           </TabsContent>
         </Tabs>

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Kuya Wally",
+    "description": "Financial assistance for BSIT students.",
+    "applicationDeadline": "2025-05-01",
+    "statusOptions": ["approved", "pending", "missingRequirements"],
+    "requiredDocuments": [
+      "Certificate Of Registration",
+      "Birth Certificate",
+      "National ID"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Win Gatchalian",
+    "description": "Scholarship for students with academic excellence.",
+    "applicationDeadline": "2025-04-30",
+    "statusOptions": ["approved", "pending", "missingRequirements"],
+    "requiredDocuments": [
+      "Certificate Of Registration",
+      "Birth Certificate",
+      "National ID"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Ate Diwata Pares",
+    "description": "Needs-based support for low-income families.",
+    "applicationDeadline": "2025-05-05",
+    "statusOptions": ["approved", "pending", "missingRequirements"],
+    "requiredDocuments": [
+      "Certificate Of Registration",
+      "Birth Certificate",
+      "National ID"
+    ]
+  }
+]

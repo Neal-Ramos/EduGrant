@@ -18,6 +18,11 @@ import {
   Megaphone,
   Archive,
   FileUser,
+  FolderOpen,
+  House,
+  LayoutDashboard,
+  LayoutGrid,
+  UsersRound,
 } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -74,27 +79,17 @@ const data = {
     {
       title: "Dashboard",
       url: "/admin-home/dashboard",
-      icon: Gauge,
+      icon: LayoutGrid,
     },
     {
       title: "Scholarships",
       url: "/admin-home/scholarships",
-      icon: ListOrdered,
-    },
-    {
-      title: "Scholarships Report",
-      url: "/admin-home/scholarships-report",
-      icon: FileUser,
-    },
-    {
-      title: "Scholarships Archive",
-      url: "/admin-home/scholarships-archive",
-      icon: Archive,
+      icon: FolderOpen,
     },
     {
       title: "Applications",
       url: "/admin-home/applications",
-      icon: Send,
+      icon: UsersRound,
     },
     {
       title: "Announcements",

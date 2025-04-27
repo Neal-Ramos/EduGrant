@@ -55,6 +55,7 @@ export default function LoginAdmin() {
   const [password, setPassword] = useState("");
   const [slideLogin, setslideLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [ludeng, setLudeng] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -238,7 +239,11 @@ export default function LoginAdmin() {
               Didn't recieve the code? <p className="underline">Resend Now</p>
             </div>
             <div className="flex flex-col gap-2 mt-3">
-              <Button type="submit" className="rounded" disabled={loading}>
+              <Button
+                type="submit"
+                className="rounded"
+                disabled={loading}
+              >
                 {loading ? "Loading..." : "Login"}
               </Button>
               <Button
@@ -255,6 +260,8 @@ export default function LoginAdmin() {
           </motion.div>
         )}
       </AnimatePresence>
+
+  
     </div>
   );
 }

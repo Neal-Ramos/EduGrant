@@ -79,7 +79,7 @@ export default function Announcements() {
 
   return (
     <>
-      <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
+      <header className="flex  bg-gradient-to-bl from-green-700 to-green-900 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
         <div className="flex items-center gap-3">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
@@ -279,7 +279,9 @@ export default function Announcements() {
               }
               required
             />
-            <Button className="bg-green-700" type="submit">Add Slide</Button>
+            <Button className="bg-green-700" type="submit">
+              Add Slide
+            </Button>
           </form>
         </DialogContent>
       </Dialog>

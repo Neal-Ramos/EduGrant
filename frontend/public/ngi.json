@@ -1,0 +1,130 @@
+[
+  {
+    "name": "STEM Scholars Grant",
+    "sponsoredBy": "National Science Foundation",
+    "startDate": "2025-03-01",
+    "endDate": "2025-05-30",
+    "description": "Supports students pursuing degrees in science, technology, engineering, and math fields.",
+    "totalApplicants": 3,
+    "totalApproved": 2,
+    "students": [
+      {
+        "name": "Alice Rivera",
+        "status": "approved",
+        "applicationDate": "2025-04-01",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Ben Tran",
+        "status": "approved",
+        "applicationDate": "2025-04-05",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Clara Zhang",
+        "status": "reject",
+        "applicationDate": "2025-04-10",
+        "section": "BSIT-3C"
+      }
+    ]
+  },
+  {
+    "name": "Future Leaders Scholarship",
+    "sponsoredBy": "Global Youth Foundation",
+    "startDate": "2025-01-15",
+    "endDate": "2025-06-15",
+    "description": "Empowers future leaders with financial support for academic excellence and leadership potential.",
+    "totalApplicants": 200,
+    "totalApproved": 80,
+    "students": [
+      {
+        "name": "Daniel Kim",
+        "status": "approved",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Ella Martinez",
+        "status": "approved",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Frankie Lee",
+        "status": "rejected",
+        "section": "BSIT-3C"
+      }
+    ]
+  },
+  {
+    "name": "Community Impact Award",
+    "sponsoredBy": "Neighborhood Alliance Fund",
+    "startDate": "2025-02-01",
+    "endDate": "2025-05-20",
+    "description": "Rewards students making a difference in their communities through service and activism.",
+    "totalApplicants": 4,
+    "totalApproved": 2,
+    "students": [
+      {
+        "name": "Grace Nunez",
+        "status": "approved",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Henry Choi",
+        "status": "approved",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Isla Thompson",
+        "status": "rejected",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Jack Wu",
+        "status": "pending",
+        "section": "BSIT-3C"
+      }
+    ]
+  },
+  {
+    "name": "Merit-Based Excellence Fund",
+    "sponsoredBy": "Academic Achievement Council",
+    "startDate": "2025-03-10",
+    "endDate": "2025-06-01",
+    "description": "Recognizes students with outstanding academic records and achievements.",
+    "totalApplicants": 1,
+    "totalApproved": 1,
+    "students": [
+      {
+        "name": "Kara Santos",
+        "status": "approved",
+        "section": "BSIT-3C"
+      }
+    ]
+  },
+  {
+    "name": "Diversity & Inclusion Scholarship",
+    "sponsoredBy": "Equity in Education Network",
+    "startDate": "2025-02-20",
+    "endDate": "2025-05-28",
+    "description": "Promotes access to higher education for underrepresented and diverse student populations.",
+    "totalApplicants": 3,
+    "totalApproved": 3,
+    "students": [
+      {
+        "name": "Liam Patel",
+        "status": "approved",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Maya Gonzales",
+        "status": "approved",
+        "section": "BSIT-3C"
+      },
+      {
+        "name": "Noah Tan",
+        "status": "approved",
+        "section": "BSIT-3C"
+      }
+    ]
+  }
+]
