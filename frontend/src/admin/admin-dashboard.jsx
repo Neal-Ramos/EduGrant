@@ -60,6 +60,7 @@ import {
   Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Component } from "./piechart";
 import { Link } from "react-router-dom";
 function Loader() {
   return (
@@ -95,7 +96,6 @@ export default function Dashboard() {
     }
     fetchScholar();
   }, []);
-  console.log(scholar);
 
   const [date, setDate] = useState(new Date());
   const navigate = useNavigate();

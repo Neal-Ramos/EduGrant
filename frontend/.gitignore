@@ -1,24 +1,24 @@
-# Node modules
+Node modules
 node_modules/
 
-# Build output
+Build output
 dist/
 build/
 
-# Vite cache
+Vite cache
 .vite/
 
-# Log files
+Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Local env files
+Local env files
 .env
 .env.*.local
 
-# IDE files
+IDE files
 .vscode/
 .idea/
 *.suo
@@ -26,11 +26,11 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 
-# MacOS junk
+MacOS junk
 .DS_Store
 
-# Windows junk
+Windows junk
 Thumbs.db
 
-# Others
+Others
 *.log
