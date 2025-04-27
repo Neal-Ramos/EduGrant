@@ -86,7 +86,7 @@ export default function Announcements() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Scholarship Management</BreadcrumbLink>
+                <BreadcrumbLink>Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>

@@ -39,6 +39,7 @@ import {
   FileDown,
   Grid2x2,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -128,13 +129,15 @@ export default function OpenScholarship() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink>Scholarship Management</BreadcrumbLink>
+                <BreadcrumbLink>Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-white">
-                  Scholarships
-                </BreadcrumbPage>
+                <Link to="/admin-home/scholarships">
+                  <BreadcrumbPage className="text-white">
+                    Scholarships
+                  </BreadcrumbPage>
+                </Link>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>

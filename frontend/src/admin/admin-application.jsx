@@ -426,12 +426,12 @@ export default function Application() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Scholarship Management</BreadcrumbLink>
+                <BreadcrumbLink>Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
-                  Scholarships Applications
+                  Applications
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>

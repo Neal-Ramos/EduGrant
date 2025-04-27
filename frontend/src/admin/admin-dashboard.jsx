@@ -111,7 +111,7 @@ export default function Dashboard() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Application Management</BreadcrumbLink>
+                <BreadcrumbLink>Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
@@ -368,7 +368,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="w-1/4 space-y-3">
-            <Card className="w-full z-10">
+            <Card className="w-full z-10 shadow-md">
               <CardHeader>
                 <CardTitle className="flex gap-1 items-center">
                   <Megaphone /> Add Announcements
@@ -390,30 +390,7 @@ export default function Dashboard() {
                 </Link>
               </CardFooter>
             </Card>
-            <div className="w-full relative">
-              <Card className="w-full z-10">
-                <CardHeader>
-                  <CardTitle className="flex gap-1 items-center">
-                    <Megaphone /> Add Announcements
-                  </CardTitle>
-                  <CardDescription>
-                    Share important updates, deadlines, or news with all
-                    applicants.
-                  </CardDescription>
-                </CardHeader>
 
-                <CardFooter className="flex justify-between">
-                  <Link className="w-full" to="/admin-home/announcements">
-                    <Button
-                      className="w-full flex gap-1 items-center"
-                      variant="outline"
-                    >
-                      <Plus /> Add
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            </div>
             <div className="w-full">
               <Card className="w-full">
                 <CardHeader>
@@ -433,6 +410,7 @@ export default function Dashboard() {
                 </CardFooter>
               </Card>
             </div>
+            <div className="w-full relative"></div>
           </div>
         </div>
       </div>
