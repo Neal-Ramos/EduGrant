@@ -15,7 +15,7 @@ import Scholarships from "./admin/admin-scholarships";
 import Announcements from "./admin/admin-announcements";
 import VerificationPage from "./client/verify-email";
 import ScholarshipsArchive from "./admin/admin-scholarships-archive";
-
+import OpenScholarship from "./admin/scholarship-details";
 import { ThemeProvider } from "./components/ui/darkmode";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -28,7 +28,7 @@ function App() {
         {/* CLIENT ROUTES */}
         <Route path="/" element={<ClientLogin />} />
         <Route path="/verify-email" element={<VerificationPage />} />
-        <Route element={<ProtectedRoutes/>}>
+        <Route element={<ProtectedRoutes />}>
           <Route path="/home" element={<ClientHome />}>
             <Route index element={<Navigate to="dashboard" />} />
             <Route path="dashboard" element={<ClientDashboard />} />
@@ -46,7 +46,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="applications" element={<Application />} />
           <Route path="scholarships" element={<Scholarships />} />
-        
+          <Route path="scholarships/:id" element={<OpenScholarship />} />
           <Route
             path="scholarships-archive"
             element={<ScholarshipsArchive />}
