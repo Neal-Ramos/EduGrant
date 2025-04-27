@@ -122,7 +122,7 @@ exports.codeAuthentication = async (req, res) => {
                 if(expiryDate > Date.now()){
                     const getUser = await userAccountsModels.getUserByEmail(userEmail)
                     const userID = getUser[0].userID
-                    const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "2h"})//expires TOKEN
+                    const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "7d"})//expires TOKEN
                     res.cookie("token", token, {
                         httpOnly:true,
                         secure:process.env.NODE_ENV === "production",
@@ -163,6 +163,7 @@ exports.codeAuthentication = async (req, res) => {
             return res.status(500).json({success:false, error})
         }
     }
+    return res.status(400).json({success:false, message:"Invalid Code Origin"})
 }
 exports.tokenAuthetication = async (req, res) => {
     const cookieToken = req.cookies.token
