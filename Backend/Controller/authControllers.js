@@ -152,7 +152,7 @@ exports.codeAuthentication = async (req, res) => {
                 const expiryDate = new Date(selectMatchCode[0].expiryDate).getTime();
                 if(expiryDate > Date.now()){
                     const encryptPassword = await bcrypt.hash(userPassword, 10)
-                    await userAccountsModels.inserNewUser(firstName, middleName, lastName, userEmail, encryptPassword)
+                    await userAccountsModels.insertNewUser(firstName, middleName, lastName, userEmail, encryptPassword)
                     await securityCodeModels.deleteCodeByEmailOrigin(userEmail, origin)
                     return res.status(201).json({success:true, message:"Account Created!!"})
                 }
