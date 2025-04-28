@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Footerdemo from "./client-footer";
 
 import edugrantlogo from "@/assets/greenlogo.png";
 import {
@@ -743,6 +744,7 @@ export default function ClientLogin() {
           </div>
         </div>
       </div>
+      <Footerdemo />
     </>
   );
 }

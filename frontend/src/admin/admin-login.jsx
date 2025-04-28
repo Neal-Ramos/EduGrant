@@ -149,32 +149,7 @@ export default function LoginAdmin() {
                     <Checkbox />
                     Remember me
                   </p>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button className="underline" variant="ghost">
-                        Forgot password?
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Forgot password</DialogTitle>
-                        <DialogDescription>
-                          Enter your email address to receive a password reset
-                          link.
-                        </DialogDescription>
-                      </DialogHeader>
-
-                      <Input
-                        id="email"
-                        defaultValue="@example.com"
-                        className="col-span-3"
-                      />
-
-                      <DialogFooter>
-                        <Button type="submit">Send</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                 
                 </p>
                 <Button
                   onClick={(e) => {
