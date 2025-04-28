@@ -27,7 +27,7 @@ exports.registerAccounts = async (req, res) => {
         const sendCode = crypto.randomBytes(3).toString("hex");
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: process.env.MAILER_EMAIL_CREDENTIAL,
             to: userEmail,
             subject: "Registration Code",
             text: `Your Registration Code is ${sendCode} if this is not you ignore this email`,
@@ -79,7 +79,7 @@ exports.loginAccounts =  async (req, res) => {
             const sendCode = crypto.randomBytes(3).toString("hex");
             const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
             const mailOptions = {
-                from: process.env.EMAIL_USER,
+                from: process.env.MAILER_EMAIL_CREDENTIAL,
                 to: userEmail,
                 subject: "Login Code",
                 text: `Your Login Code is ${sendCode} if this is not you ignore this email`,

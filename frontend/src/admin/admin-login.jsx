@@ -23,31 +23,8 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-
-const handleLoginButton = async (e) => {
-  setLoading(true);
-  e.preventDefault();
-  const data = { userEmail: email, userPassword: password };
-  try {
-    if (validateFormLogin()) {
-      console.log(data);
-      const res = await axios.post(
-        `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/login`,
-        data,
-        { withCredentials: true }
-      );
-      if (res.status === 200) {
-        setShowOTP(true);
-        setslideLogin(false);
-        setLoading(false);
-      }
-      setLoading(false);
-    }
-  } catch (error) {
-    console.log(error);
-    setLoading(false);
-  }
-};
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginAdmin() {
   const [email, setEmail] = useState("");
@@ -68,7 +45,42 @@ export default function LoginAdmin() {
   const handleOtpChange = (value) => {
     setOtp(value);
   };
-
+  const navigate = useNavigate()
+  const handleLoginButton = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    const data = { adminEmail: email, adminPassword: password}
+    try {
+      console.log(data);
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/adminLogin`,data,{ withCredentials: true });
+      if (res.status === 200) {
+        toast("Code sent to email", {
+          description:
+            "Please check your inbox for the verification code.",
+        });
+        console.log(res)
+        setShowOTP(true);
+        setslideLogin(false);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  }
+  const handleSendOtp = async () => {
+      setLoading(true)
+    try {
+      const data = {code:otp, origin:"adminLogin", adminEmail:email}
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/adminCodeAuthentication`,data,{ withCredentials: true });
+      console.log(res)
+      if(res.status === 200){navigate("/admin-home")}
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setLoading(false)
+    }
+  }
   return (
     <div
       className="
@@ -144,23 +156,14 @@ export default function LoginAdmin() {
                     </p>
                   )}
                 </div>
-                <p className="w-full flex justify-between font-semibold items-center text-sm cursor-pointer">
+                <div className="w-full flex justify-between font-semibold items-center text-sm cursor-pointer">
                   <p className="flex items-center gap-2">
                     <Checkbox />
                     Remember me
                   </p>
-                 
-                </p>
+                </div>
                 <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowOTP(true);
-                    setslideLogin(false);
-                    toast("Code sent to email", {
-                      description:
-                        "Please check your inbox for the verification code.",
-                    });
-                  }}
+                  onClick={handleLoginButton}
                   className=" rounded"
                   disabled={loading}
                 >
@@ -218,6 +221,7 @@ export default function LoginAdmin() {
                 type="submit"
                 className="rounded"
                 disabled={loading}
+                onClick={handleSendOtp}
               >
                 {loading ? "Loading..." : "Login"}
               </Button>
