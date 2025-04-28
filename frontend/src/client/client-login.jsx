@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-
+import { Feature } from "./feature";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Send } from "lucide-react";
@@ -744,6 +744,7 @@ export default function ClientLogin() {
           </div>
         </div>
       </div>
+      <Feature />
       <Footerdemo />
     </>
   );
