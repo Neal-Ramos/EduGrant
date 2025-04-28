@@ -5,6 +5,16 @@ import { useState } from "react";
 import { Send } from "lucide-react";
 import bascLogo from "../assets/basclogo.png";
 import bascImage from "../assets/BASCjf5989_03 copy.jpg";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import edugrantlogo from "@/assets/greenlogo.png";
 import {
@@ -37,6 +47,7 @@ function DrawerDemo() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [terms, setTerms] = useState(true);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -178,7 +189,10 @@ function DrawerDemo() {
         userPassword: password,
       };
       try {
-        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/registerAccount`,data);
+        const res = await axios.post(
+          `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/registerAccount`,
+          data
+        );
         if (res.status === 200) {
           console.log(res);
           setShowOTP(true);
@@ -205,9 +219,7 @@ function DrawerDemo() {
     };
     try {
       const res = await axios.post(
-        `${
-          import.meta.env.VITE_EXPRESS_API_EDUGRANT
-        }/codeAuthentication`,
+        `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/codeAuthentication`,
         data
       );
       if (res.status === 201) {
@@ -249,7 +261,7 @@ function DrawerDemo() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.3 }}
-                className="mx-auto w-full max-w-sm "
+                className="mx-auto w-full max-w-sm"
               >
                 <DrawerHeader>
                   <div className="bg-gray-200 flex justify-center items-center p-[3px] gap-2 rounded-sm">
@@ -282,7 +294,44 @@ function DrawerDemo() {
                       )}
                     </span>
                     <span className="flex gap-2 flex-col">
-                      <Label htmlFor="password">Password</Label>
+                      <Label
+                        htmlFor="password"
+                        className="flex justify-between"
+                      >
+                        <p>Password</p>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <p className="underline text-green-700">
+                              Forgot password?
+                            </p>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                              <DialogTitle>Forgot Password</DialogTitle>
+                              <DialogDescription>
+                                Enter the email address associated with your
+                                account. We’ll send you a verification code to
+                                reset your password.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="email" className="text-right">
+                                  Email
+                                </Label>
+                                <Input
+                                  id="email"
+                                  defaultValue="@example.com"
+                                  className="col-span-3"
+                                />
+                              </div>
+                            </div>
+                            <DialogFooter>
+                              <Button type="submit">Send code</Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </Label>
                       <Input
                         type="password"
                         value={password}
@@ -295,7 +344,14 @@ function DrawerDemo() {
                         </p>
                       )}
                     </span>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="terms" />
+                        <Label htmlFor="terms">Remember me</Label>
+                      </div>
+                    </div>
                   </div>
+
                   <DrawerFooter>
                     <Button
                       onClick={handleLoginButton}
@@ -305,10 +361,10 @@ function DrawerDemo() {
                       {loading ? "Loading..." : "Login"}
                     </Button>
                     <span className="relative text-center flex justify-center items-center mt-3">
-                      <p className="bg-white z-1 p-1 text-xs">
+                      <p className="bg-zinc-100 px-2 z-1 py-1 text-xs">
                         OR CONTINUE WITH
                       </p>
-                      <div className="absolute border-1 border-black/50 w-full"></div>
+                      <div className="absolute border-1 border-black/40 w-full"></div>
                     </span>
 
                     <Button className="mt-2" variant="outline">
@@ -323,10 +379,10 @@ function DrawerDemo() {
                       </svg>
                       Google
                     </Button>
-                    <p className="text-center">
+                    <p className="text-center text-sm">
                       Don't have an account?{" "}
                       <span
-                        className="underline"
+                        className="underline font-semibold text-green-800"
                         onClick={() => {
                           setshowLogin(false);
                           setshowRegister(true);
@@ -522,15 +578,20 @@ function DrawerDemo() {
                         </p>
                       )}
                     </span>
+                    <div className="flex items-center space-x-2 mt-3">
+                      <Checkbox id="terms" onClick={() => setTerms(!terms)} />
+                      <Label htmlFor="terms">Accept terms and conditions</Label>
+                    </div>
                   </div>
                   <DrawerFooter>
-                    <Button disabled={loading} type="submit">
+                    <Button disabled={(loading, terms)} type="submit">
                       {loading ? "Loading.." : "Register"}
                     </Button>
+
                     <p className="text-center">
                       Already have an account?{" "}
                       <span
-                        className="underline"
+                        className="underline font-semibold text-green-800 text-sm"
                         onClick={() => {
                           setshowLogin(true);
                           setshowRegister(false);
@@ -647,11 +708,14 @@ export default function ClientLogin() {
         </header>
 
         <div className="relative w-[95%] bg-green-800 h-[80%] rounded-4xl shadow-xl flex    overflow-hidden">
-          <div className=" w-[60%] flex flex-col justify-center items-start z-10  text-white p-10">
+          <div className=" w-[60%] flex flex-col justify-center items-start z-10  text-white p-10 gap-1">
+            <p className="font-semibold text-2xl text-yellow-400">
+              Office of Student Affairs and Service
+            </p>
             <h1 className="text-5xl font-bold">
               Scholarship Applications <br /> Made Easy
             </h1>
-            <p className="mt-3 text-xl">
+            <p className="mt-3 text-xl text-white/90">
               Apply, track, and get notified — all in one place for BASC
               students.
             </p>
@@ -659,7 +723,7 @@ export default function ClientLogin() {
               size="lg"
               className="ml-6  mt-10"
               onClick={() => {
-                setOpenLogin(true), setBg(true);
+                showLogin(true);
               }}
             >
               Apply Now <ArrowRight />
