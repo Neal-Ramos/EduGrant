@@ -256,9 +256,10 @@ export default function Scholarships() {
                         <TableHead>Scholarship Name</TableHead>
                         <TableHead>Total Applicants</TableHead>
                         <TableHead>Total Approved</TableHead>
+                        <TableHead className="text-left">Deadline</TableHead>
+                        <TableHead className="text-center">Status</TableHead>
 
-                        <TableHead className="text-right">End Date</TableHead>
-                        <TableHead className="w-[300px]"></TableHead>
+                        <TableHead className=""></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -268,12 +269,31 @@ export default function Scholarships() {
                             {scholarship.name}
                           </TableCell>
                           <TableCell>{scholarship.totalApplicants}</TableCell>
+
                           <TableCell>{scholarship.totalApproved}</TableCell>
-                          <TableCell className="text-right">
+                          <TableCell className="text-left">
                             {scholarship.endDate}
                           </TableCell>
+                          <TableCell className="flex items-center justify-center">
+                            <p className="text-xs py-1 px-2 rounded-2xl bg-green-100 text-green-700 border-1 font-semibold flex items-center gap-1 shadow">
+                              Active
+                              <Check
+                                className="bg-green-500 rounded-full text-white shadow"
+                                size={15}
+                              />
+                            </p>
+                          </TableCell>
                           <TableCell className="text-center">
-                            <Button>Open Scholarship</Button>
+                            <Link
+                              className="w-full"
+                              to={`/admin-home/scholarships/${encodeURIComponent(
+                                scholarship.name
+                              )}`}
+                            >
+                              <Button className=" bg-green-700 hover:bg-green-800">
+                                View
+                              </Button>
+                            </Link>
                           </TableCell>
                         </TableRow>
                       ))}

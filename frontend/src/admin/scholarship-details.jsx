@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
+
 import {
   Command,
   CommandEmpty,
@@ -56,6 +57,16 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SwiperSlide } from "swiper/react";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 function Loader() {
   return (
@@ -308,21 +319,55 @@ export default function OpenScholarship() {
                 Export CSV <FileDown />
               </Button>
             </div>
-            <div className="grid grid-cols-4 gap-2">
-              {filteredStudents?.map((meow) => (
-                <Card key={meow.name}>
-                  <CardHeader>
-                    <CardTitle>{meow.name}</CardTitle>
-                    <CardDescription>{meow.section}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <p> Application Date: {meow.applicationDate}</p>
-                    <p>Status: {meow.status}</p>
-                  </CardContent>
-                  <CardFooter></CardFooter>
-                </Card>
-              ))}
-            </div>
+            {viewMode === "card" ? (
+              <div className="grid grid-cols-4 gap-2 mt-4">
+                {filteredStudents?.map((meow) => (
+                  <Card key={meow.name}>
+                    <CardHeader>
+                      <CardTitle>{meow.name}</CardTitle>
+                      <CardDescription>{meow.section}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p>Status: {meow.status}</p>
+                    </CardContent>
+                    <CardFooter></CardFooter>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Scholarship Report</CardTitle>
+                  <CardDescription>
+                    List of students
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Student Name</TableHead>
+                        <TableHead>Course, Year & Section</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className=""></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredStudents?.map((meow) => (
+                        <TableRow key={meow.name}>
+                          <TableCell>{meow.name}</TableCell>
+                          <TableCell>
+                            {meow.course}-{meow.yearLevel}
+                            {meow.section}
+                          </TableCell>
+                          <TableCell>{meow.status}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
       </div>

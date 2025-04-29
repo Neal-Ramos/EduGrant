@@ -103,7 +103,7 @@ export default function Application() {
 
   const [open, setOpen] = useState(false);
 
-  const [viewMode, setviewMode] = useState("card");
+  const [viewMode, setviewMode] = useState("table");
 
   const [activeTab, setActiveTab] = useState("review");
 
@@ -156,7 +156,7 @@ export default function Application() {
     const [activeReject, setActiveReject] = useState(null);
     return (
       <Sheet>
-        <SheetTrigger className="bg-blue-800 px-3 py-2 font-semibold text-sm rounded-md text-white w-full">
+        <SheetTrigger className="bg-blue-800 px-3 py-2 font-semibold text-sm rounded-md text-white">
           Review Student
         </SheetTrigger>
 
@@ -215,7 +215,7 @@ export default function Application() {
                     className="w-full bg-yellow-200 text-yellow-800 shadow-xs hover:bg-yellow-300 cursor-pointer"
                   >
                     <Minus className="text-white bg-yellow-600 rounded shadow-xs" />{" "}
-                    Missing
+                    Mark As Missing
                   </Button>
                   <Button className="w-full bg-red-200 text-red-800 shadow-xs hover:bg-red-300 cursor-pointer">
                     <X className="text-white bg-red-600 rounded shadow-xs" />{" "}
@@ -574,46 +574,66 @@ export default function Application() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead className="text-center">
-                            Applications
-                          </TableHead>
-                          <TableHead></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredData.filter((student) =>
-                          student.scholarships.some(
-                            (scholarship) => scholarship.pending
-                          )
-                        ).length > 0 ? (
-                          filteredData
-                            .filter((student) =>
-                              student.scholarships.some(
-                                (scholarship) => scholarship.pending
-                              )
+                    {loading ? (
+                      <Loader />
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Course, Year & Section</TableHead>
+                            <TableHead className="text-center">
+                              Applications
+                            </TableHead>
+                            <TableHead className="text-center">
+                              Status
+                            </TableHead>
+                            <TableHead></TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredData.filter((student) =>
+                            student.scholarships.some(
+                              (scholarship) => scholarship.pending
                             )
-                            .map((meow) => (
-                              <TableRow key={meow.id}>
-                                <TableCell>{meow.name}</TableCell>
-                                <TableCell>{meow.email}</TableCell>
-                                <TableCell className="text-center">
-                                  {meow.scholarships.length}
-                                </TableCell>
-                                <TableCell className="text-center">
-                                  <InReviewModal meow={meow} />
-                                </TableCell>
-                              </TableRow>
-                            ))
-                        ) : (
-                          <p>No Students Found</p>
-                        )}
-                      </TableBody>
-                    </Table>
+                          ).length > 0 ? (
+                            filteredData
+                              .filter((student) =>
+                                student.scholarships.some(
+                                  (scholarship) => scholarship.pending
+                                )
+                              )
+
+                              .map((meow) => (
+                                <TableRow key={meow.id}>
+                                  <TableCell>{meow.name}</TableCell>
+                                  <TableCell>
+                                    {meow.course}-{meow.yearLevel}
+                                    {meow.section}
+                                  </TableCell>
+                                  <TableCell className="text-center">
+                                    {meow.scholarships.length}
+                                  </TableCell>
+                                  <TableCell className="flex justify-center items-center">
+                                    <p className="text-xs py-1 px-2 rounded-2xl bg-blue-100 text-blue-700  border-1 font-semibold flex items-center gap-2 shadow">
+                                      For review
+                                      <Clock
+                                        className="bg-blue-500 rounded-full text-white  shadow "
+                                        size={15}
+                                      />
+                                    </p>
+                                  </TableCell>
+                                  <TableCell className="text-center">
+                                    <InReviewModal meow={meow} />
+                                  </TableCell>
+                                </TableRow>
+                              ))
+                          ) : (
+                            <p>No Students Found</p>
+                          )}
+                        </TableBody>
+                      </Table>
+                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -672,9 +692,7 @@ export default function Application() {
               <Card className="mt-4">
                 <CardHeader>
                   <CardTitle>Student Application</CardTitle>
-                  <CardDescription>
-                    Can review and approve students
-                  </CardDescription>
+                  <CardDescription>List of approved students</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -683,6 +701,7 @@ export default function Application() {
                         <TableHead>Name</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Scholarship</TableHead>
+                        <TableHead>Status</TableHead>
                         <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
@@ -702,6 +721,15 @@ export default function Application() {
                                   .map((oink) => (
                                     <p key={oink.name}> {oink.name}</p>
                                   ))}
+                              </TableCell>
+                              <TableCell className="flex justify-start items-center">
+                                <p className="text-xs py-1 px-2 rounded-2xl bg-green-100 text-green-700  border-1 font-semibold flex items-center gap-2 shadow">
+                                  Approved
+                                  <Check
+                                    className="bg-green-500 rounded-full text-white  shadow "
+                                    size={15}
+                                  />
+                                </p>
                               </TableCell>
                               <TableCell className="text-center">
                                 <ApprovedModal meow={arf} />
@@ -771,7 +799,7 @@ export default function Application() {
                 <CardHeader>
                   <CardTitle>Student Application</CardTitle>
                   <CardDescription>
-                    Can review and approve students
+                    Students with missing requirements
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -781,8 +809,9 @@ export default function Application() {
                         <TableHead>Name</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead className="text-center">
-                          Applications
+                          Missing Requirements
                         </TableHead>
+                        <TableHead className="text-center">Status</TableHead>
                         <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
@@ -803,7 +832,20 @@ export default function Application() {
                               <TableCell>{meow.name}</TableCell>
                               <TableCell>{meow.email}</TableCell>
                               <TableCell className="text-center">
-                                {meow.scholarships.length}
+                                {
+                                  meow.scholarships.filter(
+                                    (s) => s.missingRequirements === true
+                                  ).length
+                                }
+                              </TableCell>
+                              <TableCell className="flex items-center justify-center">
+                                <p className="text-xs py-1 px-2 rounded-2xl bg-yellow-100 text-yellow-700 border-1 font-semibold flex items-center gap-2 shadow">
+                                  Missing
+                                  <Minus
+                                    className="bg-yellow-500 rounded-full text-white shadow"
+                                    size={15}
+                                  />
+                                </p>
                               </TableCell>
                               <TableCell className="text-center">
                                 <MissingModal meow={meow} />
