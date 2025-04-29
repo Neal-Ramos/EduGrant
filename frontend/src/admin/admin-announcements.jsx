@@ -188,7 +188,7 @@ export default function Announcements() {
               required
             />
             <input
-              type="url"
+              type="file"
               placeholder="Banner Image URL (optional)"
               className="w-full border p-2 rounded"
               value={newAnnouncement.banner}

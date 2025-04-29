@@ -184,7 +184,6 @@ export default function Scholarships() {
               </Button>
               <Link to="/admin-home/scholarships/archived">
                 <Button>
-                  {" "}
                   Archive <Archive />
                 </Button>
               </Link>
@@ -303,21 +302,19 @@ export default function Scholarships() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="curnamerent">Scholarship name</Label>
-                  <Input id="name" type="text" />
+                <div className="flex gap-3 w-full">
+                  <div className="space-y-1  w-full">
+                    <Label htmlFor="curnamerent">Scholarship Name</Label>
+                    <Input id="name" type="text" />
+                  </div>
+                  <div className="space-y-1  w-full">
+                    <Label htmlFor="curnamerent">Scholarship End Date</Label>
+                    <Input id="name" type="date" />
+                  </div>
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="curnamerent">Scholarship details</Label>
                   <Textarea placeholder="Type your message here" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="curnamerent">Scholarship expiry</Label>
-                  <Input id="name" type="text" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="curnamerent">Scholarship Requirements</Label>
-                  <Input id="name" type="text" />
                 </div>
               </CardContent>
               <CardFooter>

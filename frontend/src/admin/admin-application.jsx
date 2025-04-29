@@ -439,8 +439,6 @@ export default function Application() {
         </div>
       </header>
 
-     
-
       <div className="px-5 py-5 flex gap-3">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
@@ -504,9 +502,9 @@ export default function Application() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className=" p-4">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="review">In Review</TabsTrigger>
+          <TabsTrigger value="review">For Review</TabsTrigger>
           <TabsTrigger value="approved">Approved</TabsTrigger>
-          <TabsTrigger value="missing">Missing</TabsTrigger>
+          <TabsTrigger value="missing">Missing Requirements</TabsTrigger>
         </TabsList>
 
         {activeTab === "review" && (
@@ -529,7 +527,7 @@ export default function Application() {
                             <UserRound />
                             {meow.name}
                             <p className="text-xs py-1 px-2 rounded-2xl bg-blue-100 text-blue-700  border-1 font-semibold flex items-center gap-2 shadow">
-                              In review
+                              For review
                               <Clock
                                 className="bg-blue-500 rounded-full text-white  shadow "
                                 size={15}

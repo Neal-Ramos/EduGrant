@@ -50,7 +50,7 @@ function App() {
           <Route path="scholarships" element={<Scholarships />} />
           <Route path="scholarships/:id" element={<OpenScholarship />} />
           <Route
-            path="scholarships-archive"
+            path="scholarships/archived"
             element={<ScholarshipsArchive />}
           />
           <Route path="announcements" element={<Announcements />} />

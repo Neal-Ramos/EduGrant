@@ -289,7 +289,7 @@ export default function Dashboard() {
                         <CardTitle className="flex items-center gap-2">
                           <UserRound /> {ngi.name}
                           <p className="text-xs py-1 px-2 rounded-2xl bg-blue-100 text-blue-700  border-1 font-semibold flex items-center gap-2 shadow">
-                            In review
+                            For review
                             <Clock
                               className="bg-blue-500 rounded-full text-white  shadow "
                               size={15}
