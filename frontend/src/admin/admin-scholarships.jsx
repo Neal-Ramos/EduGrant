@@ -85,17 +85,28 @@ export default function Scholarships() {
     updated[index][field] = value;
     setRequirements(updated);
   };
-
   useEffect(() => {
-    async function fetchScholar() {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const response = await fetch("/ngi.json");
-      const data = await response.json();
-      setScholar(data);
-      setLoading(false);
+    const getScholar =async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/getScholarships`,{},{withCredentials:true})
+        setScholar(res.data)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
     }
-    fetchScholar();
-  }, []);
+    getScholar()
+  },[])
+  // useEffect(() => {
+  //   async function fetchScholar() {
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     const response = await fetch("/ngi.json");
+  //     const data = await response.json();
+  //     setScholar(data);
+  //     setLoading(false);
+  //   }
+  //   fetchScholar();
+  // }, []);
 
   const exportCSV = () => {
     if (!scholarships || scholarships.length === 0) {
@@ -124,7 +135,7 @@ export default function Scholarships() {
   };
 
   const filteredData = scholarships.filter((meow) =>
-    meow.name.toLowerCase().includes(searchTerm.toLowerCase())
+    meow.scholarshipName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const [newScholarData, setNewScholarData] = useState({
     newScholarName:null,
@@ -232,11 +243,11 @@ export default function Scholarships() {
             ) : viewMode === "card" ? (
               <div className="grid grid-cols-4 gap-2">
                 {filteredData.map((scholarship) => (
-                  <Card key={scholarship.name} className="w-full">
+                  <Card key={scholarship.scholarshipId } className="w-full">
                     <CardHeader>
                       <CardTitle className="flex items-center  gap-2">
                         <GraduationCap className="min-w-6" />
-                        <p>{scholarship.name}</p>
+                        <p>{scholarship.scholarshipName}</p>
                         <p className="text-xs py-1 px-2 rounded-2xl bg-green-100 text-green-700 border-1 font-semibold flex items-center gap-1 shadow">
                           Active
                           <Check
@@ -246,7 +257,7 @@ export default function Scholarships() {
                         </p>
                       </CardTitle>
                       <CardDescription>
-                        End Date: {scholarship.endDate}
+                        End Date: {scholarship.scholarshipDealine}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex justify-around">
@@ -268,7 +279,7 @@ export default function Scholarships() {
                       <Link
                         className="w-full"
                         to={`/admin-home/scholarships/${encodeURIComponent(
-                          scholarship.name
+                          scholarship.scholarshipName
                         )}`}
                       >
                         <Button className="w-full bg-green-700 hover:bg-green-800">
@@ -302,15 +313,15 @@ export default function Scholarships() {
                     </TableHeader>
                     <TableBody>
                       {filteredData.map((scholarship) => (
-                        <TableRow key={scholarship.name}>
+                        <TableRow key={scholarship.scholarshipId }>
                           <TableCell className="font-medium">
-                            {scholarship.name}
+                            {scholarship.scholarshipName}
                           </TableCell>
                           <TableCell>{scholarship.totalApplicants}</TableCell>
 
                           <TableCell>{scholarship.totalApproved}</TableCell>
                           <TableCell className="text-left">
-                            {scholarship.endDate}
+                            {scholarship.scholarshipDealine}
                           </TableCell>
                           <TableCell className="flex items-center justify-center">
                             <p className="text-xs py-1 px-2 rounded-2xl bg-green-100 text-green-700 border-1 font-semibold flex items-center gap-1 shadow">
@@ -325,7 +336,7 @@ export default function Scholarships() {
                             <Link
                               className="w-full"
                               to={`/admin-home/scholarships/${encodeURIComponent(
-                                scholarship.name
+                                scholarship.scholarshipName
                               )}`}
                             >
                               <Button className=" bg-green-700 hover:bg-green-800">

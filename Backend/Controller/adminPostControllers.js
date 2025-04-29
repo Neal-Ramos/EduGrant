@@ -30,3 +30,11 @@ exports.adminAddScholarships = async (req, res) => {
         return res.status(500).json({success:false, message:"Scholarship Not Added!", error:error.message})
     }
 }
+exports.getScholarships = async (req, res) => {
+    try {
+        const getAllScholarships = await scholarshipsModels.getScholarships()
+        res.status(200).json(getAllScholarships)
+    } catch (error) {
+        return res.status(500).json({success:false, message:"Internal Server Error!!!", error:error.message})
+    }
+}

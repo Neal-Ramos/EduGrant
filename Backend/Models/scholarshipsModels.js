@@ -6,3 +6,6 @@ exports.insertScholarships = (newScholarName, newScholarDeadline, newScholarDesc
     return query("INSERT INTO scholarships(scholarshipName, scholarshipDealine, scholarshipLogo, scholarshipCover, scholarshipDescription, scholarshipDocuments) VALUES(?, ?, ?, ?, ?, ?)",
         [newScholarName, newScholarDeadline, sponsorLogo, coverImg, newScholarDescription, requirements])
 }
+exports.getScholarships = () => {
+    return query("SELECT * FROM scholarships")
+}
