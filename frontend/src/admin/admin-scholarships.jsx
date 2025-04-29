@@ -406,8 +406,8 @@ export default function Scholarships() {
                       </label>
                       <Input
                         id={`docType-${index}`}
-                        type="text"
-                        placeholder="e.g., PDF, JPEG"
+                        disabled
+                        type="file"
                         value={req.type}
                         onChange={(e) =>
                           handleChange(index, "type", e.target.value)
