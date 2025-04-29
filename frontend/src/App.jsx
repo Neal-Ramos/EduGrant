@@ -20,6 +20,7 @@ import { ThemeProvider } from "./components/ui/darkmode";
 import { Toaster } from "@/components/ui/sonner";
 
 import ProtectedRoutes from "./ProtectedRoutes";
+import ProtectedRoutesAdmin from "./ProtectedRoutesAdmin";
 
 import { NotFoundPage } from "./404";
 function App() {
@@ -43,17 +44,19 @@ function App() {
 
         {/* ADMIN ROUTES */}
         <Route path="/admin-login" element={<LoginAdmin />} />
-        <Route path="/admin-home" element={<Home />}>
-          <Route index element={<Navigate to="dashboard" />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="applications" element={<Application />} />
-          <Route path="scholarships" element={<Scholarships />} />
-          <Route path="scholarships/:id" element={<OpenScholarship />} />
-          <Route
-            path="scholarships/archived"
-            element={<ScholarshipsArchive />}
-          />
-          <Route path="announcements" element={<Announcements />} />
+        <Route element={<ProtectedRoutesAdmin/>}>
+          <Route path="/admin-home" element={<Home />}>
+            <Route index element={<Navigate to="dashboard" />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="applications" element={<Application />} />
+            <Route path="scholarships" element={<Scholarships />} />
+            <Route path="scholarships/:id" element={<OpenScholarship />} />
+            <Route
+              path="scholarships/archived"
+              element={<ScholarshipsArchive />}
+            />
+            <Route path="announcements" element={<Announcements />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

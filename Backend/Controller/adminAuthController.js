@@ -41,7 +41,7 @@ exports.adminLogIn = async (req, res) => {
             }
         });
     } catch (error) {
-        return res.status(500).json({success:false, message:error})
+        return res.status(500).json({success:false, message:error.message})
     }
 }
 exports.adminCodeAuthentication = async (req, res) => {
@@ -65,9 +65,17 @@ exports.adminCodeAuthentication = async (req, res) => {
         await securityCodeModels.deleteCodeByEmailOrigin(adminEmail, origin)
         return res.status(200).json({success:true, message:"Login Success!"})
     } catch (error) {
-        return res.status(500).json({success:false, message:error})
+        return res.status(500).json({success:false, message:error.message})
     }
 }
 exports.adminTokenAuthentication = async (req, res) => {
-
+    try {
+        const token = req.cookies.token
+        if(!token){return res.status(400).json({success:false, message:"No token"})}
+        const verifyToken = jwt.verify(token, process.env.JWT_SECRET)
+        if(verifyToken.role !== "admin"){return res.status(400).json({success:false, message:"Access Prohibited!"})}
+        return res.status(200).json({success:true, message:"Access Granted!"})
+    } catch (error) {
+        return res.status(500).json({success:false, message:"Server Error!"})
+    }
 }
