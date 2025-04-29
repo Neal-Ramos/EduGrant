@@ -1,26 +1,13 @@
 import { useState } from "react";
+import bascLogo from "@/assets/basclogo.png";
 import {
-  GalleryVerticalEnd,
   Settings2,
   ChevronsUpDown,
-  Plus,
-  Sparkles,
-  BadgeCheck,
-  CreditCard,
-  Bell,
   LogOut,
-  Gauge,
-  ListOrdered,
-  Send,
-  SquareUserRound,
   CircleHelp,
   GraduationCap,
   Megaphone,
-  Archive,
-  FileUser,
   FolderOpen,
-  House,
-  LayoutDashboard,
   LayoutGrid,
   UsersRound,
 } from "lucide-react";
@@ -193,16 +180,16 @@ function TeamSwitcher({ teams }) {
       <SidebarMenuItem>
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground "
         >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-primary-foreground">
-            <activeTeam.logo className="size-6" />
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-primary-foreground ">
+            <img src={bascLogo} alt="" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold text-white">
+            <span className="truncate font-semibold text-white ">
               {activeTeam.name}
             </span>
-            <span className="truncate text-xs">{activeTeam.plan}</span>
+            <span className="truncate text-xs ">{activeTeam.plan}</span>
           </div>
         </SidebarMenuButton>
       </SidebarMenuItem>
@@ -219,14 +206,14 @@ function NavUser({ user }) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              size="lg "
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground "
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="grid flex-1 text-left text-sm leading-tight ">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
@@ -240,8 +227,8 @@ function NavUser({ user }) {
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm ">
+                <Avatar className="h-8 w-8 rounded-lg ">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
