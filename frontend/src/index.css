@@ -11,6 +11,10 @@
   color: red; /* emerald-500 from Tailwind */
 }
 
+#zzz {
+  position: relative;
+  z-index: 999;
+}
 
 .swiper-button-next::after,
 .swiper-button-prev::after {
