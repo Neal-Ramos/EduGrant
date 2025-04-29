@@ -270,7 +270,7 @@ export default function Announcements() {
               required
             />
             <input
-              type="url"
+              type="file"
               placeholder="Image URL"
               className="w-full border border-zinc-300 p-2 rounded text-zinc-800 placeholder-zinc-400"
               value={newSlide.image}

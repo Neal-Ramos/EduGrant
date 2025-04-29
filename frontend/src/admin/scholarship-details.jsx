@@ -38,6 +38,9 @@ import {
   TableProperties,
   FileDown,
   Grid2x2,
+  Trash,
+  Pencil,
+  Save,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -52,6 +55,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SwiperSlide } from "swiper/react";
+import { Textarea } from "@/components/ui/textarea";
 
 function Loader() {
   return (
@@ -161,47 +165,56 @@ export default function OpenScholarship() {
             ) : (
               <Card>
                 <CardHeader>
-                  <CardTitle>{scholarship.name}</CardTitle>
+                  <CardTitle>Edit Scholarship</CardTitle>
                   <CardDescription>
-                    <Input
-                      defaultValue={scholarship.description}
-                      disabled={edit}
-                    ></Input>
+                    Update the scholarship information below
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
-                  <div className="flex items-center gap-3 w-full">
-                    <div className="space-y-1 w-full">
-                      <Label htmlFor="">Sponsor</Label>
+                  <div className="flex gap-3">
+                    <div className="space-y-2 w-full">
+                      <Label htmlFor="">Scholarship Name</Label>
                       <Input
                         type="text"
-                        defaultValue={scholarship.sponsoredBy}
+                        defaultValue={scholarship.name}
                         disabled={edit}
+                        placeholder="Enter scholarship name"
                       />
                     </div>
-                    <div className="flex items-center gap-2 w-full">
-                      <div className="space-y-1 w-full">
-                        <Label htmlFor="">Start Date</Label>
-                        <Input
-                          defaultValue={scholarship.startDate}
-                          disabled={edit}
-                          type="text"
-                        />
-                      </div>
-                      <div className="space-y-1 w-full">
-                        <Label htmlFor="">End Date</Label>
-                        <Input
-                          type="text"
-                          defaultValue={scholarship.endDate}
-                          disabled={edit}
-                        />
-                      </div>
+                    <div className="space-y-2 w-full">
+                      <Label htmlFor="">Application Deadline</Label>
+                      <Input
+                        type="text"
+                        defaultValue={scholarship.endDate}
+                        disabled={edit}
+                        placeholder="e.g. 2025-12-31"
+                      />
                     </div>
                   </div>
+                  <div className="space-y-2">
+                    <Label>Scholarship Description</Label>
+                    <Textarea
+                      defaultValue={scholarship.description}
+                      disabled={edit}
+                      placeholder="Provide a detailed description of the scholarship"
+                    />
+                  </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="space-x-2">
                   <Button onClick={() => setEdit(!edit)}>
-                    {edit ? "Edit Scholarship" : "Save Changes"}
+                    {edit ? (
+                      <>
+                        <Pencil /> Edit Details
+                      </>
+                    ) : (
+                      <>
+                        <Save /> Save Changes
+                      </>
+                    )}
+                  </Button>
+
+                  <Button variant="destructive">
+                    <Trash /> Delete Scholarship
                   </Button>
                 </CardFooter>
               </Card>

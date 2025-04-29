@@ -308,12 +308,12 @@ export default function Scholarships() {
                     <Input id="name" type="text" />
                   </div>
                   <div className="space-y-1  w-full">
-                    <Label htmlFor="curnamerent">Scholarship End Date</Label>
+                    <Label htmlFor="curnamerent">Application Deadline</Label>
                     <Input id="name" type="date" />
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="curnamerent">Scholarship details</Label>
+                  <Label htmlFor="curnamerent">Scholarship Description</Label>
                   <Textarea placeholder="Type your message here" />
                 </div>
               </CardContent>
