@@ -73,6 +73,17 @@ export default function Scholarships() {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const moew = location.search.replace("?=", "") || "list";
+  const [requirements, setRequirements] = useState([{ label: "", type: "" }]);
+
+  const handleAddRequirement = () => {
+    setRequirements([...requirements, { label: "", type: "" }]);
+  };
+
+  const handleChange = (index, field, value) => {
+    const updated = [...requirements];
+    updated[index][field] = value;
+    setRequirements(updated);
+  };
 
   useEffect(() => {
     async function fetchScholar() {
@@ -321,20 +332,95 @@ export default function Scholarships() {
                   Add scholarships on active list
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-4">
                 <div className="flex gap-3 w-full">
-                  <div className="space-y-1  w-full">
-                    <Label htmlFor="curnamerent">Scholarship Name</Label>
-                    <Input id="name" type="text" />
+                  <div className="space-y-1 w-full">
+                    <Label htmlFor="scholarshipName">Scholarship Name</Label>
+                    <Input
+                      id="scholarshipName"
+                      type="text"
+                      placeholder="Enter scholarship title"
+                    />
                   </div>
-                  <div className="space-y-1  w-full">
-                    <Label htmlFor="curnamerent">Application Deadline</Label>
-                    <Input id="name" type="date" />
+                  <div className="space-y-1 w-full">
+                    <Label htmlFor="applicationDeadline">
+                      Application Deadline
+                    </Label>
+                    <Input id="applicationDeadline" type="date" />
+                  </div>
+                </div>
+                <div className="flex gap-3 w-full">
+                  <div className="space-y-1 w-full">
+                    <Label htmlFor="sponsorImage">Sponsor Logo/Image</Label>
+                    <Input
+                      id="sponsorImage"
+                      type="file"
+                      accept=".jpg, .jpeg, .png, .gif, .webp, .bmp, .svg"
+                    />
+                  </div>
+                  <div className="space-y-1 w-full">
+                    <Label htmlFor="scholarshipCover">
+                      Cover Image for Details Page
+                    </Label>
+                    <Input
+                      id="scholarshipCover"
+                      type="file"
+                      accept=".jpg, .jpeg, .png, .gif, .webp, .bmp, .svg"
+                    />
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="curnamerent">Scholarship Description</Label>
-                  <Textarea placeholder="Type your message here" />
+                  <Label htmlFor="scholarshipDescription">
+                    Scholarship Description
+                  </Label>
+                  <Textarea
+                    id="scholarshipDescription"
+                    placeholder="Provide an overview of the scholarship, eligibility, and other key information"
+                  />
+                </div>
+                {requirements.map((req, index) => (
+                  <div className=" flex gap-3 w-full" key={index}>
+                    <div className="flex flex-col   w-full">
+                      <label
+                        htmlFor={`docLabel-${index}`}
+                        className="text-sm font-medium"
+                      >
+                        Document Label
+                      </label>
+                      <Input
+                        id={`docLabel-${index}`}
+                        type="text"
+                        placeholder="e.g., Transcript of Records"
+                        value={req.label}
+                        onChange={(e) =>
+                          handleChange(index, "label", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col  w-full">
+                      <label
+                        htmlFor={`docType-${index}`}
+                        className="text-sm font-medium"
+                      >
+                        Document Type
+                      </label>
+                      <Input
+                        id={`docType-${index}`}
+                        type="text"
+                        placeholder="e.g., PDF, JPEG"
+                        value={req.type}
+                        onChange={(e) =>
+                          handleChange(index, "type", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                ))}
+
+                <div className="w-full flex justify-end">
+                  <Button onClick={handleAddRequirement}>
+                    Add More Requirements
+                  </Button>
                 </div>
               </CardContent>
               <CardFooter>
