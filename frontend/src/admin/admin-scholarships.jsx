@@ -57,6 +57,7 @@ import { ChevronsUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import axios from "axios";
 
 function Loader() {
   return (
@@ -73,10 +74,10 @@ export default function Scholarships() {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const moew = location.search.replace("?=", "") || "list";
-  const [requirements, setRequirements] = useState([{ label: "", type: "" }]);
+  const [requirements, setRequirements] = useState([]);
 
   const handleAddRequirement = () => {
-    setRequirements([...requirements, { label: "", type: "" }]);
+    setRequirements([...requirements, { label: ""}]);
   };
 
   const handleChange = (index, field, value) => {
@@ -125,6 +126,32 @@ export default function Scholarships() {
   const filteredData = scholarships.filter((meow) =>
     meow.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const [newScholarData, setNewScholarData] = useState({
+    newScholarName:null,
+    newScholarDeadline:null,
+    newScholarSponsorLogo:null,
+    newScholarCoverImg:null,
+    newScholarDescription:null
+  })
+  const handleAddScholarship = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('newScholarName', newScholarData.newScholarName);
+      formData.append('newScholarDeadline', newScholarData.newScholarDeadline);
+      formData.append('newScholarDescription', newScholarData.newScholarDescription);
+      formData.append('requirements', JSON.stringify(requirements)); // if it's an array/object
+      // Attach files
+      formData.append('sponsorLogo', newScholarData.newScholarSponsorLogo);
+      formData.append('coverImg', newScholarData.newScholarCoverImg);
+      
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/adminAddScholarships`,formData,{withCredentials:true})
+      if(res.status === 200){alert("Scholarship Added!!")}
+    } catch (error) {
+      if(error.status === 500){alert(error.response.data.error)}
+      else{alert(error.response.data.message)}
+    }
+  }
+
   return (
     <>
       <header className="flex  bg-gradient-to-bl from-green-700 to-green-900 h-16 items-center justify-between px-5 text-white border-b shadow-sm sticky top-0">
@@ -340,13 +367,18 @@ export default function Scholarships() {
                       id="scholarshipName"
                       type="text"
                       placeholder="Enter scholarship title"
+                      onChange={(e) => {
+                        setNewScholarData({...newScholarData, newScholarName:e.target.value})
+                      }}
                     />
                   </div>
                   <div className="space-y-1 w-full">
                     <Label htmlFor="applicationDeadline">
                       Application Deadline
                     </Label>
-                    <Input id="applicationDeadline" type="date" />
+                    <Input id="applicationDeadline" type="date" onChange={(e) => {
+                        setNewScholarData({...newScholarData, newScholarDeadline:e.target.value})
+                      }}/>
                   </div>
                 </div>
                 <div className="flex gap-3 w-full">
@@ -356,6 +388,9 @@ export default function Scholarships() {
                       id="sponsorImage"
                       type="file"
                       accept=".jpg, .jpeg, .png, .gif, .webp, .bmp, .svg"
+                      onChange={(e) => {
+                        setNewScholarData({...newScholarData, newScholarSponsorLogo:e.target.files[0]})
+                      }}
                     />
                   </div>
                   <div className="space-y-1 w-full">
@@ -366,6 +401,9 @@ export default function Scholarships() {
                       id="scholarshipCover"
                       type="file"
                       accept=".jpg, .jpeg, .png, .gif, .webp, .bmp, .svg"
+                      onChange={(e) => {
+                        setNewScholarData({...newScholarData, newScholarCoverImg:e.target.files[0]})
+                      }}
                     />
                   </div>
                 </div>
@@ -376,6 +414,9 @@ export default function Scholarships() {
                   <Textarea
                     id="scholarshipDescription"
                     placeholder="Provide an overview of the scholarship, eligibility, and other key information"
+                    onChange={(e) => {
+                      setNewScholarData({...newScholarData, newScholarDescription:e.target.value})
+                    }}
                   />
                 </div>
                 {requirements.map((req, index) => (
@@ -424,7 +465,7 @@ export default function Scholarships() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button>Add Scholarship</Button>
+                <Button onClick={handleAddScholarship}>Add Scholarship</Button>
               </CardFooter>
             </Card>
           </TabsContent>

@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
         pass: process.env.MAILER_SECRET_PASS,
     },
 });
-
 exports.adminLogIn = async (req, res) => {
     const {adminEmail, adminPassword} = req.body
     if(!adminEmail || !adminPassword){return res.status(400).json({success:false, message:"Fill All Credentials"})}

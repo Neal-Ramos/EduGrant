@@ -33,6 +33,7 @@ const postRoutes = require("./routes/postRoutes")
 const userRoutes = require("./routes/userRoutes")
 const adminRoutes = require("./routes/adminRoutes")
 
+app.use('/uploads', express.static('UploadImg'));
 app.use("/EduGrant", authRoutes)
 app.use("/EduGrant", postRoutes)
 app.use("/EduGrant", userRoutes)

@@ -1,8 +1,11 @@
 const express = require("express")
 const router = express.Router()
-const adminAuthController = require("../Controller/adminAuthController")
+const adminAuthControllers = require("../Controller/adminAuthControllers")
+const adminPostControllers = require("../Controller/adminPostControllers")
+const upload = require("../MiddleWare/upload")
 
-router.post("/adminLogin", adminAuthController.adminLogIn)
-router.post("/adminCodeAuthentication", adminAuthController.adminCodeAuthentication)
-router.post("/adminTokenAuthentication", adminAuthController.adminTokenAuthentication)
+router.post("/adminLogin", adminAuthControllers.adminLogIn)
+router.post("/adminCodeAuthentication", adminAuthControllers.adminCodeAuthentication)
+router.post("/adminTokenAuthentication", adminAuthControllers.adminTokenAuthentication)
+router.post("/adminAddScholarships",upload.fields([{ name: 'sponsorLogo', maxCount: 1 },{ name: 'coverImg', maxCount: 1 }]), adminPostControllers.adminAddScholarships)
 module.exports = router
