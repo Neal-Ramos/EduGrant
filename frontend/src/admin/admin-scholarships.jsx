@@ -90,9 +90,10 @@ export default function Scholarships() {
       try {
         const res = await axios.get(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/getScholarships`,{},{withCredentials:true})
         setScholar(res.data)
-        setLoading(false)
       } catch (error) {
         console.log(error)
+      } finally{
+        setLoading(false)
       }
     }
     getScholar()
@@ -279,7 +280,7 @@ export default function Scholarships() {
                       <Link
                         className="w-full"
                         to={`/admin-home/scholarships/${encodeURIComponent(
-                          scholarship.scholarshipName
+                          scholarship.scholarshipId
                         )}`}
                       >
                         <Button className="w-full bg-green-700 hover:bg-green-800">
@@ -336,7 +337,7 @@ export default function Scholarships() {
                             <Link
                               className="w-full"
                               to={`/admin-home/scholarships/${encodeURIComponent(
-                                scholarship.scholarshipName
+                                scholarship.scholarshipId
                               )}`}
                             >
                               <Button className=" bg-green-700 hover:bg-green-800">

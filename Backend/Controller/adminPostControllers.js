@@ -38,3 +38,13 @@ exports.getScholarships = async (req, res) => {
         return res.status(500).json({success:false, message:"Internal Server Error!!!", error:error.message})
     }
 }
+exports.getScholarshipsById = async (req, res) => {
+    const {scholarshipId} = req.body
+    if(!scholarshipId){return res.status(400).json({success:false, message:"No Id"})}
+    try {
+        const getScholarshipsById = await scholarshipsModels.getScholarshipsById(scholarshipId)
+        return res.status(200).json({success:true, message:"Get Success!", getScholarshipsById})
+    } catch (error) {
+        return res.status(500).json({success:false, message:"Server Error"})
+    }
+}

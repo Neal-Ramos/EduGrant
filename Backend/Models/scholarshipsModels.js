@@ -9,3 +9,6 @@ exports.insertScholarships = (newScholarName, newScholarDeadline, newScholarDesc
 exports.getScholarships = () => {
     return query("SELECT * FROM scholarships")
 }
+exports.getScholarshipsById = (id) => {
+    return query("SELECT * FROM scholarships WHERE BINARY scholarshipId = ?", [id])
+}

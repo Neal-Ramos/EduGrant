@@ -67,6 +67,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
 
 function Loader() {
   return (
@@ -81,17 +82,19 @@ export default function OpenScholarship() {
   const [scholarship, setScholar] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    async function fetchScholar() {
-      const response = await fetch("/ngi.json");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const data = await response.json();
-      const scholarshipData = data.find((meow) => meow.name === id);
-      setScholar(scholarshipData);
-      setLoading(false);
+    const getScholar =async () => {
+      try {
+        const data = {scholarshipId:id}
+        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/getScholarshipsById`,data,{withCredentials:true})
+        setScholar(res.data.getScholarshipsById[0])
+      } catch (error) {
+        console.log(error)
+      } finally{
+        setLoading(false)
+      }
     }
-    fetchScholar();
-  }, []);
-
+    getScholar()
+  },[])
   const exportCSV = () => {
     if (!scholarship.students || scholarship.students.length === 0) {
       alert("No student data to export.");
@@ -157,7 +160,7 @@ export default function OpenScholarship() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
-                  {scholarship.name}
+                  {scholarship.scholarshipName}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -187,7 +190,7 @@ export default function OpenScholarship() {
                       <Label htmlFor="">Scholarship Name</Label>
                       <Input
                         type="text"
-                        defaultValue={scholarship.name}
+                        defaultValue={scholarship.scholarshipName}
                         disabled={edit}
                         placeholder="Enter scholarship name"
                       />
@@ -196,7 +199,7 @@ export default function OpenScholarship() {
                       <Label htmlFor="">Application Deadline</Label>
                       <Input
                         type="text"
-                        defaultValue={scholarship.endDate}
+                        defaultValue={scholarship.scholarshipDealine}
                         disabled={edit}
                         placeholder="e.g. 2025-12-31"
                       />
@@ -205,7 +208,7 @@ export default function OpenScholarship() {
                   <div className="space-y-2">
                     <Label>Scholarship Description</Label>
                     <Textarea
-                      defaultValue={scholarship.description}
+                      defaultValue={scholarship.scholarshipDescription}
                       disabled={edit}
                       placeholder="Provide a detailed description of the scholarship"
                     />
