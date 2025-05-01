@@ -26,7 +26,7 @@ app.use(cookieParser())
 app.use(express.json({limit:"10kb"}))
 app.use(hpp())
 app.use(xss())
-app.use(apiLimiter)
+// app.use(apiLimiter)
 
 const authRoutes = require("./routes/authRoutes")
 const postRoutes = require("./routes/postRoutes")

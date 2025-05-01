@@ -112,7 +112,6 @@ export default function Application() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [combo, setCombo] = useState("");
-  console.log(combo);
 
   const filteredData = student.filter(
     (a) =>

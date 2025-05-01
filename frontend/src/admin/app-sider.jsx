@@ -11,7 +11,7 @@ import {
   LayoutGrid,
   UsersRound,
 } from "lucide-react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Collapsible,
@@ -49,6 +49,7 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 const data = {
   user: {
     name: "Tecson, Jerome L.",
@@ -100,7 +101,6 @@ const data = {
 
 function NavMain({ items }) {
   const location = useLocation();
-
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -198,7 +198,16 @@ function TeamSwitcher({ teams }) {
 }
 
 function NavUser({ user }) {
+  const navigate = useNavigate()
   const { isMobile } = useSidebar();
+  const handleLogoutButton = async () => {
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/adminLogout`,{},{withCredentials:true})
+      navigate("/admin-login")
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <SidebarMenu>
@@ -239,8 +248,8 @@ function NavUser({ user }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
+            <DropdownMenuItem onClick={handleLogoutButton}>
+              <LogOut/>
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
