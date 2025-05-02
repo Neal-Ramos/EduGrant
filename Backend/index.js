@@ -51,7 +51,7 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(err.status || 500).json({
       status: 'error',
-      message: process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message
+      message: process.env.CORS_URL_ORIGIN === 'production' ? 'Internal Server Error' : err.message
     });
 });
 

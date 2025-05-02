@@ -151,11 +151,9 @@ export default function Scholarships() {
       formData.append('newScholarName', newScholarData.newScholarName);
       formData.append('newScholarDeadline', newScholarData.newScholarDeadline);
       formData.append('newScholarDescription', newScholarData.newScholarDescription);
-      formData.append('requirements', JSON.stringify(requirements)); // if it's an array/object
-      // Attach files
+      formData.append('requirements', JSON.stringify(requirements));
       formData.append('sponsorLogo', newScholarData.newScholarSponsorLogo);
       formData.append('coverImg', newScholarData.newScholarCoverImg);
-      
       const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/adminAddScholarships`,formData,{withCredentials:true})
       if(res.status === 200){alert("Scholarship Added!!")}
     } catch (error) {

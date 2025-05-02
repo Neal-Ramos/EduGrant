@@ -29,7 +29,7 @@ exports.adminLogIn = async (req, res) => {
         }
         transporter.sendMail(mailOptions,async function (error, info) {
             if (error) {
-                return res.status(500).json({success:false, message:"Email Not Sent!!"})
+                return res.status(500).json({success:false, message:"Email Not Sent!!", error:error.message})
             }
             try {
                 await securityCodeModels.insertCode("adminLogin", adminEmail, sendCode, expiresAt)
