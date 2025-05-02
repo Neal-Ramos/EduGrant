@@ -11,16 +11,17 @@ import { SidebarTrigger } from "../components/ui/sidebar";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Notification from "./breadcrumbs-widget";
+import axios from "axios";
 export default function ClientScholarship() {
-  const [student, setStudent] = useState(null);
+  const [scholarships, setSscholarships] = useState(null);
 
   useEffect(() => {
-    async function fetchScholarship() {
-      const response = await fetch("/scho.json");
-      const data = await response.json();
-      setStudent(data);
+    const getScholarships = async () => {
+      const res = await axios.get(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/getScholarships`,{withCredentials:true})
+      console.log(res.data)
+      setSscholarships(res.data)
     }
-    fetchScholarship();
+    getScholarships()
   }, []);
 
   return (
@@ -56,26 +57,26 @@ export default function ClientScholarship() {
           </p>
         </section>
 
-        {student ? (
-          student.scholars.length > 0 ? (
+        {scholarships ? (
+          scholarships.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
-              {student.scholars.map((scholar) => (
+              {scholarships.map((scholar) => (
                 <Link
-                  to={`/home/scholarship/${encodeURIComponent(scholar.name)}`}
-                  key={scholar.name}
+                  to={`/home/scholarship/${encodeURIComponent(scholar.scholarshipName)}`}
+                  key={scholar.scholarshipId}
                   className="group relative bg-white rounded-md overflow-hidden shadow-md hover:shadow-xl transition-all border border-gray-200 p-2"
                 >
                   <div className="overflow-hidden rounded-sm">
                     <img
-                      src={scholar.image}
-                      alt={scholar.name}
+                      src={``}
+                      alt={scholar.scholarshipName}
                       className="w-full h-52 object-cover  transform  transition-transform duration-300 group-hover:scale-103"
                     />
                   </div>
 
                   <div className="p-3">
                     <h3 className="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">
-                      {scholar.name}
+                      {scholar.scholarshipName}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
                       Tap to view more info

@@ -26,18 +26,27 @@ app.use(cookieParser())
 app.use(express.json({limit:"10kb"}))
 app.use(hpp())
 app.use(xss())
+app.use('/images', express.static("UploadImg"))
 // app.use(apiLimiter)
 
 const authRoutes = require("./routes/authRoutes")
 const postRoutes = require("./routes/postRoutes")
 const userRoutes = require("./routes/userRoutes")
-const adminRoutes = require("./routes/adminRoutes")
 
 app.use('/uploads', express.static('UploadImg'));
 app.use("/EduGrant", authRoutes)
 app.use("/EduGrant", postRoutes)
 app.use("/EduGrant", userRoutes)
-app.use("/AdminRoutes", adminRoutes)
+
+
+const adminAuthRoutes = require("./routes/adminAuthRoutes")
+const adminPostRoutes = require("./routes/adminPostRoutes")
+const adminUserRoutes = require("./routes/adminUserRoutes")
+
+app.use("/AdminRoutes", adminAuthRoutes)
+app.use("/AdminRoutes", adminPostRoutes)
+app.use("/AdminRoutes", adminUserRoutes)
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(err.status || 500).json({

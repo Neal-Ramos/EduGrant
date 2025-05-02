@@ -12,3 +12,12 @@ const transporter = nodemailer.createTransport({
         pass: process.env.MAILER_SECRET_PASS,
     },
 });
+
+exports.getScholarships = async (req, res) => {
+    try {
+        const getAllScholarships = await scholarshipsModels.getScholarships()
+        res.status(200).json(getAllScholarships)
+    } catch (error) {
+        return res.status(500).json({success:false, message:"Internal Server Error!!!", error:error.message})
+    }
+}
