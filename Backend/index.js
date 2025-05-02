@@ -8,7 +8,7 @@ const express = require("express")
 const rateLimit = require("express-rate-limit")
 const app = express()
 const hpp = require("hpp")
-const xss = require("xss-clean")
+const xss = require('xss');
 
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 min
@@ -25,9 +25,15 @@ app.use(compression())
 app.use(cookieParser())
 app.use(express.json({limit:"10kb"}))
 app.use(hpp())
-app.use(xss())
-app.use('/images', express.static("UploadImg"))
-// app.use(apiLimiter)
+app.use((req, res, next) => {
+    for (const key in req.body) {
+        if (req.body.hasOwnProperty(key)) {
+        req.body[key] = xss(req.body[key]);
+        }
+    }
+    next();
+});
+app.use(apiLimiter)
 
 const authRoutes = require("./routes/authRoutes")
 const postRoutes = require("./routes/postRoutes")
