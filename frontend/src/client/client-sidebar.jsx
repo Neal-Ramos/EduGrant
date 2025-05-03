@@ -79,12 +79,16 @@ const data = {
       title: "Scholarships",
       url: "/home/scholarships",
       icon: ListOrdered,
-  
     },
     {
       title: "My Applications",
       url: "/home/applications",
       icon: Send,
+    },
+    {
+      title: "Notification",
+      url: "/home/notification",
+      icon: Bell,
     },
   ],
   projects: [

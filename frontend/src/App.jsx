@@ -6,6 +6,7 @@ import ClientLogin from "./client/client-login";
 import ClientProfile from "./client/client-profile";
 import ScholarshipDetail from "./client/school-details";
 import ClientScholarship from "./client/client-scholarship";
+import ClientNotif from "./client/client-notif";
 
 import LoginAdmin from "./admin/admin-login";
 import Home from "./admin/admin-home";
@@ -32,19 +33,20 @@ function App() {
         <Route path="/" element={<ClientLogin />} />
         <Route path="/verify-email" element={<VerificationPage />} />
         {/* <Route element={<ProtectedRoutes />}> */}
-          <Route path="/home" element={<ClientHome />}>
-            <Route index element={<Navigate to="dashboard" />} />
-            <Route path="dashboard" element={<ClientDashboard />} />
-            <Route path="applications" element={<ClientApplication />} />
-            <Route path="scholarships" element={<ClientScholarship />} />
-            <Route path="scholarship/:id" element={<ScholarshipDetail />} />
-            <Route path="profile" element={<ClientProfile />} />
-          </Route>
+        <Route path="/home" element={<ClientHome />}>
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<ClientDashboard />} />
+          <Route path="applications" element={<ClientApplication />} />
+          <Route path="scholarships" element={<ClientScholarship />} />
+          <Route path="scholarship/:id" element={<ScholarshipDetail />} />
+          <Route path="profile" element={<ClientProfile />} />
+          <Route path="notification" element={<ClientNotif />} />
+        </Route>
         {/* </Route> */}
 
         {/* ADMIN ROUTES */}
         <Route path="/admin-login" element={<LoginAdmin />} />
-        <Route element={<ProtectedRoutesAdmin/>}>
+        <Route element={<ProtectedRoutesAdmin />}>
           <Route path="/admin-home" element={<Home />}>
             <Route index element={<Navigate to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
