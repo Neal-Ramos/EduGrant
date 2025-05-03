@@ -3,67 +3,96 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "./dark-light-toggle";
-import { Bell, UserRound } from "lucide-react";
+import {
+  Bell,
+  ChevronDown,
+  LogOut,
+  Moon,
+  UserRound,
+  UserRoundCog,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Separator } from "@/components/ui/separator";
 
 export default function Notification() {
-  const navigate = useNavigate()
-  const handleOnclickLogout =async () =>{
+  const navigate = useNavigate();
+  const handleOnclickLogout = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/logout`,{},{withCredentials:true})
-      if(res.status === 200){
-        alert("Logout!!!")
-        navigate("/")
+      const res = await axios.post(
+        `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/logout`,
+        {},
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+        alert("Logout!!!");
+        navigate("/");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   return (
-    <div className="flex gap-5 pr-5">
+    <div className="flex gap-5">
       <Popover>
         <PopoverTrigger asChild>
-          <div className="relative">
-            <Bell size={28} />
-            <span className="absolute bottom-4 left-4 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-              3
-            </span>
+          <div className=" h-8 w-8 flex justify-center items-center shadow-md rounded-full">
+            <Bell size={25} />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-120 mr-3">
-          <h4 className="font-medium mb-2">Notifications</h4>
-          <ul className="space-y-2 text-sm">
-            <li className="border-b pb-2">
-              ✅ Your scholar application has been{" "}
-              <span className="font-semibold text-green-600">approved</span>.
-            </li>
-            <li className="border-b pb-2">
-              ⏳ Your scholar application is still{" "}
-              <span className="font-semibold text-yellow-600">pending</span>.
-            </li>
-            <li className="pb-2">
-              ❌ Your scholar application has been{" "}
-              <span className="font-semibold text-red-600">rejected</span>.
-            </li>
-          </ul>
+        <PopoverContent className="w-100">
+          <div className="py-2 space-y-1">
+            <p className=" font-medium">Scholarship Approved</p>
+            <p className="text-sm text-muted-foreground">
+              Your application for the Academic Excellence Scholarship has been
+              approved.
+            </p>
+            <p className="text-[11px] text-right text-gray-500">2 hours ago</p>
+          </div>
+          <Separator />
+          <div className="py-2 space-y-1">
+            <p className=" font-medium">Scholarship Approved</p>
+            <p className="text-sm text-muted-foreground">
+              Your application for the Academic Excellence Scholarship has been
+              approved.
+            </p>
+            <p className="text-[11px] text-right text-gray-500">2 hours ago</p>
+          </div>
+          {/* <p className="text-center py-2">No notifications</p> */}
+
+          <p className="text-center underline text-sm">See more</p>
         </PopoverContent>
       </Popover>
-
       <Popover>
         <PopoverTrigger asChild>
-          <UserRound size={28} />
+          <div className="flex items-center gap-2">
+            <div className=" h-8 w-8 flex justify-center items-center shadow-md  rounded-full">
+              <Avatar className="h-full w-full">
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </div>
+            <h1>Jerome Tecson</h1>
+            <ChevronDown size={20} />
+          </div>
         </PopoverTrigger>
-        <PopoverContent className="w-48 text-sm">
-          <div className="flex flex-col gap-2">
-            <Button variant="ghost" className="justify-start">
-              👤 Profile
-            </Button>
-            <Button variant="ghost" className="justify-start text-red-600" onClick={handleOnclickLogout}>
-              🚪 Logout
-            </Button>
+        <PopoverContent className="w-45 space-y-3">
+          <div className="flex items-center gap-2">
+            <UserRoundCog size={18} />
+            Profile Settings
+          </div>
+          <div
+            className="flex items-center gap-2"
+            onClick={() => handleOnclickLogout}
+          >
+            <LogOut size={18} />
+            Logout
           </div>
         </PopoverContent>
       </Popover>
@@ -71,3 +100,9 @@ export default function Notification() {
     </div>
   );
 }
+//  <div className="relative">
+//    <Bell size={28} />
+//    <span className="absolute bottom-4 left-4 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+//      3
+//    </span>
+//  </div>;
