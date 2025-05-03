@@ -1,55 +1,48 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
 import { SidebarTrigger } from "../components/ui/sidebar";
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Calendar, GraduationCap, IdCard } from "lucide-react";
 import Notification from "./breadcrumbs-widget";
-import { Link } from "react-router-dom";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Send, Timer, CircleMinus, Check } from "lucide-react";
+
+import { Separator } from "@/components/ui/separator";
 
 const tabs = [
-  "All",
-  "Pending",
-  "Reviewing Requirements",
-  "Approved",
-  "Rejected",
-  "Missing Requirements",
+  {
+    name: "Submitted",
+    icon: Send,
+  },
+  {
+    name: "Under Review",
+    icon: Timer,
+  },
+  {
+    name: "Approved/Rejected",
+    icon: Check,
+  },
+  {
+    name: "Missing Requirements",
+    icon: CircleMinus,
+  },
 ];
 
 export default function ClientApplication() {
-  const [student, setStudent] = useState(null);
-  const [activeTab, setActiveTab] = useState("All");
-  const [loading, setLoading] = useState(true);
-  const [adminComments, setAdminComments] = useState({});
-
-  useEffect(() => {
-    async function fetchScholarship() {
-      const response = await fetch("/info.json");
-      const data = await response.json();
-      setStudent(data);
-      setLoading(false);
-    }
-    fetchScholarship();
-  }, []);
-
-  const filterScholarships = (applications) => {
-    if (activeTab === "All") return applications;
-    if (activeTab === "Reviewing Requirements")
-      return applications.filter((app) => app.reviewingRequirements);
-    if (activeTab === "Missing Requirements")
-      return applications.filter((app) => app.missingRequirements);
-    return applications.filter(
-      (app) => app.status.toLowerCase() === activeTab.toLowerCase()
-    );
-  };
-
+  const [activeTab, setActiveTab] = useState(0);
   return (
     <>
       <header className="flex bg-green-800 h-16 items-center justify-between px-5 text-white border-b shadow-sm">
@@ -72,96 +65,249 @@ export default function ClientApplication() {
         <Notification />
       </header>
 
-      <div className="flex flex-col gap-6 p-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full flex flex-wrap gap-2 justify-start">
-            {tabs.map((tab) => (
-              <TabsTrigger key={tab} value={tab}>
-                {tab}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+      <div className="p-4">
+        <p className="text-2xl font-bold zxc tracking-[-3px]">My Application</p>
+        <p className="text-sm text-gray-600 ml-0.5">
+          Stay updated on your scholarship application progress in real time.
+        </p>
+      </div>
+      <div className="px-5">
+        <Separator />
+      </div>
+      <div className=" p-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 p-[3px] gap-3 rounded-md ">
+          {tabs.map((meow, index) => (
+            <div key={index} onClick={() => setActiveTab(index)}>
+              <div className="space-x-1">
+                <span className="text-2xl font-bold zxx text-yellow-800">
+                  0{index + 1}
+                </span>
+                <span className="zxc tracking-[-3px]">{meow.name}</span>
+              </div>
 
-          {tabs.map((tab) => (
-            <TabsContent key={tab} value={tab}>
-              {loading ? (
-                <div className="flex justify-center items-center py-10">
-                  <Loader2 className="animate-spin h-6 w-6 text-gray-500" />
-                  <span className="ml-2 text-gray-500 mt-5">
-                    Loading scholarships...
-                  </span>
+              <div className="relative flex items-center">
+                <div
+                  className={`rounded-full h-7 w-7 p-1 flex justify-center items-center
+            ${
+              activeTab === 3
+                ? index === 3
+                  ? "bg-yellow-600"
+                  : "bg-zinc-300"
+                : index <= activeTab
+                ? index === 3
+                  ? "bg-yellow-600"
+                  : "bg-green-600"
+                : "bg-zinc-300"
+            }`}
+                >
+                  <Check
+                    className={`${
+                      activeTab === 3
+                        ? index === 3
+                          ? "text-white"
+                          : "text-black/50"
+                        : index <= activeTab
+                        ? "text-white"
+                        : "text-black/50"
+                    }`}
+                  />
                 </div>
-              ) : !student ? (
-                <p className="text-center text-gray-500 mt-5">
-                  No student data found.
-                </p>
-              ) : filterScholarships(student.applications).length === 0 ? (
-                <p className="text-center text-gray-500 mt-5">
-                  No scholarships found for this status.
-                </p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-                  {filterScholarships(student.applications).map((app) => (
-                    <Card key={app.application_id}>
-                      <CardHeader>
-                        <CardTitle className="text-green-600 truncate">
-                          {app.scholarship_details.name}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                          <strong>Application Date:</strong>{" "}
-                          {app.submission_date}
-                        </p>
-                        <p className="text-sm mt-1">
-                          <strong>Status:</strong>{" "}
-                          <span
-                            className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                              app.status === "Approved"
-                                ? "bg-green-100 text-green-700"
-                                : app.status === "Pending"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : app.status === "Rejected"
-                                ? "bg-red-100 text-red-700"
-                                : "bg-gray-100 text-gray-700"
-                            }`}
-                          >
-                            {app.status}
-                          </span>
-                        </p>
-                        {app.missingRequirements && (
-                          <div className="mt-4 space-y-2">
-                            <input
-                              type="text"
-                              placeholder="Admin comments..."
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                              value={adminComments[app.application_id] || ""}
-                              onChange={(e) =>
-                                setAdminComments({
-                                  ...adminComments,
-                                  [app.application_id]: e.target.value,
-                                })
-                              }
-                            />
-                            <Link
-                              to={`/home/scholarship/${encodeURIComponent(
-                                app.scholarship_details.name
-                              )}`}
-                            >
-                              <button className="w-full px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition">
-                                Apply Again
-                              </button>
-                            </Link>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
+                <div
+                  className={`${
+                    activeTab === 3
+                      ? index === 3
+                        ? "border-yellow-300"
+                        : "border-zinc-300"
+                      : index <= activeTab
+                      ? index === 3
+                        ? "border-yellow-300"
+                        : "border-green-300"
+                      : "border-zinc-300"
+                  } w-full border-1`}
+                ></div>
+              </div>
+            </div>
           ))}
-        </Tabs>
+        </div>
+      </div>
+
+      <div className="mt-5 p-4">
+        {activeTab === 0 && (
+          <div className="grid grid-cols-4 gap-3">
+            <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div className="bg-zinc-200 p-1 rounded-md">
+                    <GraduationCap />
+                  </div>
+                  <p
+                    className="flex items-center gap-1 text-sm 
+                    py-1 px-2 rounded-full font-semibold"
+                  >
+                    <IdCard size={20} />
+                    Documents 3/3
+                  </p>
+                </div>
+                <CardTitle className="flex items-center text-lg  gap-2 mt-1">
+                  Win Gatchalian
+                </CardTitle>
+                <CardDescription className="text-xs flex items-center gap-1">
+                  <Calendar size={12} /> Application Date: 02-17-2005
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-around py-2">
+                <span className="flex items-center gap-3 flex-col">
+                  <p className="text-sm">Status</p>
+                  <p className="font-semibold text-1xl">Submitted</p>
+                </span>
+              </CardContent>
+
+              <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                View Details <ArrowRight size={15} />
+              </p>
+            </div>
+          </div>
+        )}
+        {activeTab === 1 && (
+          <div className="grid grid-cols-4 gap-3">
+            <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div className="bg-zinc-200 p-1 rounded-md">
+                    <GraduationCap />
+                  </div>
+                  <p
+                    className="flex items-center gap-1 text-sm 
+                    py-1 px-2 rounded-full font-semibold"
+                  >
+                    <IdCard size={20} />
+                    Documents 3/3
+                  </p>
+                </div>
+                <CardTitle className="flex items-center text-lg  gap-2 mt-1">
+                  Win Gatchalian
+                </CardTitle>
+                <CardDescription className="text-xs flex items-center gap-1">
+                  <Calendar size={12} /> Application Date: 02-17-2005
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-around py-2">
+                <span className="flex items-center gap-3 flex-col">
+                  <p className="text-sm">Status</p>
+                  <p className="font-semibold text-1xl">Under Review</p>
+                </span>
+              </CardContent>
+
+              <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                View Details <ArrowRight size={15} />
+              </p>
+            </div>
+          </div>
+        )}
+        {activeTab === 2 && (
+          <div className="grid grid-cols-4 gap-3">
+            <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div className="bg-zinc-200 p-1 rounded-md">
+                    <GraduationCap />
+                  </div>
+                  <p
+                    className="flex items-center gap-1 text-sm 
+                    py-1 px-2 rounded-full font-semibold"
+                  >
+                    <IdCard size={20} />
+                    Documents 3/3
+                  </p>
+                </div>
+                <CardTitle className="flex items-center text-lg  gap-2 mt-1">
+                  Win Gatchalian
+                </CardTitle>
+                <CardDescription className="text-xs flex items-center gap-1">
+                  <Calendar size={12} /> Application Date: 02-17-2005
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-around py-2">
+                <span className="flex items-center gap-3 flex-col">
+                  <p className="text-sm">Status</p>
+                  <p className="font-semibold text-1xl">Approved</p>
+                </span>
+              </CardContent>
+
+              <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                View Details <ArrowRight size={15} />
+              </p>
+            </div>
+            <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div className="bg-zinc-200 p-1 rounded-md">
+                    <GraduationCap />
+                  </div>
+                  <p
+                    className="flex items-center gap-1 text-sm 
+                    py-1 px-2 rounded-full font-semibold"
+                  >
+                    <IdCard size={20} />
+                    Documents 3/3
+                  </p>
+                </div>
+                <CardTitle className="flex items-center text-lg  gap-2 mt-1">
+                  Win Gatchalian
+                </CardTitle>
+                <CardDescription className="text-xs flex items-center gap-1">
+                  <Calendar size={12} /> Application Date: 02-17-2005
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-around py-2">
+                <span className="flex items-center gap-3 flex-col">
+                  <p className="text-sm">Status</p>
+                  <p className="font-semibold text-1xl">Reject</p>
+                </span>
+              </CardContent>
+
+              <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                View Details <ArrowRight size={15} />
+              </p>
+            </div>
+          </div>
+        )}
+        {activeTab === 3 && (
+          <div className="grid grid-cols-4 gap-3">
+            <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div className="bg-zinc-200 p-1 rounded-md">
+                    <GraduationCap />
+                  </div>
+                  <p
+                    className="flex items-center gap-1 text-sm 
+                    py-1 px-2 rounded-full font-semibold"
+                  >
+                    <IdCard size={20} />
+                    Documents 2/3
+                  </p>
+                </div>
+                <CardTitle className="flex items-center text-lg  gap-2 mt-1">
+                  Win Gatchalian
+                </CardTitle>
+                <CardDescription className="text-xs flex items-center gap-1">
+                  <Calendar size={12} /> Application Date: 02-17-2005
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-around py-2">
+                <span className="flex items-center gap-3 flex-col">
+                  <p className="text-sm">Status</p>
+                  <p className="font-semibold text-1xl">Missing Requirements</p>
+                </span>
+              </CardContent>
+
+              <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                View Details <ArrowRight size={15} />
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
