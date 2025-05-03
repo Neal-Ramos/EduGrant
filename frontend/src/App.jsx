@@ -32,7 +32,7 @@ function App() {
         {/* CLIENT ROUTES */}
         <Route path="/" element={<ClientLogin />} />
         <Route path="/verify-email" element={<VerificationPage />} />
-        {/* <Route element={<ProtectedRoutes />}> */}
+        <Route element={<ProtectedRoutes />}>
         <Route path="/home" element={<ClientHome />}>
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<ClientDashboard />} />
@@ -42,7 +42,7 @@ function App() {
           <Route path="profile" element={<ClientProfile />} />
           <Route path="notification" element={<ClientNotif />} />
         </Route>
-        {/* </Route> */}
+        </Route>
 
         {/* ADMIN ROUTES */}
         <Route path="/admin-login" element={<LoginAdmin />} />
