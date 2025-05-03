@@ -23,6 +23,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import bascLogo from "@/assets/basclogo.png";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -194,8 +195,8 @@ function TeamSwitcher({ teams }) {
           size="lg"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-primary-foreground">
-            <activeTeam.logo className="size-6" />
+          <div className="flex aspect-square size-8 items-center justify-center   text-sidebar-primary-foreground">
+           <img src={bascLogo} alt="" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold text-white">
@@ -211,18 +212,22 @@ function TeamSwitcher({ teams }) {
 
 function NavUser({ user }) {
   const { isMobile } = useSidebar();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleLogoutButton = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/logout`,{},{withCredentials:true})
-      if(res.status === 200){
-        alert("Logout!!!")
-        navigate("/")
+      const res = await axios.post(
+        `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/logout`,
+        {},
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+        alert("Logout!!!");
+        navigate("/");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <SidebarMenu>
