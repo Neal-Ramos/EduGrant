@@ -1,21 +1,14 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
-
 import Notification from "./breadcrumbs-widget";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
 import { useEffect, useState } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 import {
   CheckCheck,
@@ -23,19 +16,12 @@ import {
   Layers,
   Timer,
   X,
-
   ArrowRight,
-
-
-  UserRound,
   Megaphone,
   Calendar,
-
-  FolderOpen,
-
-  ArrowUpRight,
+  Clock,
   UserRoundCog,
- 
+  FolderSearch,
 } from "lucide-react";
 import {
   Card,
@@ -160,7 +146,7 @@ export default function ClientDashboard() {
         </div>
         <Notification />
       </header>
-      {/* <div className="px-4 mt-2">
+      <div className="px-4 mt-2">
         <Swiper
           slidesPerView={"auto"}
           loop={true}
@@ -191,15 +177,48 @@ export default function ClientDashboard() {
             </div>
           </SwiperSlide>
         </Swiper>
-      </div> */}
+      </div>
 
       <div className="p-4 flex gap-5 flex-col lg:flex-row">
         <div className="w-full lg:w-3/4 flex flex-col gap-5">
+          <div className="flex items-center gap-2 zxc tracking-tighter bg-card py-3 rounded-lg shadow">
+            <span className="w-full flex items-end justify-around">
+              <div className="flex flex-col gap-1">
+                <Layers className="text-blue-800 bg-blue-200 h-9 w-9 p-1.5 rounded-md shadow-sm" />
+                TOTAL
+              </div>
+              <p className="text-3xl">3</p>
+            </span>
+            <Separator orientation="vertical" />
+            <span className="w-full flex items-end justify-around">
+              <div className="flex flex-col gap-1">
+                <CheckCheck className="text-green-800 bg-green-200 h-9 w-9 p-1.5 rounded-md shadow-sm" />
+                APPROVED
+              </div>
+              <p className="text-3xl">1</p>
+            </span>
+            <Separator orientation="vertical" />
+            <span className="w-full flex items-end justify-around">
+              <div className="flex flex-col gap-1">
+                <Timer className="text-yellow-800 bg-yellow-200 h-9 w-9 p-1.5 rounded-md shadow-sm" />
+                UNDER REVIEW
+              </div>
+              <p className="text-3xl">0</p>
+            </span>
+            <Separator orientation="vertical" />
+            <span className="w-full flex items-end justify-around">
+              <div className="flex flex-col gap-1">
+                <X className="text-red-800 bg-red-200 h-9 w-9 p-1.5 rounded-md shadow-sm" />
+                REJECT
+              </div>
+              <p className="text-3xl">0</p>
+            </span>
+          </div>
           <div className="flex justify-between items-start ">
             <div className="p-2 space-y-1">
-              <CardTitle className="zxc text-2xl tracking-[-2px] flex items-center gap-2">
-                <UserRound strokeWidth={3} /> Hello,
-                <span className="text-green-800">Jerome</span>!
+              <CardTitle className="zxc text-3xl tracking-[-2px] flex items-center gap-2">
+                Hello,
+                <span className="text-green-800">Qatrina</span>!
               </CardTitle>
               <CardDescription>
                 Ready to take the next step? Start your scholarship application
@@ -211,171 +230,40 @@ export default function ClientDashboard() {
               <UserRoundCog /> Edit profile
             </Button>
           </div>
-          <Separator />
-          <div className="grid grid-cols-2 lg:grid-cols-4 text-left zxc gap-3 tracking-[-2.5px]">
-            <Popover open={startTour && currentStep === 0}>
-              <PopoverTrigger asChild>
-                <span
-                  id={startTour && currentStep === 0 ? "zzz" : ""}
-                  className="p-2.5 bg-blue-100 rounded-md flex items-center gap-3 shadow-md border-blue-300 border-1"
-                >
-                  <span className="bg-blue-400 p-2 rounded-sm shadow-sm  border-blue-500 border-1">
-                    <Layers size={35} strokeWidth={2.1} />
-                  </span>
-                  <span>
-                    <p> TOTAL</p>
-                    <div className="text-3xl leading-7">
-                      {loading ? <Loader /> : "0"}
-                    </div>
-                  </span>
-                </span>
-              </PopoverTrigger>
-              <PopoverContent className="z-20">
-                <div className="flex justify-between">
-                  <h3 className="font-semibold text-lg">{steps[0].title}</h3>
-                  <p>1/{steps.length}</p>
-                </div>
-                <p>{steps[0].content}</p>
-                <div className="flex justify-end">
-                  <Button className="mt-3 " onClick={handleNextStep}>
-                    Next <ArrowRight />
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Popover open={startTour && currentStep === 1}>
-              <PopoverTrigger asChild>
-                <span
-                  id={startTour && currentStep === 1 ? "zzz" : ""}
-                  className="p-2.5 bg-green-100 rounded-md flex items-center gap-3 shadow-md  border-green-300 border-1"
-                >
-                  <span className="bg-green-400 p-2 rounded-sm shadow-sm  border-green-500 border-1">
-                    <CheckCheck size={35} strokeWidth={2.1} />
-                  </span>
-                  <span>
-                    <p>APPROVED</p>
-                    <div className="text-3xl  leading-7">
-                      {loading ? <Loader /> : student.scholarships.length}
-                    </div>
-                  </span>
-                </span>
-              </PopoverTrigger>
-              <PopoverContent className="z-20">
-                <div className="flex justify-between">
-                  <h3 className="font-semibold text-lg">{steps[1].title}</h3>
-                  <p>2/{steps.length}</p>
-                </div>
-                <p>{steps[1].content}</p>
-                <div className="flex justify-end">
-                  <Button className="mt-3 " onClick={handleNextStep}>
-                    Next <ArrowRight />
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Popover open={startTour && currentStep === 2}>
-              <PopoverTrigger asChild>
-                <span
-                  id={startTour && currentStep === 2 ? "zzz" : "0"}
-                  className="p-2.5 bg-amber-100 rounded-md flex items-center gap-3 shadow-md border-amber-300 border-1"
-                >
-                  <span className="bg-amber-400 p-2 rounded-sm shadow-sm border-amber-500 border-1">
-                    <Timer size={35} strokeWidth={2.1} />
-                  </span>
-                  <span>
-                    <p>FOR REVIEW</p>
-                    <div className="text-3xl  leading-7">
-                      {loading ? <Loader /> : "0"}
-                    </div>
-                  </span>
-                </span>
-              </PopoverTrigger>
-              <PopoverContent className="z-20">
-                <div className="flex justify-between">
-                  <h3 className="font-semibold text-lg">{steps[2].title}</h3>
-                  <p>3/{steps.length}</p>
-                </div>
-                <p>{steps[2].content}</p>
-                <div className="flex justify-end">
-                  <Button className="mt-3 " onClick={handleNextStep}>
-                    Next <ArrowRight />
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
-            <Popover open={startTour && currentStep === 3}>
-              <PopoverTrigger asChild>
-                <span
-                  id={startTour && currentStep === 3 ? "zzz" : ""}
-                  className="p-2.5 bg-red-100 rounded-md flex items-center gap-3 shadow-md border-red-300 border-1"
-                >
-                  <span className="bg-red-400 p-2 rounded-sm shadow-sm border-red-500 border-1">
-                    <X size={35} strokeWidth={2.1} />
-                  </span>
-                  <span>
-                    <p className="whitespace-nowrap">REJECT</p>
-                    <div className="text-3xl  leading-7">
-                      {loading ? <Loader /> : "0"}
-                    </div>
-                  </span>
-                </span>
-              </PopoverTrigger>
-              <PopoverContent className="z-20">
-                <div className="flex justify-between">
-                  <h3 className="font-semibold text-lg">{steps[3].title}</h3>
-                  <p>4/{steps.length}</p>
-                </div>
-                <p>{steps[3].content}</p>
-                <div className="flex justify-end">
-                  <Button className="mt-3 " onClick={handleNextStep}>
-                    Next <ArrowRight />
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
 
           <div className="flex gap-3 mt-5 flex-col lg:flex-row">
-            <Card className="w-full">
-              <CardHeader className="z-10">
-                <CardTitle className="flex items-center gap-2">
-                  <GraduationCap /> Apply Scholarship
-                </CardTitle>
-                <CardDescription>
+            <div className="w-full bg-card flex items-center py-5 rounded-xl shadow-sm">
+              <div className="w-full px-5 flex flex-col">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap />
+                    <h1 className="font-semibold">Apply Scholarship</h1>
+                  </div>
+                  <ArrowRight size={15} />
+                </div>
+                <p className="text-sm mt-2">
                   Submit a new application for available scholarship
                   opportunities with ease.
-                </CardDescription>
-              </CardHeader>
-
-              <CardFooter className="flex justify-end z-10">
-                <Button>
-                  Apply <ArrowUpRight />
-                </Button>
-              </CardFooter>
-            </Card>
-
-            <Card className="w-full ">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FolderOpen /> Review My Application
-                </CardTitle>
-                <CardDescription>
+                </p>
+              </div>
+              <Separator orientation="vertical" />
+              <div className="w-full px-5 flex flex-col">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <FolderSearch />
+                    <h1 className="font-semibold"> Review My Application</h1>
+                  </div>
+                  <ArrowRight size={15} />
+                </div>
+                <p className="text-sm mt-2">
                   Check the status, details, and progress of your submitted
                   applications.
-                </CardDescription>
-              </CardHeader>
-
-              <CardFooter className="flex justify-end">
-                <Button variant="outline">
-                  View <ArrowUpRight />
-                </Button>
-              </CardFooter>
-            </Card>
+                </p>
+              </div>
+            </div>
           </div>
-          <Separator />
-          <div className="space-y-3">
+
+          <div className="space-y-3 mt-5">
             <div className="p-2 space-y-1">
               <CardTitle className="zxc text-xl tracking-[-2px] flex items-center gap-2">
                 <GraduationCap /> Recent Application
@@ -386,28 +274,102 @@ export default function ClientDashboard() {
               </CardDescription>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-              <Card className="w-full">
+              <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
                 <CardHeader>
-                  <CardTitle className="flex items-center  gap-2">
-                    <GraduationCap className="min-w-6" />
+                  <div className="flex justify-between items-center">
+                    <div className="bg-zinc-200 p-1 rounded-md">
+                      <GraduationCap />
+                    </div>
+                    <p
+                      className="flex items-center gap-1 text-xs bg-blue-200
+                    py-1 px-2 rounded-full text-blue-800 font-semibold"
+                    >
+                      <Clock size={15} />
+                      Under Review
+                    </p>
+                  </div>
+                  <CardTitle className="flex items-center  gap-2 mt-1">
                     <p>Win Gatchalian</p>
                   </CardTitle>
-                  <CardDescription>
-                    Application Date: 02-17-2005
+                  <CardDescription className="text-xs flex items-center gap-1">
+                    <Calendar size={12} /> Application Date: 02-17-2005
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="flex justify-around">
+                <CardContent className="flex justify-around py-2">
                   <span className="flex items-center gap-3 flex-col">
                     <p className="text-sm">Status</p>
                     <p className="font-semibold text-1xl">Under Review</p>
                   </span>
                 </CardContent>
-                <CardFooter>
-                  <Button className="w-full bg-green-700 hover:bg-green-800">
-                    View
-                  </Button>
-                </CardFooter>
-              </Card>
+
+                <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                  View Details <ArrowRight size={15} />
+                </p>
+              </div>
+              <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div className="bg-zinc-200 p-1 rounded-md">
+                      <GraduationCap />
+                    </div>
+                    <p
+                      className="flex items-center gap-1 text-xs bg-blue-200
+                    py-1 px-2 rounded-full text-blue-800 font-semibold"
+                    >
+                      <Clock size={15} />
+                      Under Review
+                    </p>
+                  </div>
+                  <CardTitle className="flex items-center  gap-2 mt-1">
+                    <p>Win Gatchalian</p>
+                  </CardTitle>
+                  <CardDescription className="text-xs flex items-center gap-1">
+                    <Calendar size={12} /> Application Date: 02-17-2005
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-around py-2">
+                  <span className="flex items-center gap-3 flex-col">
+                    <p className="text-sm">Status</p>
+                    <p className="font-semibold text-1xl">Under Review</p>
+                  </span>
+                </CardContent>
+
+                <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                  View Details <ArrowRight size={15} />
+                </p>
+              </div>{" "}
+              <div className=" flex flex-col gap-4 pt-5 bg-card rounded-xl shadow-md">
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div className="bg-zinc-200 p-1 rounded-md">
+                      <GraduationCap />
+                    </div>
+                    <p
+                      className="flex items-center gap-1 text-xs bg-blue-200
+                    py-1 px-2 rounded-full text-blue-800 font-semibold"
+                    >
+                      <Clock size={15} />
+                      Under Review
+                    </p>
+                  </div>
+                  <CardTitle className="flex items-center  gap-2 mt-1">
+                    <p>Win Gatchalian</p>
+                  </CardTitle>
+                  <CardDescription className="text-xs flex items-center gap-1">
+                    <Calendar size={12} /> Application Date: 02-17-2005
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-around py-2">
+                  <span className="flex items-center gap-3 flex-col">
+                    <p className="text-sm">Status</p>
+                    <p className="font-semibold text-1xl">Under Review</p>
+                  </span>
+                </CardContent>
+
+                <p className="text-center border-t-1 p-5 text-xs flex justify-center items-center gap-1 font-medium ">
+                  View Details <ArrowRight size={15} />
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -472,15 +434,4 @@ export default function ClientDashboard() {
       </div>
     </>
   );
-}
-{
-  /*  */
-}
-
-{
-  /**/
-}
-
-{
-  /**/
 }
