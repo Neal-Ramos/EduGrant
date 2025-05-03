@@ -41,18 +41,28 @@ import { Input } from "@/components/ui/input";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ModeToggle } from "./dark-light-toggle";
 
 function DrawerDemo() {
   const navigate = useNavigate();
   useEffect(() => {
     try {
-      const res = axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/tokenValidation`,{},{withCredentials:true})
-      .then(res => {if (res.status === 200){navigate("/home")}})
-      .catch(console.log("Need to Login!!"))
+      const res = axios
+        .post(
+          `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/tokenValidation`,
+          {},
+          { withCredentials: true }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            navigate("/home");
+          }
+        })
+        .catch(console.log("Need to Login!!"));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  },[])
+  }, []);
 
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
@@ -138,8 +148,9 @@ function DrawerDemo() {
   const handleOtpChange = (value) => {
     setOtp(value);
   };
-  const [rememberMe, setRemember] = useState(localStorage.getItem("email") != "" ? true : false)
-
+  const [rememberMe, setRemember] = useState(
+    localStorage.getItem("email") != "" ? true : false
+  );
 
   const handleLoginButton = async (e) => {
     setLoading(true);
@@ -160,7 +171,7 @@ function DrawerDemo() {
       }
     } catch (error) {
       console.log(error);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -179,13 +190,15 @@ function DrawerDemo() {
         { withCredentials: true }
       );
       if (res.status === 200) {
-        rememberMe === true? localStorage.setItem("email",email) : localStorage.setItem("email","")
+        rememberMe === true
+          ? localStorage.setItem("email", email)
+          : localStorage.setItem("email", "");
         console.log(res);
         navigate("/home");
       }
     } catch (error) {
       console.log(error);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -211,7 +224,7 @@ function DrawerDemo() {
         }
       } catch (error) {
         console.log(error);
-      }finally{
+      } finally {
         setLoading(false);
       }
     }
@@ -260,7 +273,9 @@ function DrawerDemo() {
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
-        <Button size="lg">Login</Button>
+        <Button className="text-white" size="lg">
+          Login
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         {showLogin && (
@@ -357,11 +372,13 @@ function DrawerDemo() {
                     </span>
                     <div>
                       <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" checked={rememberMe} onCheckedChange={
-                            (value) => {
-                              setRemember(value)
-                            }
-                          }/>
+                        <Checkbox
+                          id="terms"
+                          checked={rememberMe}
+                          onCheckedChange={(value) => {
+                            setRemember(value);
+                          }}
+                        />
                         <Label htmlFor="terms">Remember me</Label>
                       </div>
                     </div>
@@ -705,9 +722,7 @@ export default function ClientLogin() {
               src={edugrantlogo}
               alt=""
             />
-            <h1 className="zxc text-2xl tracking-[-2px] font-bold text-black/80">
-              EDUGRANT
-            </h1>
+            <h1 className="zxc text-2xl tracking-[-2px] font-bold">EDUGRANT</h1>
           </span>
 
           <nav>
@@ -715,8 +730,9 @@ export default function ClientLogin() {
               <li className="font-semibold text-md">Home</li>
               <li className="font-semibold text-md">How it Works</li>
               <li className="font-semibold text-md">About</li>
-              <li>
+              <li className="flex items-center gap-3">
                 <DrawerDemo />
+                <ModeToggle />
               </li>
             </ul>
           </nav>
@@ -736,7 +752,7 @@ export default function ClientLogin() {
             </p>
             <Button
               size="lg"
-              className="ml-6  mt-10"
+              className="ml-6  mt-10 text-white"
               onClick={() => {
                 showLogin(true);
               }}
