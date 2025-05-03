@@ -35,6 +35,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import axios from "axios";
+
 export default function ScholarshipDetail() {
   const { id } = useParams();
   const [scholarDetails, setScholarDetails] = useState(null);
@@ -45,22 +47,10 @@ export default function ScholarshipDetail() {
     async function fetchScholarDetails() {
       setLoading(true);
       setError(null);
-
       try {
-        const response = await fetch("/scho.json");
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
-        const scholar = data.scholars.find((s) => s.name === id);
-
-        if (!scholar) {
-          throw new Error("Scholarship not found");
-        }
-
-        setScholarDetails(scholar);
+        const data = {scholarshipId:id}
+        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/getScholarshipsByIdClient`,data,{withCredentials:true})
+        setScholarDetails(res.data.getScholarshipsById[0])
       } catch (err) {
         setError(err.message);
         setScholarDetails(null);
@@ -70,7 +60,10 @@ export default function ScholarshipDetail() {
     }
 
     fetchScholarDetails();
-  }, [id]);
+  }, []);
+
+
+
   const [documents, setDocuments] = useState([{ name: "", file: null }]);
   const handleAddDocument = () => {
     setDocuments([...documents, { name: "", file: null }]);
@@ -221,7 +214,7 @@ export default function ScholarshipDetail() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
-                  {scholarDetails?.name || "Loading..."}
+                  {scholarDetails?.scholarshipName || "Loading..."}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -244,13 +237,13 @@ export default function ScholarshipDetail() {
             ) : (
               <Card>
                 <CardHeader>
-                  <CardTitle> {scholarDetails.name}</CardTitle>
-                  <CardDescription>{scholarDetails.details}</CardDescription>
+                  <CardTitle> {scholarDetails.scholarshipName}</CardTitle>
+                  <CardDescription>{scholarDetails.scholarshipDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 flex items-center justify-center">
                   <img
-                    src={scholarDetails.requireImage}
-                    alt={scholarDetails.name}
+                    src={scholarDetails.scholarshipCover}
+                    alt={scholarDetails.scholarshipName}
                     className="h-1/2 w-w-1/2 object-contain rounded-md shadow-lg"
                   />
                 </CardContent>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Feature } from "./feature";
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import bascLogo from "../assets/basclogo.png";
 import bascImage from "../assets/BASCjf5989_03 copy.jpg";
@@ -43,10 +43,21 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function DrawerDemo() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    try {
+      const res = axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/tokenValidation`,{},{withCredentials:true})
+      .then(res => {if (res.status === 200){navigate("/home")}})
+      .catch(console.log("Need to Login!!"))
+    } catch (error) {
+      console.log(error)
+    }
+  },[])
+
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [password, setPassword] = useState("");
   const [terms, setTerms] = useState(true);
   const [errors, setErrors] = useState({
@@ -127,8 +138,8 @@ function DrawerDemo() {
   const handleOtpChange = (value) => {
     setOtp(value);
   };
+  const [rememberMe, setRemember] = useState(localStorage.getItem("email") != "" ? true : false)
 
-  const navigate = useNavigate();
 
   const handleLoginButton = async (e) => {
     setLoading(true);
@@ -147,9 +158,9 @@ function DrawerDemo() {
           setslideLogin(false);
         }
       }
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    }finally{
       setLoading(false);
     }
   };
@@ -168,13 +179,13 @@ function DrawerDemo() {
         { withCredentials: true }
       );
       if (res.status === 200) {
+        rememberMe === true? localStorage.setItem("email",email) : localStorage.setItem("email","")
         console.log(res);
         navigate("/home");
-        setLoading(false);
       }
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    }finally{
       setLoading(false);
     }
   };
@@ -197,11 +208,10 @@ function DrawerDemo() {
         if (res.status === 200) {
           console.log(res);
           setShowOTP(true);
-          setslideLogin(false);
         }
-        setLoading(false);
       } catch (error) {
         console.log(error);
+      }finally{
         setLoading(false);
       }
     }
@@ -347,7 +357,11 @@ function DrawerDemo() {
                     </span>
                     <div>
                       <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" />
+                        <Checkbox id="terms" checked={rememberMe} onCheckedChange={
+                            (value) => {
+                              setRemember(value)
+                            }
+                          }/>
                         <Label htmlFor="terms">Remember me</Label>
                       </div>
                     </div>

@@ -18,7 +18,6 @@ export default function ClientScholarship() {
   useEffect(() => {
     const getScholarships = async () => {
       const res = await axios.get(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/getScholarships`,{withCredentials:true})
-      console.log(res.data)
       setSscholarships(res.data)
     }
     getScholarships()
@@ -62,13 +61,13 @@ export default function ClientScholarship() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
               {scholarships.map((scholar) => (
                 <Link
-                  to={`/home/scholarship/${encodeURIComponent(scholar.scholarshipName)}`}
+                  to={`/home/scholarship/${encodeURIComponent(scholar.scholarshipId)}`}
                   key={scholar.scholarshipId}
                   className="group relative bg-white rounded-md overflow-hidden shadow-md hover:shadow-xl transition-all border border-gray-200 p-2"
                 >
                   <div className="overflow-hidden rounded-sm">
                     <img
-                      src={``}
+                      src={scholar.scholarshipLogo}
                       alt={scholar.scholarshipName}
                       className="w-full h-52 object-cover  transform  transition-transform duration-300 group-hover:scale-103"
                     />
