@@ -29,13 +29,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import axios from "axios";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import axios from "axios";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function ScholarshipDetail() {
   const { id } = useParams();
@@ -48,9 +46,15 @@ export default function ScholarshipDetail() {
       setLoading(true);
       setError(null);
       try {
-        const data = {scholarshipId:id}
-        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/getScholarshipsByIdClient`,data,{withCredentials:true})
-        setScholarDetails(res.data.getScholarshipsById[0])
+        const data = { scholarshipId: id };
+        const res = await axios.post(
+          `${
+            import.meta.env.VITE_EXPRESS_API_EDUGRANT
+          }/getScholarshipsByIdClient`,
+          data,
+          { withCredentials: true }
+        );
+        setScholarDetails(res.data.getScholarshipsById[0]);
       } catch (err) {
         setError(err.message);
         setScholarDetails(null);
@@ -61,138 +65,6 @@ export default function ScholarshipDetail() {
 
     fetchScholarDetails();
   }, []);
-
-
-
-  const [documents, setDocuments] = useState([{ name: "", file: null }]);
-  const handleAddDocument = () => {
-    setDocuments([...documents, { name: "", file: null }]);
-  };
-  const handleDocChange = (index, key, value) => {
-    const updatedDocs = [...documents];
-    updatedDocs[index][key] = value;
-    setDocuments(updatedDocs);
-  };
-
-  function BirthdaySelect() {
-    const currentYear = new Date().getFullYear();
-
-    const months = useMemo(
-      () => Array.from({ length: 12 }, (_, index) => index + 1),
-      []
-    );
-
-    const years = useMemo(
-      () =>
-        Array.from(
-          { length: currentYear - 1900 + 1 },
-          (_, index) => currentYear - index
-        ),
-      [currentYear]
-    );
-
-    const [month, setMonth] = useState("");
-    const [day, setDay] = useState("");
-    const [year, setYear] = useState("");
-
-    // Generate days based on the selected month
-    const daysInMonth = useMemo(() => {
-      if (!month) return [];
-      const daysInMonthMap = {
-        1: 31,
-        2:
-          currentYear % 4 === 0 &&
-          (currentYear % 100 !== 0 || currentYear % 400 === 0)
-            ? 29
-            : 28,
-        3: 31,
-        4: 30,
-        5: 31,
-        6: 30,
-        7: 31,
-        8: 31,
-        9: 30,
-        10: 31,
-        11: 30,
-        12: 31,
-      };
-      const days = Array.from(
-        { length: daysInMonthMap[month] },
-        (_, index) => index + 1
-      );
-      return days;
-    }, [month, currentYear]);
-
-    return (
-      <div className="w-full space-y-2">
-        <Label htmlFor="birthday">Birthday</Label>
-        <div className="flex gap-1">
-          {/* Month Select */}
-          <Select value={month} onValueChange={setMonth}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Month" />
-            </SelectTrigger>
-            <SelectContent>
-              {months.map((m) => (
-                <SelectItem key={m} value={m}>
-                  {m}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Date Select */}
-          <Select value={day} onValueChange={setDay}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Date" />
-            </SelectTrigger>
-            <SelectContent>
-              {daysInMonth.map((d) => (
-                <SelectItem key={d} value={d}>
-                  {d}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Year Select */}
-          <Select value={year} onValueChange={setYear}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Year" />
-            </SelectTrigger>
-            <SelectContent>
-              {years.map((y) => (
-                <SelectItem key={y} value={y}>
-                  {y}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-    );
-  }
-
-  const [address, setAddress] = useState([]);
-
-  useEffect(() => {
-    async function fetchAddress() {
-      try {
-        const response = await fetch("/setAddress.json");
-        if (!response.ok) {
-          throw new Error("Failed to fetch address");
-        }
-        const data = await response.json();
-        setAddress(data.cities_and_municipalities);
-      } catch (error) {
-        console.error("Error fetching address:", error);
-      }
-    }
-
-    fetchAddress();
-  }, []);
-
-  console.log(address);
 
   return (
     <>
@@ -214,7 +86,7 @@ export default function ScholarshipDetail() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
-                  {scholarDetails?.scholarshipName || "Loading..."}
+                  {scholarDetails?.name || "Loading..."}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -237,13 +109,13 @@ export default function ScholarshipDetail() {
             ) : (
               <Card>
                 <CardHeader>
-                  <CardTitle> {scholarDetails.scholarshipName}</CardTitle>
-                  <CardDescription>{scholarDetails.scholarshipDescription}</CardDescription>
+                  <CardTitle> {scholarDetails.name}</CardTitle>
+                  <CardDescription>{scholarDetails.details}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 flex items-center justify-center">
                   <img
-                    src={scholarDetails.scholarshipCover}
-                    alt={scholarDetails.scholarshipName}
+                    src={scholarDetails.requireImage}
+                    alt={scholarDetails.name}
                     className="h-1/2 w-w-1/2 object-contain rounded-md shadow-lg"
                   />
                 </CardContent>
@@ -262,99 +134,84 @@ export default function ScholarshipDetail() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
+                <div className="w-full space-y-2">
+                  <Label htmlFor="studentId">Student ID</Label>
+                  <Input id="studentId" type="number" required />
+                </div>
                 <div className="flex w-full gap-2">
                   <div className="w-full space-y-2">
                     <Label htmlFor="firstName">First name</Label>
-                    <Input id="firstName" type="text" />
+                    <Input id="firstName" type="text" required />
                   </div>
                   <div className="w-full space-y-2">
                     <Label htmlFor="middleName">Middle name</Label>
-                    <Input id="middleName" type="text" />
+                    <Input id="middleName" type="text" required />
                   </div>
                 </div>
                 <div className="flex w-full gap-2">
                   <div className="w-full space-y-2">
                     <Label htmlFor="lastName">Last name</Label>
-                    <Input id="lastName" type="text" />
+                    <Input id="lastName" type="text" required />
                   </div>
-                  <div
-                    className="w-full space-y-2 flex justify-center
-                  items-center gap-4 mt-6"
-                  >
-                    <RadioGroup
-                      defaultValue="option-one"
-                      className="flex w-full justify-around"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="ip" id="ip" />
-                        <Label htmlFor="ip">Indigenous People</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="pwd" id="pwd" />
-                        <Label htmlFor="pwd">PWD</Label>
-                      </div>
-                    </RadioGroup>
+                  <div className="w-full flex items-center mt-5">
+                    <div className="w-full flex items-center gap-2 justify-center">
+                      <Checkbox value="ind" id="ind" />
+                      <Label htmlFor="ind">Indigenous People</Label>
+                    </div>
+                    <div className="w-full flex items-center gap-2 justify-center">
+                      <Checkbox value="pwd" id="pwd" />
+                      <Label htmlFor="pwd">PWD</Label>
+                    </div>
                   </div>
                 </div>
                 <div className="flex w-full gap-2 mt-3">
                   <div className="w-full space-y-2">
-                    <Label htmlFor="lastName">Sex</Label>
-                    <Select>
-                      <SelectTrigger className="w-full">
+                    <Label htmlFor="sex">Sex</Label>
+                    <Select required>
+                      <SelectTrigger id="sex" className="w-full">
                         <SelectValue placeholder="Choose" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="bulacan">Female</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  <BirthdaySelect />
                   <div className="w-full space-y-2">
-                    <Label htmlFor="lastName">Contact</Label>
-                    <Input id="lastName" type="text" />
+                    <Label htmlFor="birthday">Birthday</Label>
+                    <Input id="birthday" type="date" required />
+                  </div>
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="contact">Contact</Label>
+                    <Input id="contact" type="tel" required />
                   </div>
                 </div>
                 <div className="flex w-full gap-2 mt-3">
                   <div className="w-full space-y-2">
                     <Label htmlFor="province">Province</Label>
-                    <Select>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Province" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="bulacan">Bulacan</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input id="province" type="text" required />
                   </div>
                   <div className="w-full space-y-2">
-                    <Label htmlFor="municipality">Municipality</Label>
-                    <Select>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Municipality" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {address.map((meow, index) => (
-                          <SelectItem key={index} value="bulacan">
-                            {meow}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Label htmlFor="municipality">City/Municipality</Label>
+                    <Input id="municipality" type="text" required />
+                  </div>
+                  <div className="w-full space-y-2">
+                    <Label htmlFor="barangay">Barangay</Label>
+                    <Input id="barangay" type="text" required />
                   </div>
                 </div>
                 <div className="flex w-full gap-2 mt-3">
                   <div className="w-full space-y-2">
                     <Label htmlFor="course">Course</Label>
-                    <Input id="course" type="text" />
+                    <Input id="course" type="text" required />
                   </div>
                   <div className="w-full space-y-2">
-                    <Label htmlFor="year">Year</Label>
-                    <Input id="year" type="text" />
+                    <Label htmlFor="year">Year Level</Label>
+                    <Input id="year" type="text" required />
                   </div>
                   <div className="w-full space-y-2">
                     <Label htmlFor="section">Section</Label>
-                    <Input id="section" type="text" />
+                    <Input id="section" type="text" required />
                   </div>
                 </div>
               </CardContent>
@@ -364,34 +221,22 @@ export default function ScholarshipDetail() {
                 <CardDescription>Upload the required documents</CardDescription>
 
                 <div className="mt-3 flex flex-col gap-4">
-                  {documents.map((doc, index) => (
-                    <div key={index} className="flex flex-col gap-2">
-                      <Label>Document Name</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="Document Name"
-                          value={doc.name}
-                          onChange={(e) =>
-                            handleChange(index, "name", e.target.value)
-                          }
-                        />
-                        <Input
-                          type="file"
-                          onChange={(e) =>
-                            handleChange(index, "file", e.target.files[0])
-                          }
-                        />
-                        <Button type="button">Submit</Button>
-                      </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Document Name"
+                        onChange={(e) =>
+                          handleChange(index, "name", e.target.value)
+                        }
+                      />
+                      <Input type="file" accept=".pdf, .doc, .docx, image/*" />
+                      <Button type="button">Submit</Button>
                     </div>
-                  ))}
-                  <Button type="button" onClick={handleAddDocument}>
-                    + Add More
-                  </Button>
+                  </div>
                 </div>
               </CardHeader>
-              <CardFooter>
-                <Button>Apply Now</Button>
+              <CardFooter className="mt-5">
+                <Button className="w-full">Apply Now</Button>
               </CardFooter>
             </Card>
           </TabsContent>

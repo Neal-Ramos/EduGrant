@@ -46,7 +46,7 @@ function App() {
 
         {/* ADMIN ROUTES */}
         <Route path="/admin-login" element={<LoginAdmin />} />
-        <Route element={<ProtectedRoutesAdmin />}>
+        {/* <Route element={<ProtectedRoutesAdmin />}> */}
           <Route path="/admin-home" element={<Home />}>
             <Route index element={<Navigate to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
@@ -59,7 +59,7 @@ function App() {
             />
             <Route path="announcements" element={<Announcements />} />
           </Route>
-        </Route>
+        {/* </Route> */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ThemeProvider>
