@@ -57,6 +57,7 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 const data = {
   user: {
     name: "Tecson, Jerome L.",
@@ -221,10 +222,13 @@ function NavUser({ user }) {
         { withCredentials: true }
       );
       if (res.status === 200) {
-        alert("Logout!!!");
-        navigate("/");
+        toast("Logout Success!!")
+        setTimeout(() => {
+          navigate("/");
+        }, 1000)
       }
     } catch (error) {
+      toast("Logout Failed!!")
       console.log(error);
     }
   };

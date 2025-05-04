@@ -203,9 +203,12 @@ function NavUser({ user }) {
   const handleLogoutButton = async () => {
     try {
       const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/adminLogout`,{},{withCredentials:true})
-      navigate("/admin-login")
+      toast("Logout Success!!")
+        setTimeout(() => {
+          navigate("/admin-login")
+        }, 1000)
     } catch (error) {
-      console.log(error)
+      toast("Logout Failed!!")
     }
   }
 

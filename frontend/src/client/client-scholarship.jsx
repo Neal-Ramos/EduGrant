@@ -10,6 +10,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ArrowUpRight } from "lucide-react";
 import Notification from "./breadcrumbs-widget";
 import axios from "axios";
 export default function ClientScholarship() {
@@ -94,7 +95,7 @@ export default function ClientScholarship() {
                             {scholar.scholarshipName}
                           </h3>
                           <p className="text-sm text-zinc-200 dark:text-zinc-300 line-clamp-2">
-                            {scholar.scholarshipDetails}
+                            {scholar.scholarshipDescription}
                           </p>
                         </div>
                         <div className="p-2 rounded-full bg-white/10 dark:bg-zinc-800/50 backdrop-blur-md group-hover:bg-white/20 dark:group-hover:bg-zinc-700/50 transition-colors duration-300 group">

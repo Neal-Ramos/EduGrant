@@ -42,6 +42,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "./dark-light-toggle";
+import { toast } from "sonner";
 
 function DrawerDemo() {
   const navigate = useNavigate();
@@ -158,19 +159,26 @@ function DrawerDemo() {
     const data = { userEmail: email, userPassword: password };
     try {
       if (validateFormLogin()) {
-        console.log(data);
         const res = await axios.post(
           `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/login`,
           data,
           { withCredentials: true }
         );
         if (res.status === 200) {
+          toast("Code sent to email", {
+            description:
+              "Please check your inbox for the verification code.",
+          })
           setShowOTP(true);
           setslideLogin(false);
         }
       }
     } catch (error) {
-      console.log(error);
+      toast("Login Failed", {
+        description:
+          error.response.data.message,
+      })
+      console.log(error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -193,11 +201,13 @@ function DrawerDemo() {
         rememberMe === true
           ? localStorage.setItem("email", email)
           : localStorage.setItem("email", "");
-        console.log(res);
         navigate("/home");
       }
     } catch (error) {
-      console.log(error);
+      toast("Login Failed", {
+        description:
+          error.response.data.message,
+      })
     } finally {
       setLoading(false);
     }

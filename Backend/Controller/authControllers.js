@@ -111,7 +111,7 @@ exports.loginAccounts =  async (req, res) => {
 }
 exports.codeAuthentication = async (req, res) => {
     const { code, origin} = req.body
-    if(!code || !origin){return res.status(400).json({success:false})}
+    if(!code || !origin){return res.status(400).json({success:false, message:"Enter A Valid Code!!"})}
     if(origin === "login"){
         const {code, origin, userEmail, userPassword} = req.body
         if(!userEmail || !userPassword){return res.status(400).json({success:false, message:"Fillout All Credentials!!"})}
@@ -170,6 +170,7 @@ exports.tokenAuthetication = async (req, res) => {
     if (!cookieToken) {return res.status(401).json({success: false, message: "No Token Provided or Invalid Format"})}
     try {
         const verifiedUser = jwt.verify(cookieToken, process.env.JWT_SECRET)
+        if(verifiedUser.role === "admin"){return res.status(401).json({success:false, message:"Token Prohibited!!!"})}
         return res.status(200).json({
             success: true
         })

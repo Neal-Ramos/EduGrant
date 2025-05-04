@@ -59,7 +59,7 @@ export default function LoginAdmin() {
         toast("Code sent to email", {
           description:
             "Please check your inbox for the verification code.",
-        });
+        })
         console.log(res)
         setShowOTP(true);
         setslideLogin(false);
