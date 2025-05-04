@@ -29,6 +29,7 @@ exports.adminAddScholarships = async (req, res) => {
   
     const sponsorLogo = req.files.sponsorLogo?.[0];
     const coverImg = req.files.coverImg?.[0];
+    const applicationForm = req.files.applicationForm?.[0];
   
     if (
       !newScholarName ||
@@ -36,7 +37,8 @@ exports.adminAddScholarships = async (req, res) => {
       !newScholarDescription ||
       !requirements ||
       !sponsorLogo ||
-      !coverImg
+      !coverImg ||
+      !applicationForm
     ) {
       return res.status(400).json({
         success: false,
@@ -51,7 +53,7 @@ exports.adminAddScholarships = async (req, res) => {
             {
               folder: 'scholarship-files',
               public_id: `${folderName}-${Date.now()}-${uuidv4()}`,
-              resource_type: 'image', // You can change to 'auto' if mixing file types
+              resource_type: 'auto', // You can change to 'auto' if mixing file types
             },
             (error, result) => {
               if (error) return reject(error);
@@ -64,13 +66,15 @@ exports.adminAddScholarships = async (req, res) => {
   
       const sponsorResult = await streamUpload(sponsorLogo.buffer, 'sponsor')
       const coverResult = await streamUpload(coverImg.buffer, 'cover')
+      const formResult = await streamUpload(applicationForm.buffer, 'form')
       const insertScholarships = await scholarshipsModels.insertScholarships(
         newScholarName,
         newScholarDeadline,
         newScholarDescription,
         requirements,
         sponsorResult.secure_url,
-        coverResult.secure_url
+        coverResult.secure_url,
+        formResult.secure_url
       );
   
       return res.status(200).json({success: true,message: 'Scholarship Added!',});

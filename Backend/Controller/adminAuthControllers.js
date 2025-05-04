@@ -49,7 +49,7 @@ exports.adminCodeAuthentication = async (req, res) => {
     if(origin !== "adminLogin"){return res.status(400).json({success:false, message:"Prohibited!!"})}
     try {
         const codeRecord = await securityCodeModels.selectCodeByCodeEmailOrigin(code, adminEmail, origin);
-        if(codeRecord.length === 0){return res.status(400).json({success:false, message:"Invalid Credentials!"})}
+        if(codeRecord.length === 0){return res.status(400).json({success:false, message:"Invalid Code!"})}
         const expiryDate = new Date(codeRecord[0].expiryDate).getTime();
         if(expiryDate < Date.now()){return res.status(400).json({success:false, message:"Code Expired!!"})}
         const payload = {role:"admin"}

@@ -65,6 +65,10 @@ export default function LoginAdmin() {
         setslideLogin(false);
       }
     } catch (error) {
+      toast("Login Failed!!", {
+        description:
+          error.response.data.message
+      })
       console.log(error);
     } finally {
       setLoading(false)
@@ -78,6 +82,10 @@ export default function LoginAdmin() {
       console.log(res)
       if(res.status === 200){navigate("/admin-home")}
     } catch (error) {
+      toast("Login Failed!!", {
+        description:
+          error.response.data.message
+      })
       console.log(error)
     }finally{
       setLoading(false)

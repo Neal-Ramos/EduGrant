@@ -102,16 +102,6 @@ export default function Scholarships() {
     };
     getScholar();
   }, []);
-  // useEffect(() => {
-  //   async function fetchScholar() {
-  //     await new Promise((resolve) => setTimeout(resolve, 500));
-  //     const response = await fetch("/ngi.json");
-  //     const data = await response.json();
-  //     setScholar(data);
-  //     setLoading(false);
-  //   }
-  //   fetchScholar();
-  // }, []);
 
   const exportCSV = () => {
     if (!scholarships || scholarships.length === 0) {
@@ -148,19 +138,18 @@ export default function Scholarships() {
     newScholarSponsorLogo: null,
     newScholarCoverImg: null,
     newScholarDescription: null,
+    newScholarshipForm: null
   });
   const handleAddScholarship = async () => {
     try {
       const formData = new FormData();
       formData.append("newScholarName", newScholarData.newScholarName);
       formData.append("newScholarDeadline", newScholarData.newScholarDeadline);
-      formData.append(
-        "newScholarDescription",
-        newScholarData.newScholarDescription
-      );
+      formData.append("newScholarDescription",newScholarData.newScholarDescription);
       formData.append("requirements", JSON.stringify(requirements));
       formData.append("sponsorLogo", newScholarData.newScholarSponsorLogo);
       formData.append("coverImg", newScholarData.newScholarCoverImg);
+      formData.append("applicationForm", newScholarData.newScholarshipForm);
       const res = await axios.post(
         `${
           import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN
@@ -470,7 +459,16 @@ export default function Scholarships() {
                   <Label htmlFor="scholarshipDescription">
                     Scholarship Application Form
                   </Label>
-                  <Input className="w-full" type="file"></Input>
+                  <Input className="w-full" type="file"
+                  onChange={(e) => {
+                    setNewScholarData({
+                      ...newScholarData,
+                      newScholarshipForm: e.target.files[0],
+                      
+                    })
+                    console.log(e);
+                  }}
+                  ></Input>
                 </div>
                 {requirements.map((req, index) => (
                   <div className=" flex gap-3 w-full" key={index}>
