@@ -77,7 +77,7 @@ export default function Scholarships() {
   const [requirements, setRequirements] = useState([]);
 
   const handleAddRequirement = () => {
-    setRequirements([...requirements, { label: ""}]);
+    setRequirements([...requirements, { label: "" }]);
   };
 
   const handleChange = (index, field, value) => {
@@ -86,18 +86,22 @@ export default function Scholarships() {
     setRequirements(updated);
   };
   useEffect(() => {
-    const getScholar =async () => {
+    const getScholar = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/getScholarships`,{},{withCredentials:true})
-        setScholar(res.data)
+        const res = await axios.get(
+          `${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/getScholarships`,
+          {},
+          { withCredentials: true }
+        );
+        setScholar(res.data);
       } catch (error) {
-        console.log(error)
-      } finally{
-        setLoading(false)
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-    }
-    getScholar()
-  },[])
+    };
+    getScholar();
+  }, []);
   // useEffect(() => {
   //   async function fetchScholar() {
   //     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -139,28 +143,42 @@ export default function Scholarships() {
     meow.scholarshipName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const [newScholarData, setNewScholarData] = useState({
-    newScholarName:null,
-    newScholarDeadline:null,
-    newScholarSponsorLogo:null,
-    newScholarCoverImg:null,
-    newScholarDescription:null
-  })
+    newScholarName: null,
+    newScholarDeadline: null,
+    newScholarSponsorLogo: null,
+    newScholarCoverImg: null,
+    newScholarDescription: null,
+  });
   const handleAddScholarship = async () => {
     try {
       const formData = new FormData();
-      formData.append('newScholarName', newScholarData.newScholarName);
-      formData.append('newScholarDeadline', newScholarData.newScholarDeadline);
-      formData.append('newScholarDescription', newScholarData.newScholarDescription);
-      formData.append('requirements', JSON.stringify(requirements));
-      formData.append('sponsorLogo', newScholarData.newScholarSponsorLogo);
-      formData.append('coverImg', newScholarData.newScholarCoverImg);
-      const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN}/adminAddScholarships`,formData,{withCredentials:true})
-      if(res.status === 200){alert("Scholarship Added!!")}
+      formData.append("newScholarName", newScholarData.newScholarName);
+      formData.append("newScholarDeadline", newScholarData.newScholarDeadline);
+      formData.append(
+        "newScholarDescription",
+        newScholarData.newScholarDescription
+      );
+      formData.append("requirements", JSON.stringify(requirements));
+      formData.append("sponsorLogo", newScholarData.newScholarSponsorLogo);
+      formData.append("coverImg", newScholarData.newScholarCoverImg);
+      const res = await axios.post(
+        `${
+          import.meta.env.VITE_EXPRESS_API_EDUGRANT_ADMIN
+        }/adminAddScholarships`,
+        formData,
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+        alert("Scholarship Added!!");
+      }
     } catch (error) {
-      if(error.status === 500){alert(error.response.data.error)}
-      else{alert(error.response.data.message)}
+      if (error.status === 500) {
+        alert(error.response.data.error);
+      } else {
+        alert(error.response.data.message);
+      }
     }
-  }
+  };
 
   return (
     <>
@@ -242,7 +260,7 @@ export default function Scholarships() {
             ) : viewMode === "card" ? (
               <div className="grid grid-cols-4 gap-2">
                 {filteredData.map((scholarship) => (
-                  <Card key={scholarship.scholarshipId } className="w-full">
+                  <Card key={scholarship.scholarshipId} className="w-full">
                     <CardHeader>
                       <CardTitle className="flex items-center  gap-2">
                         <GraduationCap className="min-w-6" />
@@ -312,7 +330,7 @@ export default function Scholarships() {
                     </TableHeader>
                     <TableBody>
                       {filteredData.map((scholarship) => (
-                        <TableRow key={scholarship.scholarshipId }>
+                        <TableRow key={scholarship.scholarshipId}>
                           <TableCell className="font-medium">
                             {scholarship.scholarshipName}
                           </TableCell>
@@ -378,7 +396,10 @@ export default function Scholarships() {
                       type="text"
                       placeholder="Enter scholarship title"
                       onChange={(e) => {
-                        setNewScholarData({...newScholarData, newScholarName:e.target.value})
+                        setNewScholarData({
+                          ...newScholarData,
+                          newScholarName: e.target.value,
+                        });
                       }}
                     />
                   </div>
@@ -386,9 +407,16 @@ export default function Scholarships() {
                     <Label htmlFor="applicationDeadline">
                       Application Deadline
                     </Label>
-                    <Input id="applicationDeadline" type="date" onChange={(e) => {
-                        setNewScholarData({...newScholarData, newScholarDeadline:e.target.value})
-                      }}/>
+                    <Input
+                      id="applicationDeadline"
+                      type="date"
+                      onChange={(e) => {
+                        setNewScholarData({
+                          ...newScholarData,
+                          newScholarDeadline: e.target.value,
+                        });
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="flex gap-3 w-full">
@@ -399,7 +427,10 @@ export default function Scholarships() {
                       type="file"
                       accept=".jpg, .jpeg, .png, .gif, .webp, .bmp, .svg"
                       onChange={(e) => {
-                        setNewScholarData({...newScholarData, newScholarSponsorLogo:e.target.files[0]})
+                        setNewScholarData({
+                          ...newScholarData,
+                          newScholarSponsorLogo: e.target.files[0],
+                        });
                       }}
                     />
                   </div>
@@ -412,7 +443,10 @@ export default function Scholarships() {
                       type="file"
                       accept=".jpg, .jpeg, .png, .gif, .webp, .bmp, .svg"
                       onChange={(e) => {
-                        setNewScholarData({...newScholarData, newScholarCoverImg:e.target.files[0]})
+                        setNewScholarData({
+                          ...newScholarData,
+                          newScholarCoverImg: e.target.files[0],
+                        });
                       }}
                     />
                   </div>
@@ -425,9 +459,18 @@ export default function Scholarships() {
                     id="scholarshipDescription"
                     placeholder="Provide an overview of the scholarship, eligibility, and other key information"
                     onChange={(e) => {
-                      setNewScholarData({...newScholarData, newScholarDescription:e.target.value})
+                      setNewScholarData({
+                        ...newScholarData,
+                        newScholarDescription: e.target.value,
+                      });
                     }}
                   />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="scholarshipDescription">
+                    Scholarship Application Form
+                  </Label>
+                  <Input className="w-full" type="file"></Input>
                 </div>
                 {requirements.map((req, index) => (
                   <div className=" flex gap-3 w-full" key={index}>
