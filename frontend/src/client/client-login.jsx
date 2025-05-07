@@ -790,7 +790,7 @@ export default function ClientLogin() {
           </div>
         </div>
       </div>
-
+      <Feature />
       <Footerdemo />
     </>
   );
