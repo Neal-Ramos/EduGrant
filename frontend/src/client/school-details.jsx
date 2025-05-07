@@ -40,6 +40,7 @@ export default function ScholarshipDetail() {
   const [scholarDetails, setScholarDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [documentsNeeded, setDocumentsNeeded] = useState(null)
 
   useEffect(() => {
     async function fetchScholarDetails() {
@@ -54,6 +55,7 @@ export default function ScholarshipDetail() {
           data,
           { withCredentials: true }
         );
+        setDocumentsNeeded(JSON.parse(res.data.getScholarshipsById[0].scholarshipDocuments))
         setScholarDetails(res.data.getScholarshipsById[0]);
       } catch (err) {
         setError(err.message);
@@ -86,7 +88,7 @@ export default function ScholarshipDetail() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-white">
-                  {scholarDetails?.name || "Loading..."}
+                  {scholarDetails?.scholarshipName || "Loading..."}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -109,13 +111,13 @@ export default function ScholarshipDetail() {
             ) : (
               <Card>
                 <CardHeader>
-                  <CardTitle> {scholarDetails.name}</CardTitle>
-                  <CardDescription>{scholarDetails.details}</CardDescription>
+                  <CardTitle> {scholarDetails.scholarshipName}</CardTitle>
+                  <CardDescription>{scholarDetails.scholarshipDescription}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 flex items-center justify-center">
                   <img
-                    src={scholarDetails.requireImage}
-                    alt={scholarDetails.name}
+                    src={scholarDetails.scholarshipCover}
+                    alt={scholarDetails.scholarshipName}
                     className="h-1/2 w-w-1/2 object-contain rounded-md shadow-lg"
                   />
                 </CardContent>
@@ -219,19 +221,19 @@ export default function ScholarshipDetail() {
               <CardHeader>
                 <CardTitle>Documents</CardTitle>
                 <CardDescription>Upload the required documents</CardDescription>
-
                 <div className="mt-3 flex flex-col gap-4">
                   <div className="flex flex-col gap-2">
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Document Name"
-                        onChange={(e) =>
-                          handleChange(index, "name", e.target.value)
-                        }
-                      />
-                      <Input type="file" accept=".pdf, .doc, .docx, image/*" />
-                      <Button type="button">Submit</Button>
-                    </div>
+                    {documentsNeeded?.map((element, index) => {
+                      return(
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            placeholder="Document Name"
+                            value={element.label}
+                          />
+                          <Input type="file" accept=".pdf, .doc, .docx, image/*"/>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               </CardHeader>

@@ -33,7 +33,7 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use(apiLimiter)
+// app.use(apiLimiter)
 
 const authRoutes = require("./routes/authRoutes")
 const postRoutes = require("./routes/postRoutes")
