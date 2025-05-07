@@ -6,6 +6,56 @@
 * {
   /* border: 1px solid red; */
 }
+.bg {
+  background: #008148;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 129, 72, 1) 0%,
+    rgba(3, 71, 50, 1) 100%
+  );
+}
+.test {
+  background-color: #99ff9c;
+  background-image: radial-gradient(
+      at 65% 9%,
+      hsla(124, 63%, 63%, 1) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 25% 16%, hsla(233, 96%, 77%, 1) 0px, transparent 50%),
+    radial-gradient(at 32% 11%, hsla(151, 96%, 79%, 1) 0px, transparent 50%),
+    radial-gradient(at 50% 92%, hsla(212, 79%, 75%, 1) 0px, transparent 50%),
+    radial-gradient(at 0% 3%, hsla(85, 71%, 75%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 81%, hsla(82, 60%, 62%, 1) 0px, transparent 50%),
+    radial-gradient(at 99% 4%, hsla(10, 74%, 77%, 1) 0px, transparent 50%);
+}
+.custom-shape-divider-top-1746616033 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-top-1746616033 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 50px;
+}
+
+.custom-shape-divider-top-1746616033 .shape-fill {
+  fill: #ffffff;
+}
+
+/** For mobile devices **/
+@media (max-width: 767px) {
+  .custom-shape-divider-top-1746616033 svg {
+    width: calc(100% + 1.3px);
+    height: 32px;
+  }
+}
 .swiper-button-next,
 .swiper-button-prev {
   color: red; /* emerald-500 from Tailwind */
@@ -16,7 +66,6 @@ body {
 }
 
 .fontstyle {
-
   text-transform: uppercase;
 }
 

@@ -734,11 +734,11 @@ function DrawerDemo({ title }) {
 export default function ClientLogin() {
   return (
     <>
-      <div className="h-screen w-full flex flex-col justify-start items-center bg-background rounded-xs gap-5">
-        <header className="h-[70px] w-[95%]  mt-3 rounded-md flex justify-between items-center px-5">
-          <span className="h-[90%] flex  justify-center items-center gap-2">
+      <div className="h-screen w-full flex flex-col justify-start items-center bg-background">
+        <header className="h-[70px] w-[95%] mt-5  rounded-md flex justify-between items-center px-5">
+          <span className="h-[90%] flex  justify-center items-center gap-1">
             <img
-              className="h-11 w-11 object-contain"
+              className="h-10 w-10 object-contain"
               src={edugrantlogo}
               alt=""
             />
@@ -758,36 +758,33 @@ export default function ClientLogin() {
           </nav>
         </header>
 
-        <div className="relative w-[95%] bg-green-800 h-[80%] rounded-4xl shadow-xl flex    overflow-hidden">
-          <div className=" w-[60%] flex flex-col justify-center items-start z-10  text-white p-10 gap-1 ">
+        <div className="relative mt-3 w-[95%] bg h-[80%] rounded-4xl shadow-xl flex items-center overflow-hidden border-1 border-green-800">
+          <div className="ml-10 text-white z-10">
             <p className="font-semibold text-lg text-yellow-300 ">
               Office of Student Affairs and Service
             </p>
             <h1 className="text-5xl font-bold fontstyle">
               Scholarship Applications <br /> Made Easy
             </h1>
-            <p className="mt-4 text-xl">
+            <p className="mt-4 mb-8 text-xl">
               Apply, track, and get notified — all in one place for
               <span> BASC </span>
               students.
             </p>
 
-            <span className="mt-10">
-              <DrawerDemo />
-            </span>
+            <DrawerDemo />
           </div>
-          <div className="absolute h-full opacity-10 -translate-x-20">
-            <img className="h-full w-full" src={bascLogo} alt="" />
-          </div>
-          <div className="relative w-[40%] flex justify-end items-center overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-green-800 via-transparent to-transparent z-10" />
 
-            <img
-              className="absolute bottom-0 h-full w-full drop-shadow-md object-cover object-[center_70%] z-0"
-              src={bascImage}
-              alt="bascImage"
-            />
-          </div>
+          <img
+            className="absolute opacity-20 h-[95%] [mask-image:linear-gradient(to_right,transparent,black_30%)]"
+            src={bascLogo}
+            alt=""
+          />
+          <img
+            className="h-full w-[40%] object-cover absolute right-0 [mask-image:linear-gradient(to_right,transparent,black)]"
+            src={bascImage}
+            alt=""
+          />
         </div>
       </div>
       <Feature />
