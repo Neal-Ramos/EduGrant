@@ -146,7 +146,7 @@ export default function ClientDashboard() {
         </div>
         <Notification />
       </header>
-      <div className="px-4 mt-2">
+      {/* <div className="px-4 mt-2">
         <Swiper
           slidesPerView={"auto"}
           loop={true}
@@ -177,7 +177,7 @@ export default function ClientDashboard() {
             </div>
           </SwiperSlide>
         </Swiper>
-      </div>
+      </div> */}
 
       <div className="p-4 flex gap-5 flex-col lg:flex-row">
         <div className="w-full lg:w-3/4 flex flex-col gap-5">
@@ -218,7 +218,7 @@ export default function ClientDashboard() {
             <div className="p-2 space-y-1">
               <CardTitle className="zxc text-3xl tracking-[-2px] flex items-center gap-2">
                 Hello,
-                <span className="text-green-800">Qatrina</span>!
+                <span className="text-green-800">Jerome</span>!
               </CardTitle>
               <CardDescription>
                 Ready to take the next step? Start your scholarship application
@@ -239,7 +239,9 @@ export default function ClientDashboard() {
                     <GraduationCap />
                     <h1 className="font-semibold">Apply Scholarship</h1>
                   </div>
-                  <ArrowRight size={15} />
+                  <span className="shadow-md p-2 rounded-full">
+                    <ArrowRight size={15} />
+                  </span>
                 </div>
                 <p className="text-sm mt-2">
                   Submit a new application for available scholarship
@@ -253,7 +255,9 @@ export default function ClientDashboard() {
                     <FolderSearch />
                     <h1 className="font-semibold"> Review My Application</h1>
                   </div>
-                  <ArrowRight size={15} />
+                  <span className="shadow-md p-2 rounded-full">
+                    <ArrowRight size={15} />
+                  </span>
                 </div>
                 <p className="text-sm mt-2">
                   Check the status, details, and progress of your submitted

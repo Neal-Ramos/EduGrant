@@ -11,6 +11,15 @@
   color: red; /* emerald-500 from Tailwind */
 }
 
+body {
+  font-family: "QuickSand";
+}
+
+.fontstyle {
+
+  text-transform: uppercase;
+}
+
 #zzz {
   position: relative;
   z-index: 999;
@@ -78,7 +87,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.97 0.00 286);
+  --background: oklch(0.97 0 286);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Feature } from "./feature";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, LogIn } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import bascLogo from "../assets/basclogo.png";
@@ -44,7 +44,7 @@ import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "./dark-light-toggle";
 import { toast } from "sonner";
 
-function DrawerDemo() {
+function DrawerDemo({ title }) {
   const navigate = useNavigate();
   useEffect(() => {
     try {
@@ -166,18 +166,16 @@ function DrawerDemo() {
         );
         if (res.status === 200) {
           toast("Code sent to email", {
-            description:
-              "Please check your inbox for the verification code.",
-          })
+            description: "Please check your inbox for the verification code.",
+          });
           setShowOTP(true);
           setslideLogin(false);
         }
       }
     } catch (error) {
       toast("Login Failed", {
-        description:
-          error.response.data.message,
-      })
+        description: error.response.data.message,
+      });
       console.log(error.response.data.message);
     } finally {
       setLoading(false);
@@ -205,9 +203,8 @@ function DrawerDemo() {
       }
     } catch (error) {
       toast("Login Failed", {
-        description:
-          error.response.data.message,
-      })
+        description: error.response.data.message,
+      });
     } finally {
       setLoading(false);
     }
@@ -283,9 +280,22 @@ function DrawerDemo() {
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
-        <Button className="text-white" size="lg">
-          Login
-        </Button>
+        {title ? (
+          <Button size="lg">
+            Login <LogIn />
+          </Button>
+        ) : (
+          <Button
+            size="lg"
+            className="bg-yellow-400 text-green-950 font-semibold hover:text-white"
+            onClick={() => {
+              setshowLogin(false);
+              setshowRegister(true);
+            }}
+          >
+            Get Started <ArrowRight />
+          </Button>
+        )}
       </DrawerTrigger>
       <DrawerContent>
         {showLogin && (
@@ -728,7 +738,7 @@ export default function ClientLogin() {
         <header className="h-[70px] w-[95%]  mt-3 rounded-md flex justify-between items-center px-5">
           <span className="h-[90%] flex  justify-center items-center gap-2">
             <img
-              className="h-full w-full object-contain"
+              className="h-11 w-11 object-contain"
               src={edugrantlogo}
               alt=""
             />
@@ -741,7 +751,7 @@ export default function ClientLogin() {
               <li className="font-semibold text-md">How it Works</li>
               <li className="font-semibold text-md">About</li>
               <li className="flex items-center gap-3">
-                <DrawerDemo />
+                <DrawerDemo title="login" />
                 <ModeToggle />
               </li>
             </ul>
@@ -749,26 +759,22 @@ export default function ClientLogin() {
         </header>
 
         <div className="relative w-[95%] bg-green-800 h-[80%] rounded-4xl shadow-xl flex    overflow-hidden">
-          <div className=" w-[60%] flex flex-col justify-center items-start z-10  text-white p-10 gap-1">
-            <p className="font-semibold text-2xl text-yellow-400">
+          <div className=" w-[60%] flex flex-col justify-center items-start z-10  text-white p-10 gap-1 ">
+            <p className="font-semibold text-lg text-yellow-300 ">
               Office of Student Affairs and Service
             </p>
-            <h1 className="text-5xl font-bold">
+            <h1 className="text-5xl font-bold fontstyle">
               Scholarship Applications <br /> Made Easy
             </h1>
-            <p className="mt-3 text-xl text-white/90">
-              Apply, track, and get notified — all in one place for BASC
+            <p className="mt-4 text-xl">
+              Apply, track, and get notified — all in one place for
+              <span> BASC </span>
               students.
             </p>
-            <Button
-              size="lg"
-              className="ml-6  mt-10 text-white"
-              onClick={() => {
-                showLogin(true);
-              }}
-            >
-              Apply Now <ArrowRight />
-            </Button>
+
+            <span className="mt-10">
+              <DrawerDemo />
+            </span>
           </div>
           <div className="absolute h-full opacity-10 -translate-x-20">
             <img className="h-full w-full" src={bascLogo} alt="" />
