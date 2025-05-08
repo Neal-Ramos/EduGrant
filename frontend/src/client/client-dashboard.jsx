@@ -8,7 +8,7 @@ import {
 import Notification from "./breadcrumbs-widget";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "../components/ui/sidebar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
   CheckCheck,
@@ -37,8 +37,10 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Button } from "@/components/ui/button";
+import AuthContext from "@/context/AuthContext";
 
 export default function ClientDashboard() {
+  const {user} = useContext(AuthContext)
   const [student, setStudent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
@@ -218,7 +220,7 @@ export default function ClientDashboard() {
             <div className="p-2 space-y-1">
               <CardTitle className="zxc text-3xl tracking-[-2px] flex items-center gap-2">
                 Hello,
-                <span className="text-green-800">Jerome</span>!
+                <span className="text-green-800">{user.firstName}</span>!
               </CardTitle>
               <CardDescription>
                 Ready to take the next step? Start your scholarship application

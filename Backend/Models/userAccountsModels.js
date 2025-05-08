@@ -9,3 +9,6 @@ exports.insertNewUser = (firstName, middleName, lastName, userEmail, encryptPass
     return query("INSERT INTO user_account(firstName, middleName, lastName, userEmail, userPassword) VALUES(?, ?, ?, ?, ?)",
         [firstName, middleName, lastName, userEmail, encryptPassword])
 }
+exports.getUserByID = (userId) => {
+    return query("SELECT * FROM user_account WHERE userId = ?",[userId])
+}

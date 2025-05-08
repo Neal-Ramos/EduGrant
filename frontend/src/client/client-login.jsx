@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Feature } from "./feature";
 import { ArrowRight, LogIn } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import bascLogo from "../assets/basclogo.png";
 import bascImage from "../assets/BASCjf5989_03 copy.jpg";
@@ -43,26 +43,22 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "./dark-light-toggle";
 import { toast } from "sonner";
+import AuthContext from "@/context/AuthContext";
 
 function DrawerDemo({ title }) {
   const navigate = useNavigate();
+  const {setUser} = useContext(AuthContext)
   useEffect(() => {
-    try {
-      const res = axios
-        .post(
-          `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/tokenValidation`,
-          {},
-          { withCredentials: true }
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            navigate("/home");
-          }
-        })
-        .catch(console.log("Need to Login!!"));
-    } catch (error) {
-      console.log(error);
+    const validate = async() => {
+      try {
+        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/tokenValidation`,{},{ withCredentials: true })
+        setUser(res.data.userData)
+        if (res.status === 200) {navigate("/home");}
+      } catch (error) {
+        console.log("Need To Login!!")
+      }
     }
+    validate()
   }, []);
 
   const [firstName, setFirstName] = useState("");
@@ -196,6 +192,7 @@ function DrawerDemo({ title }) {
         { withCredentials: true }
       );
       if (res.status === 200) {
+        setUser(res.data.userData)
         rememberMe === true
           ? localStorage.setItem("email", email)
           : localStorage.setItem("email", "");

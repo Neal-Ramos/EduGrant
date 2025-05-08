@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   GalleryVerticalEnd,
   Settings2,
@@ -58,6 +58,8 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import AuthContext from "@/context/AuthContext";
+
 const data = {
   user: {
     name: "Tecson, Jerome L.",
@@ -212,6 +214,7 @@ function TeamSwitcher({ teams }) {
 }
 
 function NavUser({ user }) {
+  const contextUser = useContext(AuthContext)
   const { isMobile } = useSidebar();
   const navigate = useNavigate();
   const handleLogoutButton = async () => {
@@ -247,8 +250,8 @@ function NavUser({ user }) {
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-semibold">{`${contextUser.user.firstName} ${contextUser.user.middleName} ${contextUser.user.lastName}`}</span>
+                <span className="truncate text-xs">{contextUser.user.userEmail}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -266,8 +269,8 @@ function NavUser({ user }) {
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-semibold">{`${contextUser.user.firstName} ${contextUser.user.middleName} ${contextUser.user.lastName}`}</span>
+                  <span className="truncate text-xs">{contextUser.user.userEmail}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

@@ -27,15 +27,14 @@ exports.adminAddScholarships = async (req, res) => {
       requirements,
     } = req.body;
   
-    const sponsorLogo = req.files.sponsorLogo?.[0];
-    const coverImg = req.files.coverImg?.[0];
-    const applicationForm = req.files.applicationForm?.[0];
+    const sponsorLogo = req.files.find(file => file.fieldname === 'sponsorLogo');
+    const coverImg = req.files.find(file => file.fieldname === 'coverImg');
+    const applicationForm = req.files.find(file => file.fieldname === 'applicationForm');
   
     if (
       !newScholarName ||
       !newScholarDeadline ||
       !newScholarDescription ||
-      !requirements ||
       !sponsorLogo ||
       !coverImg ||
       !applicationForm
@@ -64,9 +63,10 @@ exports.adminAddScholarships = async (req, res) => {
         });
       };
   
-      const sponsorResult = await streamUpload(sponsorLogo.buffer, 'sponsor')
-      const coverResult = await streamUpload(coverImg.buffer, 'cover')
-      const formResult = await streamUpload(applicationForm.buffer, 'form')
+      const sponsorResult = await streamUpload(sponsorLogo.buffer, `${newScholarName}-Logo`)
+      const coverResult = await streamUpload(coverImg.buffer, `${newScholarName}-Cover`)
+      const formResult = await streamUpload(applicationForm.buffer, `${newScholarName}-Form`)
+
       const insertScholarships = await scholarshipsModels.insertScholarships(
         newScholarName,
         newScholarDeadline,

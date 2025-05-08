@@ -20,8 +20,9 @@ import OpenScholarship from "./admin/scholarship-details";
 import { ThemeProvider } from "./components/ui/darkmode";
 import { Toaster } from "@/components/ui/sonner";
 
-import ProtectedRoutes from "./ProtectedRoutes";
-import ProtectedRoutesAdmin from "./ProtectedRoutesAdmin";
+import ProtectedRoutes from "./routes/ProtectedRoutes";
+import ProtectedRoutesAdmin from "./routes/ProtectedRoutesAdmin";
+import AuthProvider from "./context/AuthProvider";
 
 import { NotFoundPage } from "./404";
 function App() {
@@ -30,9 +31,9 @@ function App() {
       <Toaster position="bottom-right" richColors />
       <Routes>
         {/* CLIENT ROUTES */}
-        <Route path="/" element={<ClientLogin />} />
+        <Route path="/" element={<AuthProvider><ClientLogin /></AuthProvider>} />
         <Route path="/verify-email" element={<VerificationPage />} />
-        <Route element={<ProtectedRoutes />}>
+        <Route element={<AuthProvider><ProtectedRoutes /></AuthProvider>}>
         <Route path="/home" element={<ClientHome />}>
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<ClientDashboard />} />

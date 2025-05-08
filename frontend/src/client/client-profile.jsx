@@ -29,8 +29,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
+import AuthContext from "@/context/AuthContext";
+import { useContext } from "react";
 
 export default function ClientProfile() {
+  const {user} = useContext(AuthContext)
   const [profilePic, setProfilePic] = React.useState(null);
 
   const handleProfileChange = (e) => {
@@ -97,10 +100,10 @@ export default function ClientProfile() {
                     2022000510
                   </h2>
                   <h2 className="font-semibold text-black text-4xl">
-                    Jerome L. Tecson
+                    {`${user.firstName} ${user.middleName} ${user.lastName}`}
                   </h2>
                   <h2 className="font-semibold text-black/50">
-                    jerometecson@gmail.com
+                    {user.userEmail}
                   </h2>
                   <div className="w-full flex flex-col gap-4 mt-20">
                     <div className=" w-full">

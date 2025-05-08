@@ -171,9 +171,8 @@ exports.tokenAuthetication = async (req, res) => {
     try {
         const verifiedUser = jwt.verify(cookieToken, process.env.JWT_SECRET)
         if(verifiedUser.role === "admin"){return res.status(401).json({success:false, message:"Token Prohibited!!!"})}
-        return res.status(200).json({
-            success: true
-        })
+        const userData = await userAccountsModels.getUserByID(verifiedUser.userID)
+        return res.status(200).json({success: true, userData})
     } catch (error) {
         return res.status(401).json({
             success: false, message:"Session Expired"

@@ -18,7 +18,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Separator } from "@/components/ui/separator";
 
+import AuthContext from "@/context/AuthContext";
+import { useContext } from "react";
+
 export default function Notification() {
+  const {user} = useContext(AuthContext)
   const navigate = useNavigate();
   const handleOnclickLogout = async () => {
     try {
@@ -78,7 +82,7 @@ export default function Notification() {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>
-            <h1>Jerome Tecson</h1>
+            <h1>{`${user.firstName} ${user.lastName}`}</h1>
             <ChevronDown size={20} />
           </div>
         </PopoverTrigger>
