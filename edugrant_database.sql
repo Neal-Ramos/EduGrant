@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2025 at 03:42 PM
+-- Generation Time: May 12, 2025 at 05:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,6 +66,7 @@ CREATE TABLE `scholarships` (
   `scholarshipDealine` varchar(255) NOT NULL,
   `scholarshipLogo` varchar(255) NOT NULL,
   `scholarshipCover` varchar(255) NOT NULL,
+  `scholarshipApplicationForm` varchar(255) NOT NULL,
   `scholarshipDescription` varchar(255) NOT NULL,
   `scholarshipDocuments` varchar(255) NOT NULL,
   `totalApplicants` int(255) NOT NULL DEFAULT 0,
@@ -76,8 +77,9 @@ CREATE TABLE `scholarships` (
 -- Dumping data for table `scholarships`
 --
 
-INSERT INTO `scholarships` (`scholarshipId`, `scholarshipName`, `scholarshipDealine`, `scholarshipLogo`, `scholarshipCover`, `scholarshipDescription`, `scholarshipDocuments`, `totalApplicants`, `totalApproved`) VALUES
-(17, 'Win Gachalian', '2025-05-13', 'https://tlisrihwtsvpkvbsohcj.supabase.co/storage/v1/object/public/scholarship-files/sponsor-1746191419439-b551b67f-df77-4d57-959f-7ee9757bd417.jpg', 'https://tlisrihwtsvpkvbsohcj.supabase.co/storage/v1/object/public/scholarship-files/cover-1746191419439-c47a634e-223c-4296-8f57-b8b1ebf37bc5.jpg', 'hahahahaha', '[{\"label\":\"COR\"}]', 0, 0);
+INSERT INTO `scholarships` (`scholarshipId`, `scholarshipName`, `scholarshipDealine`, `scholarshipLogo`, `scholarshipCover`, `scholarshipApplicationForm`, `scholarshipDescription`, `scholarshipDocuments`, `totalApplicants`, `totalApproved`) VALUES
+(24, 'Win Gachalian', '2025-05-31', 'https://res.cloudinary.com/ddhubrtxy/image/upload/v1746712770/scholarship-files/Win%20Gachalian-Logo-1746712759505-448a438d-a231-434a-bd97-297ace03c990.jpg', 'https://res.cloudinary.com/ddhubrtxy/image/upload/v1746712770/scholarship-files/Win%20Gachalian-Cover-1746712761720-d33d2333-5f97-4cc2-aff4-7dd7109fa57a.jpg', 'https://res.cloudinary.com/ddhubrtxy/raw/upload/v1746712771/scholarship-files/Win%20Gachalian-Form-1746712762515-0279c1b5-5de6-437a-b375-2fd0405edb6d', 'Sigma Boooooooyyyyyyyyyy', '[]', 0, 0),
+(25, 'Win Gachalian', '2025-05-31', 'https://res.cloudinary.com/ddhubrtxy/image/upload/v1746712817/scholarship-files/Win%20Gachalian-Logo-1746712806012-9a49053a-7c7e-4f19-8e9d-c7b9643a2497.jpg', 'https://res.cloudinary.com/ddhubrtxy/image/upload/v1746712818/scholarship-files/Win%20Gachalian-Cover-1746712809024-213fc033-9c2c-406e-ab78-91c4466ebf7f.jpg', 'https://res.cloudinary.com/ddhubrtxy/raw/upload/v1746712819/scholarship-files/Win%20Gachalian-Form-1746712809932-dea0a983-be3c-4874-a63e-956ac00aed23', 'Sigma Boooooooyyyyyyyyyy', '[{\"label\":\"Certificate of Registration\"},{\"label\":\"Report Card\"}]', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -129,13 +131,6 @@ CREATE TABLE `user_account` (
   `address` varchar(255) DEFAULT NULL,
   `birthDay` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `user_account`
---
-
-INSERT INTO `user_account` (`userID`, `firstName`, `middleName`, `lastName`, `userEmail`, `userPassword`, `gender`, `contactNumber`, `address`, `birthDay`) VALUES
-(21, 'Neal', 'Juliano', 'Ramos', 'nealramos72@gmail.com', '$2b$10$A.Dz2EDQqnhkmD8xtmchH.wN4A6WlhJWX6V8jh3iz/.BewAWdydta', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -276,13 +271,13 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `scholarships`
 --
 ALTER TABLE `scholarships`
-  MODIFY `scholarshipId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `scholarshipId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `security_code`
 --
 ALTER TABLE `security_code`
-  MODIFY `codeId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `codeId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `user_account`

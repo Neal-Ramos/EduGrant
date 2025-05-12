@@ -224,6 +224,7 @@ function DrawerDemo({ title }) {
         );
         if (res.status === 200) {
           console.log(res);
+          setshowRegister(false)
           setShowOTP(true);
         }
       } catch (error) {
@@ -535,7 +536,7 @@ function DrawerDemo({ title }) {
                     Enter your details to create a new account.
                   </DrawerDescription>
                 </DrawerHeader>
-                <form onSubmit={RegisterhandleSubmit}>
+                <form>
                   <div className="p-4 flex gap-3 flex-col">
                     <span className="flex flex-col items-end justify-center gap-2">
                       <div className="flex items-center justify-center gap-2 w-full">
@@ -633,7 +634,7 @@ function DrawerDemo({ title }) {
                     </div>
                   </div>
                   <DrawerFooter>
-                    <Button disabled={(loading, terms)} type="submit">
+                    <Button disabled={(loading, terms)} type="submit" onClick={RegisterhandleSubmit}>
                       {loading ? "Loading.." : "Register"}
                     </Button>
 
