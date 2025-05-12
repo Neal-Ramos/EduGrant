@@ -16,7 +16,6 @@ const transporter = nodemailer.createTransport({
 exports.registerAccounts = async (req, res) => {
     try {
         const {firstName, middleName, lastName, userEmail, userPassword} = req.body
-        const hashedPass = await bcrypt.hash(userPassword, 10)
 
         if(!firstName || !lastName || !middleName || !userEmail || !userPassword){return res.status(400).json({message : "Please Fillout all Credentials!!!"})}
         if(userPassword.length < 8 || userEmail.charAt(0) === userEmail.charAt(0).toUpperCase() || !userEmail.includes("@")){return res.status(400).json({message : "Invalid Password: Must be 8 Characters Or Invalid Email"})}
@@ -66,11 +65,7 @@ exports.registerAccounts = async (req, res) => {
 exports.loginAccounts =  async (req, res) => {
     try {
         const {userEmail, userPassword} = req.body
-        if(!userEmail || !userPassword){
-            return res.status(400).json({
-                message : "Please Fillout all Credentials!!!"
-            })
-        }
+        if(!userEmail || !userPassword){return res.status(400).json({message : "Please Fillout all Credentials!!!"})}
         const checkEmailExist = await userAccountsModels.getUserByEmail(userEmail)
         if(checkEmailExist.length === 0){return res.status(401).json({success: false, message : "Invalid Credentials!!"})}
         try {
@@ -91,10 +86,7 @@ exports.loginAccounts =  async (req, res) => {
                     const expiryDate = new Date(element.expiryDate).getTime();
                     return expiryDate > Date.now();
                 });
-                
-                if (validCodeExists) {
-                return res.status(200).json({ success: true, message: "Email already Sent!!" });
-                }
+                if (validCodeExists) {return res.status(200).json({ success: true, message: "Email already Sent!!" });}
             }//code expired sends another code
             transporter.sendMail(mailOptions,async function (error, info) {
                 await securityCodeModels.insertCode("login", userEmail, sendCode, expiresAt)
@@ -119,22 +111,20 @@ exports.codeAuthentication = async (req, res) => {
             const selectMatchCode = await securityCodeModels.selectCodeByCodeEmailOrigin(code, userEmail, origin)
             if(selectMatchCode.length > 0){
                 const expiryDate = new Date(selectMatchCode[0].expiryDate).getTime();
-                if(expiryDate > Date.now()){
-                    const getUser = await userAccountsModels.getUserByEmail(userEmail)
-                    const userID = getUser[0].userID
-                    const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "7d"})//expires TOKEN
-                    res.cookie("token", token, {
-                        httpOnly:true,
-                        secure:process.env.NODE_ENV === "production",
-                        sameSite:"strict",
-                        maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
-                        path:"/"
-                    })
-                    await securityCodeModels.deleteCodeByEmailOrigin(userEmail, origin)
-                    const userData = getUser[0]
-                    return res.status(200).json({success:true, message:"Login Success!", userData})
-                }
-                return res.status(403).json({success:false, message:"Expired Code!!"})
+                if(expiryDate < Date.now()){return res.status(403).json({success:false, message:"Expired Code!!"})}
+                const getUser = await userAccountsModels.getUserByEmail(userEmail)
+                const userID = getUser[0].userID
+                const token = jwt.sign({userID}, process.env.JWT_SECRET, {expiresIn: "7d"})//expires TOKEN
+                res.cookie("token", token, {
+                    httpOnly:true,
+                    secure:process.env.NODE_ENV === "production",
+                    sameSite:"strict",
+                    maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
+                    path:"/"
+                })
+                const deleteCode = await securityCodeModels.deleteCodeByEmailOrigin(userEmail, origin)
+                const userData = getUser[0]
+                return res.status(200).json({success:true, message:"Login Success!", userData})
             }
             return res.status(403).json({success:false, message:"Invalid Code"})
         } catch (error) {
