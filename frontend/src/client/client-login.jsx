@@ -155,11 +155,7 @@ function DrawerDemo({ title }) {
     const data = { userEmail: email, userPassword: password };
     try {
       if (validateFormLogin()) {
-        const res = await axios.post(
-          `${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/login`,
-          data,
-          { withCredentials: true }
-        );
+        const res = await axios.post(`${import.meta.env.VITE_EXPRESS_API_EDUGRANT}/login`,data,{ withCredentials: true });
         if (res.status === 200) {
           toast("Code sent to email", {
             description: "Please check your inbox for the verification code.",
@@ -223,6 +219,9 @@ function DrawerDemo({ title }) {
           data
         );
         if (res.status === 200) {
+          toast("Code sent to email", {
+            description: "Please check your inbox for the verification code.",
+          });
           console.log(res);
           setslideLogin(false)
           setShowOTP(true);
@@ -264,6 +263,7 @@ function DrawerDemo({ title }) {
         setshowRegister(false);
         setshowLogin(true);
         setLoading(false);
+        toast("Account Created!!");
       }
       setLoading(false);
     } catch (error) {
