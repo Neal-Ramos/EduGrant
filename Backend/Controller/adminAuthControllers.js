@@ -1,17 +1,12 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const crypto = require("crypto")
-const nodemailer = require("nodemailer")
 const adminAccountsModels = require("../Models/adminAccountsModels")
 const securityCodeModels = require("../Models/securityCodeModels")
 const { json } = require("stream/consumers")
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.MAILER_EMAIL_CREDENTIAL,
-        pass: process.env.MAILER_SECRET_PASS,
-    },
-});
+const Mailer = require("../config/Mailer")
+const { resolve } = require("path")
+const { rejects } = require("assert")
 exports.adminLogIn = async (req, res) => {
     const {adminEmail, adminPassword} = req.body
     if(!adminEmail || !adminPassword){return res.status(400).json({success:false, message:"Fill All Credentials"})}
@@ -27,19 +22,9 @@ exports.adminLogIn = async (req, res) => {
             text:`Your Admin Login code is ${sendCode} if this is not you please ignore this email!!`,
             html:""
         }
-        transporter.sendMail(mailOptions,async function (error, info) {
-            if (error) {
-                console.log(error)
-                return res.status(500).json({success:false, message:"Email Not Sent!!", error:error.message})
-            }
-            try {
-                await securityCodeModels.insertCode("adminLogin", adminEmail, sendCode, expiresAt)
-                return res.status(200).json({ success: true, message: "Email Sent!!" });
-            } catch (err) {
-                console.error("DB insert error:", err);
-                return res.status(500).json({ success: false, message: "Server Error!" });
-            }
-        });
+        const sendMail = await Mailer.SendMail(mailOptions, "adminLogin", adminEmail, sendCode, expiresAt)
+        if(sendMail.success === false){return res.status(500).json({success:false, message:"Email Not Sent!!", error:error.message})}
+        return res.status(200).json({ success: true, message: "Email Sent!!" });
     } catch (error) {
         return res.status(500).json({success:false, message:error.message})
     }
@@ -62,7 +47,7 @@ exports.adminCodeAuthentication = async (req, res) => {
             maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
             path:"/"
         })
-        await securityCodeModels.deleteCodeByEmailOrigin(adminEmail, origin)
+        securityCodeModels.deleteCodeByEmailOrigin(adminEmail, origin)
         return res.status(200).json({success:true, message:"Login Success!"})
     } catch (error) {
         return res.status(500).json({success:false, message:error.message})

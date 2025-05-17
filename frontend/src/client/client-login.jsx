@@ -257,13 +257,12 @@ function DrawerDemo({ title }) {
         setEmail("");
         setPassword("");
         setOtp("");
-        alert(res.data.message);
         setShowOTP(false);
         setslideLogin(true);
         setshowRegister(false);
         setshowLogin(true);
         setLoading(false);
-        toast("Account Created!!");
+        toast(res.data.message);
       }
       setLoading(false);
     } catch (error) {

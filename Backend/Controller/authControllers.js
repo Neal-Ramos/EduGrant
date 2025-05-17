@@ -4,6 +4,7 @@ const crypto = require("crypto")
 const nodemailer = require("nodemailer")
 const userAccountsModels = require("../Models/userAccountsModels")
 const securityCodeModels = require("../Models/securityCodeModels")
+const Mailer = require("../config/Mailer")
 const { json } = require("stream/consumers")
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -32,7 +33,6 @@ exports.registerAccounts = async (req, res) => {
             text: `Your Registration Code is ${sendCode} if this is not you ignore this email`,
             html:``
         };
-
         const code = await securityCodeModels.getCodeByEmailRegistration(userEmail, "registration")
         if(code.length > 0){
             const validCodeExists = code.some(element => {
@@ -43,19 +43,9 @@ exports.registerAccounts = async (req, res) => {
             return res.status(200).json({ success: true, message: "Email already Sent!!" });
             }
         }//code expired sends another code
-        
-        transporter.sendMail(mailOptions,async function (error, info) {
-            if (error) {
-                return res.status(500).json({success:false, message:"Email Not Sent!!"})
-            }
-            try {
-                await securityCodeModels.insertCode("registration", userEmail, sendCode, expiresAt)
-                return res.status(200).json({ success: true, message: "Email Sent!!" });
-            } catch (err) {
-                console.error("DB insert error:", err);
-                return res.status(500).json({ success: false, message: "Server Error" });
-            }
-        });
+        const SendMail = await Mailer.SendMail(mailOptions, "registration", userEmail, sendCode, expiresAt)
+        if(SendMail.success === false){return res.status(500).json({success:false, message:"Email Not Sent!!"})}
+        return res.status(200).json({ success: true, message: "Email Sent!!" })
     } catch (error) {
         return res.status(500).json({
             success: false, detail:error.message
@@ -88,10 +78,9 @@ exports.loginAccounts =  async (req, res) => {
                 });
                 if (validCodeExists) {return res.status(200).json({ success: true, message: "Email already Sent!!" });}
             }//code expired sends another code
-            transporter.sendMail(mailOptions,async function (error, info) {
-                await securityCodeModels.insertCode("login", userEmail, sendCode, expiresAt)
-                return res.status(200).json({ success: true, message: "Email Sent!!" });
-            });
+            const SendMail = await Mailer.SendMail(mailOptions, "login", userEmail, sendCode, expiresAt)
+            if(SendMail.success === false){return res.status(500).json({success:false, message:"Email Not Sent!!"})}
+            return res.status(200).json({ success: true, message: "Email Sent!!" })
         } catch (error) {
             console.log(error)
         }
