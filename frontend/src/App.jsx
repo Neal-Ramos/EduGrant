@@ -20,8 +20,8 @@ import OpenScholarship from "./admin/scholarship-details";
 import { ThemeProvider } from "./components/ui/darkmode";
 import { Toaster } from "@/components/ui/sonner";
 
-import ProtectedRoutes from "./routes/ProtectedRoutes";
-import ProtectedRoutesAdmin from "./routes/ProtectedRoutesAdmin";
+// import ProtectedRoutes from "./routes/ProtectedRoutes";
+// import ProtectedRoutesAdmin from "./routes/ProtectedRoutesAdmin";
 import AuthProvider from "./context/AuthProvider";
 
 import { NotFoundPage } from "./404";
@@ -31,9 +31,16 @@ function App() {
       <Toaster position="bottom-right" richColors />
       <Routes>
         {/* CLIENT ROUTES */}
-        <Route path="/" element={<AuthProvider><ClientLogin /></AuthProvider>} />
+        <Route
+          path="/"
+          element={
+            <AuthProvider>
+              <ClientLogin />
+            </AuthProvider>
+          }
+        />
         <Route path="/verify-email" element={<VerificationPage />} />
-        <Route element={<AuthProvider><ProtectedRoutes /></AuthProvider>}>
+        {/* <Route element={<AuthProvider><ProtectedRoutes /></AuthProvider>}> */}
         <Route path="/home" element={<ClientHome />}>
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<ClientDashboard />} />
@@ -43,11 +50,11 @@ function App() {
           <Route path="profile" element={<ClientProfile />} />
           <Route path="notification" element={<ClientNotif />} />
         </Route>
-        </Route>
+        {/* </Route> */}
 
         {/* ADMIN ROUTES */}
         <Route path="/admin-login" element={<LoginAdmin />} />
-        <Route element={<ProtectedRoutesAdmin />}>
+        {/* <Route element={<ProtectedRoutesAdmin />}> */}
           <Route path="/admin-home" element={<Home />}>
             <Route index element={<Navigate to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
@@ -60,7 +67,7 @@ function App() {
             />
             <Route path="announcements" element={<Announcements />} />
           </Route>
-        </Route>
+        {/* </Route> */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ThemeProvider>
