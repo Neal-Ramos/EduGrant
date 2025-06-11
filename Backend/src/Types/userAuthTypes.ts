@@ -6,9 +6,33 @@ export interface LoginAccounts {
     userPassword: string
 }
 
-export interface CodeOrigin {
-    code: string,
-    origin: string
+export interface reqUserRegister {
+    studentId: number,
+    studentEmail: string,
+    studentContact: number,
+    studentFirstName: string,
+    studentMiddleName: string,
+    studentLastName: string,
+    studentGender: string,
+    studentAddress: string,
+    studentDateofBirth: Date,
+    studentCourseYearSection: string,
+    studentPassword: string,
+    verificationCode : string
+}
+
+export interface reqSendCodeRegister {
+    studentId: number,
+    studentEmail: string,
+    studentContact: number,
+    studentFirstName: string,
+    studentMiddleName: string,
+    studentLastName: string,
+    studentGender: string,
+    studentAddress: string,
+    studentDateofBirth: Date,
+    studentCourseYearSection: string
+    studentPassword: string,
 }
 
 export interface LoginCodeAuth {
@@ -21,7 +45,7 @@ export interface LoginCodeAuth {
 export interface RegisterCodeAuth {
     code: string,
     origin: string,
-    firstName: string,
+    firstName: string, 
     middleName: string,
     lastName: string,
     userEmail: string,

@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { json, Request, Response } from "express"
 import crypto from "crypto"
 import { sign, verify } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -6,52 +6,43 @@ import { Mailer } from "../Config/mailer"
 import { getUserByEmail, getUserByID, insertNewUser } from "../Models/userAccountsModels"
 import { deleteCodeByEmailOrigin, getCodeByEmailRegistration, selectCodeByCodeEmailOrigin, selectExistingCodeByEmailOrigin } from "../Models/securityCodeModels"
 import * as Types from "../Types/userAuthTypes";
+import { error } from "console";
 
 export const registerAccounts = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {firstName, middleName, lastName, userEmail, userPassword} = req.body
-
-        if(!firstName || !lastName || !middleName || !userEmail || !userPassword){
-            res.status(400).json({message : "Please Fillout all Credentials!!!"});
+        const origin = req.body.origin;
+        const { studentId, studentEmail, studentContact,
+            studentFirstName, studentMiddleName, studentLastName, studentGender, studentAddress,
+            studentDateofBirth, studentCourseYearSection, studentPassword, verificationCode } = JSON.parse(req.body.data) as Types.reqUserRegister;
+        // console.log(studentId, studentEmail, studentContact,
+        //     studentFirstName, studentMiddleName, studentLastName, studentGender, studentAddress,
+        //     studentDateofBirth, studentCourseYearSection, studentPassword, verificationCode)
+        if(!verificationCode || !origin || !studentId 
+            || !studentEmail || !studentContact 
+            || !studentPassword || !studentFirstName 
+            || !studentMiddleName || !studentLastName || !studentGender 
+            || !studentDateofBirth || !studentAddress || !studentCourseYearSection ){
+            res.status(400).json({success: false, message:"Fill all Credentials!"});
             return;
         }
-        if(userPassword.length < 8 || userEmail.charAt(0) === userEmail.charAt(0).toUpperCase() || !userEmail.includes("@")){
-            res.status(400).json({message : "Invalid Password: Must be 8 Characters Or Invalid Email"});
+        const checkCode = await selectCodeByCodeEmailOrigin(verificationCode , studentEmail, origin)
+        if(checkCode.length === 0){
+            res.status(400).json({success:false, message:"Invalid Code!!"})
+        }
+        const expiryDate = new Date(checkCode[0].expiryDate).getTime();
+        if(expiryDate < Date.now()){
+            res.status(400).json({success:false, message:"Code Expired!!"});
             return;
         }
-        
-        const checkIfExistingEmail = await getUserByEmail(userEmail)
-        if (checkIfExistingEmail.length > 0) {
-            res.status(400).json({ message: "Email Already Exists!!" });
+        const HashedPassword = await bcrypt.hash(studentPassword, 10)
+        const newUser = await insertNewUser(studentId, studentEmail, studentContact,
+            HashedPassword, studentFirstName, studentMiddleName, studentLastName, studentGender,
+            studentDateofBirth, JSON.stringify(studentAddress), JSON.stringify(studentCourseYearSection));
+        if(newUser === 0){
+            res.status(500).json({success: false, message:"Database Error!!"});
             return;
         }
-
-        const sendCode = crypto.randomBytes(3).toString("hex");
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-        const mailOptions = {
-            from: process.env.MAILER_EMAIL_CREDENTIAL,
-            to: userEmail,
-            subject: "Registration Code",
-            text: `Your Registration Code is ${sendCode} if this is not you ignore this email`,
-            html:``
-        };
-        const code = await getCodeByEmailRegistration(userEmail, "registration")
-        if(code.length > 0){
-            const validCodeExists = code.some(element => {
-                const expiryDate = new Date(element.expiryDate).getTime();
-                return expiryDate > Date.now();
-                });
-            if (validCodeExists) {
-                res.status(200).json({ success: true, message: "Email already Sent!!" });
-                return;
-            }
-        }
-        const SendMail = await Mailer(mailOptions, "registration", userEmail, sendCode, expiresAt)
-        if(SendMail.success === false){
-            res.status(500).json({success:false, message:"Email Not Sent!!"});
-            return;
-        }
-        res.status(200).json({ success: true, message: "Email Sent!!" })
+        res.status(200).json({success: true, message:"Account Created!!!"});
     } catch (error) {
         res.status(500).json({
             success: false, detail:(error as {message: string}).message
@@ -111,82 +102,48 @@ export const loginAccounts = async (req: Request, res: Response): Promise<void>=
         });
     }
 }
-export const codeAuthentication = async (req: Request, res: Response): Promise<void>=> {
-    const { code, origin} = req.body as Types.CodeOrigin;
-    if(!code || !origin){
-        res.status(400).json({success:false, message:"Enter A Valid Code!!"});
-        return;
+export const sendAuthCode = async (req: Request, res: Response): Promise<void>=> {
+    try {
+        const origin: string = req.body.origin;
+        const { studentId, studentEmail, studentContact,
+            studentFirstName, studentMiddleName, studentLastName, studentGender, studentAddress,
+            studentDateofBirth, studentCourseYearSection, studentPassword } = JSON.parse(req.body.data) as Types.reqSendCodeRegister;
+        if( !origin || !studentId 
+            || !studentEmail || !studentContact 
+            || !studentPassword || !studentFirstName 
+            || !studentMiddleName || !studentLastName || !studentGender 
+            || !studentDateofBirth || !studentAddress || !studentCourseYearSection ){
+            res.status(400).json({success: false, message:"Fill all Credentials!"});
+            return;
+        }
+        if(studentPassword.length < 8 || studentEmail.charAt(0) === studentEmail.charAt(0).toUpperCase() || !studentEmail.includes("@")){
+            res.status(400).json({message : "Invalid Password: Must be 8 Characters Or Invalid Email"});
+            return;
+        }
+        const checkIfExistingEmail = await getUserByEmail(studentEmail)
+        if (checkIfExistingEmail.length > 0) {
+            res.status(400).json({ message: "Email Already Exists!!" });
+            return;
+        }
+        const sendCode = crypto.randomBytes(3).toString("hex");
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+        const mailOptions = {
+            from: process.env.MAILER_EMAIL_CREDENTIAL,
+            to: studentEmail,
+            subject: "Registration Code",
+            text: `Your Registration Code is ${sendCode} if this is not you ignore this email`,
+            html:``
+        };
+        const SendMail = await Mailer(mailOptions, origin, studentEmail, sendCode, expiresAt)
+        if(SendMail.success === false){
+            res.status(500).json({success:false, message:"Email Not Sent!!"});
+            return;
+        }
+        res.status(200).json({ success: true, message: "Email Sent!!" })
+    } catch (error) {
+        res.status(500).json({success: false, error});
+        console.log(error)
     }
-    if(origin === "login"){
-        const {code, origin, userEmail, userPassword} = req.body as Types.LoginCodeAuth;
-        if(!userEmail || !userPassword){
-            res.status(400).json({success:false, message:"Fillout All Credentials!!"});
-            return;
-        }
-        try {
-            const selectMatchCode = await selectCodeByCodeEmailOrigin(code, userEmail, origin)
-            if(selectMatchCode.length > 0){
-                const expiryDate = new Date(selectMatchCode[0].expiryDate).getTime();
-                if(expiryDate < Date.now()){
-                    res.status(403).json({success:false, message:"Expired Code!!"});
-                    return;
-                }
-                const getUser = await getUserByEmail(userEmail)
-                const userID = getUser[0].userID
-                const secret = process.env.JWT_SECRET as string;
-                const token = sign({userID}, secret, {expiresIn: "7d"})//expires TOKEN
-                res.cookie("token", token, {
-                    httpOnly:true,
-                    secure:process.env.NODE_ENV === "production",
-                    sameSite:"strict",
-                    maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
-                    path:"/"
-                })
-                const deleteCode = await deleteCodeByEmailOrigin(userEmail, origin)
-                const userData = getUser[0]
-                res.status(200).json({success:true, message:"Login Success!", userData})
-                return;
-            }
-            res.status(403).json({success:false, message:"Invalid Code"});
-            return;
-        } catch (error) {
-            res.status(500).json({success:false, message:"server error", error})
-            return;
-        }
-    }
-    if(origin == "registration"){
-        const {code,origin ,firstName , middleName, lastName, userEmail, userPassword} = req.body as Types.RegisterCodeAuth;
-        if(!firstName || !middleName || !lastName || !userEmail || !userPassword){
-            res.status(400).json({success:false, message:"Fill all Credentials"});
-            return;
-        }
-        const checkDuplicate = await getUserByEmail(userEmail)
-        if(checkDuplicate.length > 0){
-            res.status(400).json({success:false, message:"This Email is Already used"});
-            return;
-        }
-        try {
-            const selectMatchCode = await selectCodeByCodeEmailOrigin(code, userEmail, origin)
-            if(selectMatchCode.length > 0){
-                const expiryDate = new Date(selectMatchCode[0].expiryDate).getTime();
-                if(expiryDate > Date.now()){
-                    const encryptPassword = await bcrypt.hash(userPassword, 10)
-                    await insertNewUser(firstName, middleName, lastName, userEmail, encryptPassword)
-                    await deleteCodeByEmailOrigin(userEmail, origin)
-                    res.status(201).json({success:true, message:"Account Created!!"});
-                    return;
-                }
-                res.status(400).json({success:false, message:"Expired Code!!"});
-                return;
-            }
-            res.status(400).json({success:false, message:"Invalid Code!!"});
-            return;
-        } catch (error) {
-            res.status(500).json({success:false, error});
-            return;
-        }
-    }
-    res.status(400).json({success:false, message:"Invalid Code Origin"});
 }
 export const tokenAuthetication = async (req: Request, res: Response): Promise<void>=> {
     const cookieToken = req.cookies.token

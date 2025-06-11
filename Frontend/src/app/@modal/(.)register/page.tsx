@@ -17,6 +17,7 @@ import {
   StepperTitle,
   StepperTrigger,
 } from "../../../components/ui/stepper";
+import axios, { AxiosError } from 'axios';
 const steps = [
   {
     step: 1,
@@ -52,6 +53,7 @@ import { registerData } from "./data-types";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import EmailVerification from "./email-verification";
+import { promises } from "dns";
 
 export default function RegisterClient() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -87,9 +89,35 @@ export default function RegisterClient() {
   });
   const router = useRouter();
   const [open, setOpen] = useState(true);
-  const onSubmit = (data: registerData) => {
-    alert(JSON.stringify(data, null, 2));
+  const onSubmit = async (data: registerData) => {
+    try {
+      const data = watch();
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/registerAccount`, {origin: "register", data:JSON.stringify(data)}, {withCredentials:true});
+      if(res.status === 200){
+        alert(res.data.message);
+        router.push("/login")
+      }
+    } catch (error: any) {
+      console.log(error)
+        alert(error.response.data.message)
+    } finally {
+
+    }
   };
+
+  const HandleSendCode = async () => {
+    try {
+      const data = watch();
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/sendAuthCode`,{origin: "register", data:JSON.stringify(data)},{withCredentials: true})
+      if(res.status === 200){
+        setCurrentStep((prev) => prev + 1);
+        alert(res.data.message)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   useEffect(() => {
     if (!open) {
       const timer = setTimeout(() => {
@@ -207,14 +235,14 @@ export default function RegisterClient() {
               {currentStep < steps.length && (
                 <Button
                   onClick={
-                    currentStep === 1 || currentStep === 2 || currentStep === 3
+                    currentStep === 1 || currentStep === 2
                       ? handleSubmit(() => {
                           setCurrentStep((prev) => prev + 1);
-                          if(currentStep === 3){
-                            console.log("Send Code")
-                          }
                         })
-                      : () => setCurrentStep((prev) => prev + 1)
+                      : () => {
+                        HandleSendCode()
+                        // setCurrentStep((prev) => prev + 1)
+                      }
                   }
                 >
                   Next
