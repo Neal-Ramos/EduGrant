@@ -207,9 +207,12 @@ export default function RegisterClient() {
               {currentStep < steps.length && (
                 <Button
                   onClick={
-                    currentStep === 1 || currentStep === 2
+                    currentStep === 1 || currentStep === 2 || currentStep === 3
                       ? handleSubmit(() => {
                           setCurrentStep((prev) => prev + 1);
+                          if(currentStep === 3){
+                            console.log("Send Code")
+                          }
                         })
                       : () => setCurrentStep((prev) => prev + 1)
                   }
