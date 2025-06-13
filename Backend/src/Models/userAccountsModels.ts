@@ -6,6 +6,10 @@ export const getUserByEmail = async (userEmail: string): Promise<UserAccountData
     const [rows] = await pool.query<UserAccountData[]>("SELECT * FROM user_account WHERE userEmail = ?", [userEmail]);
     return rows;
 }
+export const getUserByStudentId = async (studentId: string): Promise<UserAccountData[]>=> {
+    const [rows] = await pool.query<UserAccountData[]>("SELECT * FROM user_account WHERE BINARY studentId = ?", [studentId, ]);
+    return rows;
+}
 export const insertNewUser= async (
     studentId: number, studentEmail: string, studentContact: number,
     HashedPassword: string, studentFirstName: string, studentMiddleName: string, studentLastName: string, studentGender: string,

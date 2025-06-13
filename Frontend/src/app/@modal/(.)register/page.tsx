@@ -17,7 +17,7 @@ import {
   StepperTitle,
   StepperTrigger,
 } from "../../../components/ui/stepper";
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 const steps = [
   {
     step: 1,
@@ -92,7 +92,7 @@ export default function RegisterClient() {
   const onSubmit = async (data: registerData) => {
     try {
       const data = watch();
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/registerAccount`, {origin: "register", data:JSON.stringify(data)}, {withCredentials:true});
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/registerAccount`, {data:JSON.stringify(data)}, {withCredentials:true});
       if(res.status === 200){
         alert(res.data.message);
         router.push("/login")
@@ -108,7 +108,7 @@ export default function RegisterClient() {
   const HandleSendCode = async () => {
     try {
       const data = watch();
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/sendAuthCode`,{origin: "register", data:JSON.stringify(data)},{withCredentials: true})
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/sendAuthCodeRegister`,{origin: "register", data:JSON.stringify(data)},{withCredentials: true})
       if(res.status === 200){
         setCurrentStep((prev) => prev + 1);
         alert(res.data.message)

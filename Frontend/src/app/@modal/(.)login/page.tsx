@@ -40,6 +40,9 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { watch } from "fs";
+
+import axios from "axios";
 
 export default function LoginClient() {
   type LoginDetails = {
@@ -62,7 +65,7 @@ export default function LoginClient() {
       verificationCode: "",
     },
   });
-  const onSubmit = (data: LoginDetails) => {
+  const onSubmit = async (data: LoginDetails) => {
     if (data.remember) {
       localStorage.setItem("rememberedId", data.id);
       localStorage.setItem("rememberMe", "true");
@@ -70,7 +73,18 @@ export default function LoginClient() {
       localStorage.removeItem("rememberedId");
       localStorage.removeItem("rememberMe");
     }
-    alert(JSON.stringify(data, null, 2));
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/loginAccounts`, 
+        {studentId: data.id, userPassword: data.password, code: data.verificationCode}, 
+        {withCredentials:true});
+      if(res.status === 200){
+        alert(res.data.message)
+        router.push("/");
+      }
+    } catch (error: any) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
   };
   const router = useRouter();
   const [open, setOpen] = useState(true);
@@ -113,6 +127,17 @@ export default function LoginClient() {
     const s = (secs % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
+  const handleSendCode = async (data: LoginDetails) => {
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/sendAuthCodeLogin`, { studentId:data.id, userPassword:data.password}, {withCredentials:true});
+      if(res.status === 200){
+        setCurrentStep((prev) => prev + 1);
+        alert(res.data.message)
+      }
+    } catch (error: any) {
+      alert(error.response.data.message)
+    }
+  }
 
   const handleResend = () => {
     // TODO: trigger actual resend code logic here
@@ -259,9 +284,7 @@ export default function LoginClient() {
                   <Button
                     onClick={
                       currentStep === 1
-                        ? handleSubmit(() => {
-                            setCurrentStep((prev) => prev + 1);
-                          })
+                        ? handleSubmit(handleSendCode)
                         : () => setCurrentStep((prev) => prev + 1)
                     }
                     className="w-full"

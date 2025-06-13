@@ -1,3 +1,4 @@
+import { OkPacket } from "mysql2";
 import {pool} from "../Config/dbConnect";
 import { SecurityCodeData } from "../Types/ModelsTypes";
 
@@ -16,7 +17,7 @@ export const selectCodeByCodeEmailOrigin = async (code:string, userEmail:string,
         [code, userEmail, origin]);
     return result;
 }
-export const deleteCodeByEmailOrigin = async (userEmail:string, origin:string) => {
+export const deleteCodeByEmailOrigin = async (userEmail:string, origin:string)=> {
     const [result] = await pool.query("DELETE FROM security_code WHERE receiver = ? AND origin = ?",
         [userEmail, origin]);
     return result;

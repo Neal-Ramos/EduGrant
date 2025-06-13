@@ -2,8 +2,9 @@ import { JwtPayload } from "jsonwebtoken";
 
 
 export interface LoginAccounts {
-    userEmail: string,
-    userPassword: string
+    studentId: string,
+    userPassword: string,
+    code: string
 }
 
 export interface reqUserRegister {
@@ -33,6 +34,11 @@ export interface reqSendCodeRegister {
     studentDateofBirth: Date,
     studentCourseYearSection: string
     studentPassword: string,
+}
+
+export interface reqSendCodeLogin {
+    studentId: string,
+    userPassword: string
 }
 
 export interface LoginCodeAuth {
