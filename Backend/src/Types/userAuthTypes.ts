@@ -7,17 +7,29 @@ export interface LoginAccounts {
     code: string
 }
 
+export interface StudentAddress {
+  province: string;
+  city: string;
+  barangay: string;
+}
+
+export interface CourseYearSection {
+  course: string;
+  year: string;
+  section: string;
+}
+
 export interface reqUserRegister {
-    studentId: number,
+    studentId: string,
     studentEmail: string,
-    studentContact: number,
+    studentContact: string,
     studentFirstName: string,
     studentMiddleName: string,
     studentLastName: string,
     studentGender: string,
-    studentAddress: string,
+    studentAddress: StudentAddress,
     studentDateofBirth: Date,
-    studentCourseYearSection: string,
+    studentCourseYearSection: CourseYearSection,
     studentPassword: string,
     verificationCode : string
 }

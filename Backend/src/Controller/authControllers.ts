@@ -1,4 +1,4 @@
-import { json, Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import crypto from "crypto"
 import { sign, verify } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -10,9 +10,9 @@ import { error } from "console";
 import { UserAccountData } from "../Types/ModelsTypes";
 import { OkPacket } from "mysql2";
 
-export const registerAccounts = async (req: Request, res: Response): Promise<void> => {
+export const registerAccounts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const origin = req.body.origin;
+        const origin = "register";
         const { studentId, studentEmail, studentContact,
             studentFirstName, studentMiddleName, studentLastName, studentGender, studentAddress,
             studentDateofBirth, studentCourseYearSection, studentPassword, verificationCode } = JSON.parse(req.body.data) as Types.reqUserRegister;
@@ -36,19 +36,17 @@ export const registerAccounts = async (req: Request, res: Response): Promise<voi
         const HashedPassword = await bcrypt.hash(studentPassword, 10)
         const newUser = await insertNewUser(studentId, studentEmail, studentContact,
             HashedPassword, studentFirstName, studentMiddleName, studentLastName, studentGender,
-            studentDateofBirth, JSON.stringify(studentAddress), JSON.stringify(studentCourseYearSection));
+            studentDateofBirth, studentAddress, studentCourseYearSection);
         if(newUser === 0){
             res.status(500).json({success: false, message:"Database Error!!"});
             return;
         }
         res.status(200).json({success: true, message:"Account Created!!!"});
     } catch (error) {
-        res.status(500).json({
-            success: false, detail:(error as {message: string}).message
-        })
+        next(error);
     }
 }
-export const loginAccounts = async (req: Request, res: Response): Promise<void>=> {
+export const loginAccounts = async (req: Request, res: Response, next: NextFunction): Promise<void>=> {
     try {
         const origin: string = "login";
         const {studentId, userPassword, code} = req.body as Types.LoginAccounts
@@ -57,7 +55,7 @@ export const loginAccounts = async (req: Request, res: Response): Promise<void>=
             return;
         }
         const user = await getUserByStudentId(studentId);
-        const checkCode = await selectCodeByCodeEmailOrigin(code, user[0].userEmail, origin)
+        const checkCode = await selectCodeByCodeEmailOrigin(code, user[0].studentEmail, origin)
         if(checkCode.length === 0){
             res.status(401).json({success: false, message: "Invalid Code!!"});
             return;
@@ -71,12 +69,12 @@ export const loginAccounts = async (req: Request, res: Response): Promise<void>=
         if(!isMatch){
             res.status(500).json({success: false, message: "Wrong Password!!"});
         }
-        const deleteCode = await deleteCodeByEmailOrigin(user[0].userEmail, origin);
-        if((deleteCode as {affectedRows: number}).affectedRows === 0){
+        const deleteCode = await deleteCodeByEmailOrigin(user[0].studentEmail, origin);
+        if(deleteCode === 0){
             res.status(500).json({success: false, message: "Server Errror"})
             return;
         }
-        const payload = {role: "user"};
+        const payload = {role: "user", studentId: user[0].userId};
         const token = sign(payload, (process.env.JWT_SECRET as any), {expiresIn: "7d"})
         res.cookie("token", token, {
             httpOnly: true,
@@ -87,12 +85,10 @@ export const loginAccounts = async (req: Request, res: Response): Promise<void>=
         });
         res.status(200).json({success: true, message: "Login Success!!"})
     } catch (error) {
-        res.status(500).json({
-            success: false, detail:(error as {message: string}).message
-        });
+        next(error);
     }
 }
-export const sendAuthCodeRegister = async (req: Request, res: Response): Promise<void>=> {
+export const sendAuthCodeRegister = async (req: Request, res: Response, next: NextFunction): Promise<void>=> {
     try {
         const origin: string = "register";
         const { studentId, studentEmail, studentContact,
@@ -131,10 +127,10 @@ export const sendAuthCodeRegister = async (req: Request, res: Response): Promise
         }
         res.status(200).json({ success: true, message: "Email Sent!!" })
     } catch (error) {
-        res.status(500).json({success: false, error});
+        next(error);
     }
 }
-export const sendAuthCodeLogin = async(req: Request, res: Response): Promise<void>=> {
+export const sendAuthCodeLogin = async(req: Request, res: Response, next: NextFunction): Promise<void>=> {
     try {
         const origin: string = "login";
         const {studentId, userPassword} = req.body as Types.reqSendCodeLogin
@@ -143,21 +139,25 @@ export const sendAuthCodeLogin = async(req: Request, res: Response): Promise<voi
             return;
         };
         const checkUserExist = await getUserByStudentId(studentId);
+        if(checkUserExist.length === 0){
+            res.status(401).json({success: false, message: "Invalid Student ID/Password!"});
+            return;
+        }
         const isMatch = await bcrypt.compare(userPassword, checkUserExist[0].userPassword);
         if(!isMatch){
             res.status(401).json({success: false, message:"Invalid Student ID/Password!"});
             return;
         }
         const sendCode = crypto.randomBytes(3).toString("hex");
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
+        const expiresAt = new Date(Date.now() + 2 * 60 * 1000)
         const mailOptions = {
             from:process.env.MAILER_EMAIL_CREDENTIAL,
-            to:checkUserExist[0].userEmail,
+            to:checkUserExist[0].studentEmail,
             subject:"Login Code",
             text:`Your Login Code is ${sendCode} if this isn't you Ignore this Email!!`,
             html:""
         }
-        const checkExistingCode = await selectExistingCodeByEmailOrigin(checkUserExist[0].userEmail, origin);
+        const checkExistingCode = await selectExistingCodeByEmailOrigin(checkUserExist[0].studentEmail, origin);
         if(checkExistingCode.length > 0){
             const expiryDate = new Date(checkExistingCode[0].expiryDate).getTime();
             if(expiryDate > Date.now()){
@@ -165,16 +165,17 @@ export const sendAuthCodeLogin = async(req: Request, res: Response): Promise<voi
                 return;
             }
         }
-        const SendCode = await Mailer(mailOptions, origin, checkUserExist[0].userEmail, sendCode, expiresAt)
+        const SendCode = await Mailer(mailOptions, origin, checkUserExist[0].studentEmail, sendCode, expiresAt)
         if(SendCode.success === false){
             res.status(500).json({success:false, message:"Server Error"})
         }
         res.status(200).json({success: true, message:"Code Send!!"});
     } catch (error) {
-        res.status(500).json({success: false, message:(error as {message: string}).message})
+        console.log(error)
+        next(error);
     }
 }
-export const tokenAuthetication = async (req: Request, res: Response): Promise<void>=> {
+export const tokenAuthetication = async (req: Request, res: Response, next: NextFunction): Promise<void>=> {
     const cookieToken = req.cookies.token
     if (!cookieToken) {
         res.status(401).json({success: false, message: "No Token Provided or Invalid Format"});
@@ -190,8 +191,6 @@ export const tokenAuthetication = async (req: Request, res: Response): Promise<v
         const userData = await getUserByID(verifiedUser.userID)
         res.status(200).json({success: true, userData})
     } catch (error) {
-        res.status(401).json({
-            success: false, message:"Session Expired"
-        })
+        next(error);
     }
 }

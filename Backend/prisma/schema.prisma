@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model admin_accounts {
+  adminId       Int    @id @default(autoincrement())
+  adminEmail    String @unique
+  adminPassword String
+}
+
+model announcements {
+  announcementId      Int      @id @default(autoincrement())
+  announcementTitle   String
+  announcementDate    DateTime
+  announcementFile    Json
+  announcementContent Json
+}
+
+model scholarships {
+  scholarshipId              Int                         @id @default(autoincrement())
+  scholarshipName            String
+  scholarshipDealine         DateTime
+  scholarshipLogo            String
+  scholarshipCover           String
+  scholarshipApplicationForm String
+  scholarshipDescription     String
+  scholarshipDocuments       Json
+  totalApplicants            Int
+  totalApproved              Int
+  scholarships_archive       scholarships_archive[]
+  user_application           user_application[]
+  user_application_approved  user_application_approved[]
+  user_application_missing   user_application_missing[]
+  user_application_rejected  user_application_rejected[]
+}
+
+model scholarships_archive {
+  archiveId              Int          @id @default(autoincrement())
+  scholarshipId          Int
+  scholarshipName        String
+  scholarshipDeadline    DateTime
+  scholarshipLogo        String
+  scholarshipCover       String
+  scholarshipDescription String
+  scholarshipDocuments   Json
+  scholarshipApplicants  Int
+  scholarshipApproved    Int
+  scholarship            scholarships @relation(fields: [scholarshipId], references: [scholarshipId])
+}
+
+model security_code {
+  codeId     Int      @id @default(autoincrement())
+  origin     String
+  receiver   String
+  code       String
+  expiryDate DateTime
+}
+
+model user_accounts {
+  userId                    Int                         @id @default(autoincrement())
+  contactNumber             String
+  userPassword              String
+  firstName                 String
+  middleName                String
+  lastName                  String
+  gender                    String
+  dateOfBirth               DateTime
+  address                   Json
+  studentCourseYearSection  Json
+  studentEmail              String                      @unique
+  studentId                 String                      @unique
+  user_application          user_application[]
+  user_application_approved user_application_approved[]
+  user_application_missing  user_application_missing[]
+  user_application_rejected user_application_rejected[]
+}
+
+model user_application {
+  applicationId             Int                         @id @default(autoincrement())
+  userId                    Int
+  scholarshipId             Int
+  status                    String
+  SID                       scholarships                @relation(fields: [scholarshipId], references: [scholarshipId])
+  UID                       user_accounts               @relation(fields: [userId], references: [userId])
+  user_application_approved user_application_approved[]
+  user_application_missing  user_application_missing[]
+  user_application_rejected user_application_rejected[]
+}
+
+model user_application_approved {
+  approved      Int              @id @default(autoincrement())
+  applicationId Int
+  userId        Int
+  scholarshipId Int
+  status        String
+  AID           user_application @relation(fields: [applicationId], references: [applicationId])
+  SID           scholarships     @relation(fields: [scholarshipId], references: [scholarshipId])
+  UID           user_accounts    @relation(fields: [userId], references: [userId])
+}
+
+model user_application_rejected {
+  approved      Int              @id @default(autoincrement())
+  applicationId Int
+  userId        Int
+  scholarshipId Int
+  status        String
+  AID           user_application @relation(fields: [applicationId], references: [applicationId])
+  SID           scholarships     @relation(fields: [scholarshipId], references: [scholarshipId])
+  UID           user_accounts    @relation(fields: [userId], references: [userId])
+}
+
+model user_application_missing {
+  approved      Int              @id @default(autoincrement())
+  applicationId Int
+  userId        Int
+  scholarshipId Int
+  status        String
+  missingFile   Json
+  AID           user_application @relation(fields: [applicationId], references: [applicationId])
+  SID           scholarships     @relation(fields: [scholarshipId], references: [scholarshipId])
+  UID           user_accounts    @relation(fields: [userId], references: [userId])
+}

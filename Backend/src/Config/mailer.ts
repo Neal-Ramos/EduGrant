@@ -19,7 +19,10 @@ export const Mailer = (mailOptions: object, origin: string, adminEmail: string, 
             }
             try {
                 await insertCode(origin, adminEmail, sendCode, expiresAt);
-                return resolve({success:true});
+                if(insertCode.length> 0){
+                    return resolve({success:true});
+                }
+                throw new Error("Database did not Work");
             } catch (error) {
                 console.error("DB insert error:", error);
                 resolve({success:false, error});

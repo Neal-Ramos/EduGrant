@@ -91,7 +91,8 @@ export default function RegisterClient() {
   const [open, setOpen] = useState(true);
   const onSubmit = async (data: registerData) => {
     try {
-      const data = watch();
+      // const data = watch();
+      console.log(data)
       const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/registerAccount`, {data:JSON.stringify(data)}, {withCredentials:true});
       if(res.status === 200){
         alert(res.data.message);
@@ -99,7 +100,6 @@ export default function RegisterClient() {
       }
     } catch (error: any) {
       console.log(error)
-        alert(error.response.data.message)
     } finally {
 
     }

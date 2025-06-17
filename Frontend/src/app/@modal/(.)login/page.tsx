@@ -134,8 +134,16 @@ export default function LoginClient() {
         setCurrentStep((prev) => prev + 1);
         alert(res.data.message)
       }
-    } catch (error: any) {
-      alert(error.response.data.message)
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || "Something went wrong.");
+        console.log(error.response);
+      } else if (error instanceof Error) {
+        alert(error.message);
+        console.log(error.stack);
+      } else {
+        alert("An unexpected error occurred.");
+      }
     }
   }
 
