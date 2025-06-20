@@ -63,7 +63,11 @@ export const adminAddScholarships = async (req: Request, res: Response): Promise
         coverResult.secure_url,
         formResult.secure_url
       );
-      res.status(200).json({success: true,message: 'Scholarship Added!',});
+      if(!insertScholarshipsData){
+        res.status(500).json({success: false, message: "Database Errro"});
+        return;
+      }
+      res.status(200).json({success: true,message: 'Scholarship Added!'});
     } catch (error) {
       res.status(500).json({success: false,message: 'Scholarship Not Added!',error: (error as {message: string}).message,});
     }

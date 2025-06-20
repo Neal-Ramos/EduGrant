@@ -31,8 +31,8 @@ model scholarships {
   scholarshipApplicationForm String
   scholarshipDescription     String
   scholarshipDocuments       Json
-  totalApplicants            Int
-  totalApproved              Int
+  totalApplicants            Int                         @default(0)
+  totalApproved              Int                         @default(0)
   scholarships_archive       scholarships_archive[]
   user_application           user_application[]
   user_application_approved  user_application_approved[]

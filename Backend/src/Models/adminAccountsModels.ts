@@ -1,12 +1,20 @@
-import { RowDataPacket } from "mysql2";
-import { pool } from "../Config/dbConnect";
-import { AdminData } from "../Types/ModelsTypes";
+import { admin_accounts, PrismaClient } from "../generated/prisma";
+const prisma = new PrismaClient();
 
-export const getAdminByEmailPassword = async (adminEmail: string, adminPassword: string): Promise<AdminData[]>=> {
-    const [rows]  = await pool.query<AdminData[]>("SELECT * FROM admin_accounts WHERE BINARY adminEmail = ? AND BINARY adminPassword = ?", [adminEmail, adminPassword]);
-    return rows;
+export const getAdminByEmailPassword = async (adminEmail: string, adminPassword: string): Promise<admin_accounts[]>=> {
+    const restult = prisma.admin_accounts.findMany({
+        where:{
+            adminEmail: adminEmail,
+            adminPassword: adminPassword
+        }
+    });
+    return restult;
 }
-export const getAdminByEmail = async (adminEmail: string): Promise<AdminData[]>=> {
-    const [rows] = await pool.query<AdminData[]>("SELECT * FROM admin_accounts WHERE BINARY email = ?", [adminEmail]);
-    return rows;
+export const getAdminByEmail = async (adminEmail: string): Promise<admin_accounts[]>=> {
+    const result = prisma.admin_accounts.findMany({
+        where:{
+            adminEmail: adminEmail
+        }
+    });
+    return result;
 }
