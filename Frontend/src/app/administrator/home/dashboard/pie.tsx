@@ -58,9 +58,6 @@ export default function ChartPieDonutText() {
     <Card className="bg-background/40 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01]">
       <CardHeader>
         <CardTitle>Application Status Overview</CardTitle>
-        <CardDescription>
-          Visual representation of approved, pending, and rejected applications.
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer

@@ -1,60 +1,71 @@
-import { Activity, CheckCheck, CloudAlert, TrendingUp } from "lucide-react";
-
-const summaryData = [
-  {
-    title: "Total Applications",
-    value: 500,
-    icon: <TrendingUp className="h-6 w-6" />,
-    color: "blue",
-  },
-  {
-    title: "Submitted",
-    value: 500,
-    icon: <CloudAlert className="h-6 w-6" />,
-    color: "amber",
-  },
-  {
-    title: "Approved",
-    value: 500,
-    icon: <CheckCheck className="h-6 w-6" />,
-    color: "green",
-  },
-  {
-    title: "Active Scholarship",
-    value: 500,
-    icon: <Activity className="h-6 w-6" />,
-    color: "violet",
-  },
-];
+import {
+  Activity,
+  CheckCheck,
+  CloudAlert,
+  CloudUpload,
+  Plus,
+  TrendingUp,
+} from "lucide-react";
 
 export default function ApplicationSummary() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {summaryData.map((item, index) => (
-        <div
-          key={index}
-          className={`group p-6 rounded-2xl border border-border bg-background/40 backdrop-blur-md shadow-md transition-all duration-300 
-            hover:-translate-y-1 hover:shadow-2xl`}
-        >
-          <div className="flex items-center gap-4">
-            <div
-              className={`p-3 rounded-xl bg-${item.color}-100 dark:bg-${item.color}-900/20 text-${item.color}-900 dark:text-${item.color}-300 shadow-inner`}
-            >
-              {item.icon}
-            </div>
-            <div>
-              <h4 className="text-sm font-semibold text-muted-foreground">
-                {item.title}
-              </h4>
-              <p
-                className={`text-4xl font-bold text-${item.color}-900 dark:text-${item.color}-300`}
-              >
-                {item.value}
-              </p>
-            </div>
-          </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="space-y-2 bg-background/40 flex flex-col justify-center px-3 py-3 rounded-xl border shadow-sm">
+        <div className="flex justify-between items-start ">
+          <span className="border p-2 rounded-md">
+            <TrendingUp />
+          </span>
+          <p className="flex text-xs border p-1 rounded-sm bg-green-800/10 text-blue-600">
+            + 100 today
+          </p>
         </div>
-      ))}
+        <div className="flex justify-between items-end">
+          <p className="text-sm text-muted-foreground">Total Application</p>
+          <p className="text-3xl font-semibold text-blue-600">500</p>
+        </div>
+      </div>
+      <div className="space-y-2 bg-background/40 flex flex-col justify-center px-3 py-3 rounded-xl border shadow-sm">
+        <div className="flex justify-between items-start ">
+          <span className="border p-2 rounded-md">
+            <CheckCheck />
+          </span>
+          <p className="flex text-xs border p-1 rounded-sm bg-green-800/10 text-green-600">
+            + 100 today
+          </p>
+        </div>
+        <div className="flex justify-between items-end">
+          <p className="text-sm text-muted-foreground">Approved</p>
+          <p className="text-3xl font-semibold text-green-600">500</p>
+        </div>
+      </div>
+      <div className="space-y-2 bg-background/40 flex flex-col justify-center px-3 py-3 rounded-xl border shadow-sm">
+        <div className="flex justify-between items-start ">
+          <span className="border p-2 rounded-md">
+            <CloudUpload />
+          </span>
+          <p className="flex text-xs border p-1 rounded-sm bg-green-800/10 text-yellow-500">
+            + 100 today
+          </p>
+        </div>
+        <div className="flex justify-between items-end">
+          <p className="text-sm text-muted-foreground">Submitted</p>
+          <p className="text-3xl font-semibold text-yellow-500">500</p>
+        </div>
+      </div>
+      <div className="space-y-2 bg-background/40 flex flex-col justify-center px-3 py-3 rounded-xl border shadow-sm">
+        <div className="flex justify-between items-start ">
+          <span className="border p-2 rounded-md">
+            <Activity />
+          </span>
+          <p className="flex text-xs border p-1 rounded-sm bg-green-800/10 text-green-600">
+            + 1 today
+          </p>
+        </div>
+        <div className="flex justify-between items-end">
+          <p className="text-sm text-muted-foreground">Active Scholarships</p>
+          <p className="text-3xl font-semibold text-green-600">3</p>
+        </div>
+      </div>
     </div>
   );
 }

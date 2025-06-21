@@ -2,7 +2,6 @@
 
 import ChartPieDonutText from "./pie";
 import { ChartBarMultiple } from "./bar";
-import CalendarDashboard from "./calendar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import TableDashboard from "./table";
@@ -12,14 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Breadcrumb,
@@ -34,41 +26,18 @@ import ApplicationSummary from "./summary";
 import { Button } from "@/components/ui/button";
 import {
   Activity,
-  Archive,
   Bell,
   ChevronDown,
+  FileText,
+  GraduationCap,
   LogOut,
   Megaphone,
   Plus,
+  SquarePen,
 } from "lucide-react";
-const dashboardCards = [
-  {
-    title: "Scholarship",
-    description: "Card Description",
-    buttonLabel: "Add",
-    icon: <Plus />,
-  },
-  {
-    title: "Report",
-    description: "Card Description",
-    buttonLabel: "Generate",
-    icon: <Activity />,
-  },
-  {
-    title: "Announcement",
-    description: "Card Description",
-    buttonLabel: "Add",
-    icon: <Plus />,
-  },
-  {
-    title: "Archive",
-    description: "Card Description",
-    buttonLabel: "View",
-    icon: <Archive />,
-  },
-];
+import CalendarComponent from "./origin-calendar";
 
-export default function ChartBarLabelCustom() {
+export default function AdminDashboard() {
   return (
     <div className="pl-1 pr-2 your-class">
       <header className="flex w-full items-center justify-between your-class2 border-b rounded-md top-2 relative">
@@ -125,37 +94,85 @@ export default function ChartBarLabelCustom() {
           <ModeToggle />
         </div>
       </header>
-      <div className="p-10">
-        <ApplicationSummary />
-      </div>
-      <div className=" grid grid-cols-3 gap-5  px-10">
-        <div className="grid grid-cols-2 gap-3">
-          {dashboardCards.map((card, index) => (
-            <Card
-              key={index}
-              className="bg-background/40 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01]"
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-1">
-                  {card.title}
-                </CardTitle>
-                <CardDescription>{card.description}</CardDescription>
-              </CardHeader>
-              <CardFooter>
-                <Button className="w-full">
-                  {card.buttonLabel} {card.icon}
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-        <ChartBarMultiple />
-        <ChartPieDonutText />
 
-        <div className=" col-span-2 ">
-          <TableDashboard />
+      <div className=" grid grid-cols-3  gap-5 px-5 mt-10">
+        <div className=" flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-semibold">Hello Admin Jerome...</h1>
+            <p className="text-sm text-muted-foreground">
+              Tuesday, August 6th 2025
+            </p>
+          </div>
+          <div className="space-x-3">
+            <div className="flex items-center gap-2"></div>
+          </div>
         </div>
-        <CalendarDashboard />
+        <div></div>
+        <div className="flex gap-3">
+          <Button variant="outline" className="flex-1">
+            <SquarePen /> Post a scholarship
+          </Button>
+          <Button variant="outline" className="flex-1">
+            <Activity /> Generate Report
+          </Button>
+        </div>
+
+        <div className="col-span-2 grid gap-5">
+          <ApplicationSummary />
+          <div className="grid grid-cols-2 gap-5">
+            <ChartBarMultiple />
+            <ChartPieDonutText />
+          </div>
+        </div>
+        <div>
+          <CalendarComponent />
+        </div>
+        <div className="col-span-3">
+          <Tabs defaultValue="tab-1">
+            <TabsList className="bg-background/40 mb-3 h-auto -space-x-px p-0 shadow-xs rtl:space-x-reverse w-full">
+              <TabsTrigger
+                value="tab-1"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e flex-1"
+              >
+                <Megaphone
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
+                Announcements
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="tab-2"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e flex-1"
+              >
+                <Megaphone
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
+                Active Scholarship
+              </TabsTrigger>
+              <TabsTrigger
+                value="tab-3"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e flex-1"
+              >
+                Recent Application
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="tab-1">
+              <p className="text-muted-foreground p-4 pt-1 text-center text-xs">
+                No Announcements Yet
+              </p>
+            </TabsContent>
+            <TabsContent value="tab-2">
+              <CalendarComponent />
+            </TabsContent>
+            <TabsContent value="tab-3">
+              <TableDashboard />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

@@ -37,10 +37,7 @@ export function ChartBarMultiple() {
     <Card className="bg-background/40 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01]">
       <CardHeader>
         <CardTitle>Scholarship Application Summary</CardTitle>
-        <CardDescription>
-          A breakdown of received and approved applications for each
-          scholarship.
-        </CardDescription>
+       
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

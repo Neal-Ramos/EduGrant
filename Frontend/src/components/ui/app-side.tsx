@@ -64,53 +64,63 @@ const sidebarData = {
     {
       title: "Application Processing",
       items: [
-        {
-          title: "All Applications",
-          url: "/administrator/home/applications/all",
-          icon: ClipboardList,
-        },
+        // {
+        //   title: "All Applications",
+        //   url: "/administrator/home/applications/all",
+        //   icon: ClipboardList,
+        // },
         {
           title: "Review Applications",
           url: "/administrator/home/applications/review",
           icon: Eye,
         },
-        {
-          title: "Track Status",
-          url: "/administrator/home/applications/track",
-          icon: CheckCircle2,
-        },
+        // {
+        //   title: "Track Status",
+        //   url: "/administrator/home/applications/track",
+        //   icon: CheckCircle2,
+        // },
       ],
     },
     {
-      title: "User & Access Control",
+      title: "Updates",
       items: [
         {
-          title: "Manage Students",
-          url: "/administrator/home/users/students",
+          title: "Annoucements",
+          url: "/administrator/home/announcements",
           icon: Users,
         },
-        {
-          title: "Admin Settings",
-          url: "/administrator/home/users/admin-settings",
-          icon: Settings,
-        },
       ],
     },
-    {
-      title: "Support",
-      items: [
-        {
-          title: "Help Center",
-          url: "/administrator/home/support/help-center",
-          icon: HelpCircle,
-        },
-        {
-          title: "Contact Support",
-          url: "/administrator/home/support/contact",
-          icon: Mail,
-        },
-      ],
-    },
+    // {
+    //   title: "User & Access Control",
+    //   items: [
+    //     {
+    //       title: "Manage Students",
+    //       url: "/administrator/home/users/students",
+    //       icon: Users,
+    //     },
+    //     {
+    //       title: "Admin Settings",
+    //       url: "/administrator/home/users/admin-settings",
+    //       icon: Settings,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Support",
+    //   items: [
+    //     {
+    //       title: "Help Center",
+    //       url: "/administrator/home/support/help-center",
+    //       icon: HelpCircle,
+    //     },
+    //     {
+    //       title: "Contact Support",
+    //       url: "/administrator/home/support/contact",
+    //       icon: Mail,
+    //     },
+    //   ],
+    // },
   ],
 };
 

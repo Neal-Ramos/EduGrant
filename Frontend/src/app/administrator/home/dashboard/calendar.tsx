@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function CalendarDashboard() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
-    <Card className="bg-background/40 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01]">
+    <Card className="bg-background/40 h-full w-full">
       <CardContent>
         <Calendar
           mode="single"
