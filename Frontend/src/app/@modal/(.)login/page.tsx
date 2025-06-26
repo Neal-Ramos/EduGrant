@@ -42,6 +42,7 @@ import {
 import Link from "next/link";
 import { watch } from "fs";
 
+import { useUserStore } from "@/app/userData/User";
 import axios from "axios";
 
 export default function LoginClient() {
@@ -65,6 +66,8 @@ export default function LoginClient() {
       verificationCode: "",
     },
   });
+  const {user, setUser, clearUser} = useUserStore();
+
   const onSubmit = async (data: LoginDetails) => {
     if (data.remember) {
       localStorage.setItem("rememberedId", data.id);
@@ -78,8 +81,11 @@ export default function LoginClient() {
         {studentId: data.id, userPassword: data.password, code: data.verificationCode}, 
         {withCredentials:true});
       if(res.status === 200){
-        alert(res.data.message)
-        router.push("/");
+        setOpen(false);
+        setUser(res.data.userData)
+        setTimeout(() => {
+          router.replace("/home/dashboard");
+        }, 1000)
       }
     } catch (error: any) {
       console.log(error);
@@ -134,16 +140,9 @@ export default function LoginClient() {
         setCurrentStep((prev) => prev + 1);
         alert(res.data.message)
       }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        alert(error.response?.data?.message || "Something went wrong.");
-        console.log(error.response);
-      } else if (error instanceof Error) {
-        alert(error.message);
-        console.log(error.stack);
-      } else {
-        alert("An unexpected error occurred.");
-      }
+    } catch (error: any) {
+      console.log(error)
+      error.response.data.message? alert(error.response.data.message) : alert("Something Went Wrong!!!!")
     }
   }
 

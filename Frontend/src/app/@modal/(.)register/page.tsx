@@ -99,7 +99,7 @@ export default function RegisterClient() {
         router.push("/login")
       }
     } catch (error: any) {
-      console.log(error)
+      error.response.data.message? alert(error.response.data.message) : alert("Something Went Wrong!!!");
     } finally {
 
     }
@@ -113,8 +113,10 @@ export default function RegisterClient() {
         setCurrentStep((prev) => prev + 1);
         alert(res.data.message)
       }
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      error.response.data.message? alert(error.response.data.message) : alert("Something Went Wrong!!!");
+    }finally{
+      
     }
   };
 

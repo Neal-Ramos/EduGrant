@@ -75,6 +75,9 @@ export default function TrackScholarship() {
                 variant="ghost"
                 className="w-full justify-start gap-2"
                 size="sm"
+                onClick={() => {
+                  console.log("click")
+                }}
               >
                 <LogOut className="h-4 w-4" />
                 Logout

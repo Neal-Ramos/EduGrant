@@ -128,8 +128,14 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
+import { useUserStore } from "@/app/userData/User";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 export default function ClientDashboard() {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const user = useUserStore((state) => state.user);
+  const {clearUser} = useUserStore()
 
   const handleCalendarChange = (
     _value: string | number,
@@ -142,6 +148,20 @@ export default function ClientDashboard() {
     } as React.ChangeEvent<HTMLSelectElement>;
     _e(_event);
   };
+
+  const router = useRouter()
+  const HandleLogout = async () => {
+    try {
+      console.log(user)
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/logout`, {id:2}, {withCredentials: true});
+      if(res.status === 200){
+        clearUser()
+        router.replace("/")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="pl-1 pr-2 your-class min-h-screen">
       <header className="flex w-full items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
@@ -171,7 +191,7 @@ export default function ClientDashboard() {
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" className="gap-2">
-                Jerome Tecson <ChevronDown className="h-4 w-4" />
+                {(user as {firstName: string})?.firstName} {(user as {lastName: string})?.lastName} <ChevronDown className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-40">
@@ -179,6 +199,7 @@ export default function ClientDashboard() {
                 variant="ghost"
                 className="w-full justify-start gap-2"
                 size="sm"
+                onClick={HandleLogout}
               >
                 <LogOut className="h-4 w-4" />
                 Logout

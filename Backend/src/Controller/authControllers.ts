@@ -26,7 +26,8 @@ export const registerAccounts = async (req: Request, res: Response, next: NextFu
         }
         const checkCode = await selectCodeByCodeEmailOrigin(verificationCode , studentEmail, origin)
         if(checkCode.length === 0){
-            res.status(400).json({success:false, message:"Invalid Code!!"})
+            res.status(400).json({success:false, message:"Invalid Code!!"});
+            return;
         }
         const expiryDate = new Date(checkCode[0].expiryDate).getTime();
         if(expiryDate < Date.now()){
@@ -41,6 +42,7 @@ export const registerAccounts = async (req: Request, res: Response, next: NextFu
             res.status(500).json({success: false, message:"Database Error!!"});
             return;
         }
+        deleteCodeByEmailOrigin(studentEmail, origin)
         res.status(200).json({success: true, message:"Account Created!!!"});
     } catch (error) {
         next(error);
@@ -83,7 +85,20 @@ export const loginAccounts = async (req: Request, res: Response, next: NextFunct
             sameSite: "strict",
             path:"/"
         });
-        res.status(200).json({success: true, message: "Login Success!!"})
+        const safeData = {
+            contactNumber: user[0].contactNumber,
+            firstName: user[0].firstName,
+            middleName: user[0].middleName,
+            lastName: user[0].lastName,
+            gender: user[0].gender,
+            dateOfBirth: user[0].dateOfBirth,
+            address: user[0].address,
+            studentCourseYearSection: user[0].studentCourseYearSection,
+            studentEmail: user[0].studentEmail,
+            studentId: user[0].studentId
+        }
+
+        res.status(200).json({success: true, userData: safeData})
     } catch (error) {
         next(error);
     }
