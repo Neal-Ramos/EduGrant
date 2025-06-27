@@ -4,6 +4,6 @@ import { adminLogout } from "../Controller/adminUserControllers";
 const AdminUserRoutes = Router();
 
 
-AdminUserRoutes.post("/adminAddScholarships", adminLogout);
+AdminUserRoutes.post("/adminLogout", adminLogout);
 
 export default AdminUserRoutes;

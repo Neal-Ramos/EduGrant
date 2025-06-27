@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import BlurText from "@/components/ui/blur";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "../userData/User";
 
 type FormData = {
   username: string;
@@ -17,6 +20,7 @@ type FormData = {
 };
 
 export default function Admin() {
+  const router = useRouter();
   const [showVerification, setShowVerification] = useState(false);
 
   const {
@@ -25,12 +29,36 @@ export default function Admin() {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
+  const {setUser} = useUserStore()
+
+  const onSubmit = async (data: FormData) => {
     if (!showVerification) {
-      // Simulate sending code to email
-      setShowVerification(true);
+      try {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_ADMIN_API}/adminLogin`,
+          {adminPassword: data.password, adminEmail: data.username},
+          {withCredentials: true});
+        if(res.status === 200){
+          alert(res.data.message);
+          setShowVerification(true);
+        }
+      } catch (error: any) {
+        console.log(error)
+        alert(error?.response?.data?.message || "Something Went Wrong!!")
+      }
     } else {
-      alert(JSON.stringify(data, null, 2));
+      try {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_ADMIN_API}/adminCodeAuthentication`,
+          {code: data.code, adminPassword: data.password, adminEmail: data.username},
+          {withCredentials: true}
+        );
+        if(res.status === 200){
+          setUser(res.data.safeData);
+          router.replace("/administrator/home/dashboard");
+        }
+      } catch (error: any) {
+        console.log(error);
+        alert(error?.response?.data?.message)
+      }
     }
   };
 

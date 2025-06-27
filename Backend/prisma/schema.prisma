@@ -11,6 +11,7 @@ datasource db {
 model admin_accounts {
   adminId       Int    @id @default(autoincrement())
   adminEmail    String @unique
+  adminName     String
   adminPassword String
 }
 

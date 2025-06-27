@@ -48,9 +48,9 @@ app.use("/EduGrant",UserAuthRoutes);
 app.use("/EduGrant",UserPostRoutes);
 app.use("/EduGrant",UserUserRoutes);
 
-app.use("/AdminRoutes", AdminAuthRoutes)
-app.use("/AdminRoutes", AdminPostRoutes)
-app.use("/AdminRoutes", AdminUserRoutes)
+app.use("/AdminEduGrant", AdminAuthRoutes)
+app.use("/AdminEduGrant", AdminPostRoutes)
+app.use("/AdminEduGrant", AdminUserRoutes)
 
 app.get("/", (req, res) => {
     res.send("TS Express!!");

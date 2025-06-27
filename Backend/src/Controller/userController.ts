@@ -8,7 +8,7 @@ export const logoutUser = async (req: Request, res: Response, next: NextFunction
         res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
         res.status(200).json({ success: true, message: "Logged out successfully!" });
     } catch (error) {
-        next();
+        next(error);
     }
 }
 
@@ -27,6 +27,6 @@ export const getUserData = async(req: Request, res: Response, next: NextFunction
         }
         res.status(200).json({success: true, getUser})
     } catch (error) {
-        next();
+        next(error);
     }
 }

@@ -36,8 +36,28 @@ import {
   SquarePen,
 } from "lucide-react";
 import CalendarComponent from "./origin-calendar";
+import { useUserStore } from "@/app/userData/User";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function AdminDashboard() {
+  const router = useRouter()
+  interface adminUser {
+    adminEmail: string,
+    adminName: string
+  }
+  const user = useUserStore((state) => state.user) as adminUser;
+  const HandleLogout = async () => {
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_ADMIN_API}/adminLogout`,{},{withCredentials: true});
+      if(res.status === 200){
+        router.replace("/administrator")
+      }
+    } catch (error: any) {
+      alert(error.response.data.message)
+    }
+  }
   return (
     <div className="pl-1 pr-2 your-class">
       <header className="flex w-full items-center justify-between your-class2 border-b rounded-md top-2 relative">
@@ -75,11 +95,11 @@ export default function AdminDashboard() {
                   src={morty.src}
                   alt=""
                 />{" "}
-                Admin 001 <ChevronDown />
+                Admin "{user.adminName || "Not Loged In!!"}" <ChevronDown />
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <Button variant="ghost" className="w-full" size="sm">
+              <Button variant="ghost" className="w-full" size="sm" onClick={HandleLogout}>
                 <LogOut />
                 Logout
               </Button>
@@ -98,7 +118,7 @@ export default function AdminDashboard() {
       <div className=" grid grid-cols-3  gap-5 px-5 mt-10">
         <div className=" flex justify-between items-start">
           <div>
-            <h1 className="text-2xl font-semibold">Hello Admin Jerome...</h1>
+            <h1 className="text-2xl font-semibold">Hello Admin {user?.adminName || ""}</h1>
             <p className="text-sm text-muted-foreground">
               Tuesday, August 6th 2025
             </p>

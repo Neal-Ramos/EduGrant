@@ -66,7 +66,7 @@ export default function LoginClient() {
       verificationCode: "",
     },
   });
-  const {user, setUser, clearUser} = useUserStore();
+  const { setUser } = useUserStore();
 
   const onSubmit = async (data: LoginDetails) => {
     if (data.remember) {
