@@ -153,7 +153,7 @@ export default function ClientDashboard() {
   const HandleLogout = async () => {
     try {
       console.log(user)
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/logout`, {id:2}, {withCredentials: true});
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/logout`, {id:2}, {withCredentials: true});
       if(res.status === 200){
         clearUser()
         router.replace("/")

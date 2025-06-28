@@ -77,7 +77,7 @@ export default function LoginClient() {
       localStorage.removeItem("rememberMe");
     }
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/loginAccounts`, 
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/loginAccounts`, 
         {studentId: data.id, userPassword: data.password, code: data.verificationCode}, 
         {withCredentials:true});
       if(res.status === 200){
@@ -135,7 +135,7 @@ export default function LoginClient() {
   };
   const handleSendCode = async (data: LoginDetails) => {
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/sendAuthCodeLogin`, { studentId:data.id, userPassword:data.password}, {withCredentials:true});
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/sendAuthCodeLogin`, { studentId:data.id, userPassword:data.password}, {withCredentials:true});
       if(res.status === 200){
         setCurrentStep((prev) => prev + 1);
         alert(res.data.message)

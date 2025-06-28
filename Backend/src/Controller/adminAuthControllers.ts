@@ -79,7 +79,7 @@ export const adminCodeAuthentication = async (req: Request, res: Response, next:
             sameSite:"strict",
             maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
             path:"/administrator"
-        })
+        });
         const deleteRecentCode = await deleteCodeByEmailOrigin(adminEmail, "adminLogin");
         const safeData = {
             adminEmail: validAccount[0].adminEmail,
@@ -95,16 +95,23 @@ export const adminTokenAuthentication = async (req: Request, res: Response): Pro
     try {
         const token = req.cookies.token
         if(!token){
-            res.status(400).json({success:false, message:"No token"});
+            res.status(401).json({success:false, message:"No token"});
             return;
         }
         const verifyToken = verify(token, process.env.JWT_SECRET as string) as TokenPayload
+        console.log(verifyToken)
         if(verifyToken.role !== "admin"){
-            res.status(400).json({success:false, message:"Access Prohibited!"});
+            res.status(401).json({success:false, message:"Access Prohibited!"});
             return;
         }
-        res.status(200).json({success:true, message:"Access Granted!"})
-    } catch (error) {
-        res.status(500).json({success:false, message:"Server Error!"})
+        res.status(200).json({success:true, message:"Access Granted!"});
+    } catch (error: any) {
+        if (error.name === "TokenExpiredError") {
+            res.status(401).json({ success: false, message: "Token expired" });
+        } else if (error.name === "JsonWebTokenError") {
+            res.status(401).json({ success: false, message: "Invalid token" });
+        } else {
+            res.status(500).json({ success: false, message: "Server error" });
+        }
     }
 };

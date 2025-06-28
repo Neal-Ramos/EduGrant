@@ -48,13 +48,17 @@ export default function AdminDashboard() {
     adminName: string
   }
   const user = useUserStore((state) => state.user) as adminUser;
+  const { clearUser } = useUserStore();
   const HandleLogout = async () => {
     try {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_ADMIN_API}/adminLogout`,{},{withCredentials: true});
+      console.log(res)
       if(res.status === 200){
+        clearUser();
         router.replace("/administrator")
       }
     } catch (error: any) {
+      console.log(error)
       alert(error.response.data.message)
     }
   }
@@ -95,7 +99,7 @@ export default function AdminDashboard() {
                   src={morty.src}
                   alt=""
                 />{" "}
-                Admin "{user.adminName || "Not Loged In!!"}" <ChevronDown />
+                Admin "{user?.adminName || "Not Loged In!!"}" <ChevronDown />
               </Button>
             </PopoverTrigger>
             <PopoverContent>

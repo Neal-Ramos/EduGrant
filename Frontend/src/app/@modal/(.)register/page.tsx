@@ -93,7 +93,7 @@ export default function RegisterClient() {
     try {
       // const data = watch();
       console.log(data)
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/registerAccount`, {data:JSON.stringify(data)}, {withCredentials:true});
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/registerAccount`, {data:JSON.stringify(data)}, {withCredentials:true});
       if(res.status === 200){
         alert(res.data.message);
         router.push("/login")
@@ -108,7 +108,7 @@ export default function RegisterClient() {
   const HandleSendCode = async () => {
     try {
       const data = watch();
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API}/sendAuthCodeRegister`,{origin: "register", data:JSON.stringify(data)},{withCredentials: true})
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/sendAuthCodeRegister`,{origin: "register", data:JSON.stringify(data)},{withCredentials: true})
       if(res.status === 200){
         setCurrentStep((prev) => prev + 1);
         alert(res.data.message)
