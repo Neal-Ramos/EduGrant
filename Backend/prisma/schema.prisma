@@ -25,11 +25,12 @@ model announcements {
 
 model scholarships {
   scholarshipId              Int                         @id @default(autoincrement())
-  scholarshipName            String
+  scholarshipProvider        String
+  scholarshipTitle            String
   scholarshipDealine         DateTime
   scholarshipLogo            String
   scholarshipCover           String
-  scholarshipApplicationForm String
+  // scholarshipApplicationForm String
   scholarshipDescription     String
   scholarshipDocuments       Json
   totalApplicants            Int                         @default(0)

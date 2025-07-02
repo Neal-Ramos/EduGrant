@@ -18,3 +18,11 @@ export const getAdminByEmail = async (adminEmail: string): Promise<admin_account
     });
     return result;
 }
+export const getAdminById = async (id: number) => {
+    const result = await prisma.admin_accounts.findMany({
+        where:{
+            adminId: id
+        }
+    });
+    return result
+}

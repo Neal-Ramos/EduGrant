@@ -1,7 +1,8 @@
 
 
 export interface adminAddScholarshipsData {
-    newScholarName: string,
+    newScholarTitle: string,
+    newScholarProvider: string,
     newScholarDeadline: Date,
     newScholarDescription: string,
     requirements: object

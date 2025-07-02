@@ -6,6 +6,6 @@ const AdminPostRoutes = Router();
 
 AdminPostRoutes.post("/adminAddScholarships", upload.any() ,adminAddScholarships)
 AdminPostRoutes.post("/getScholarshipsById", GetScholarshipsById)
-AdminPostRoutes.get("/getScholarships", getScholarships)
+AdminPostRoutes.post("/getScholarships", getScholarships)
 
 export default AdminPostRoutes;

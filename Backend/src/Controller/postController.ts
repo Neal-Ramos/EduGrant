@@ -2,8 +2,9 @@ import { Response, Request } from "express"
 import * as Models from "../Models/scholarshipsModels"
 import * as Types from "../Types/userPostTypes"
 
-export const getScholarships = async (req: Request, res: Response): Promise<void>=> {
+export const getAllScholarships = async (req: Request, res: Response): Promise<void>=> {
     try {
+        console.log(req.cookies.token)
         const getAllScholarships = await Models.getAllScholarships()
         res.status(200).json(getAllScholarships)
     } catch (error) {

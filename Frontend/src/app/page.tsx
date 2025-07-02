@@ -32,6 +32,10 @@ import {
 import { Button } from "@/components/ui/button";
 import SpotlightBorderWrapper from "@/components/ui/border";
 import { Separator } from "@/components/ui/separator";
+import { useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "./userData/User";
 const navItems = [
   { label: "Home", icon: Home },
   { label: "Features", icon: Sparkles },
@@ -98,7 +102,23 @@ const howItWorks = [
 ];
 
 export default function LandingPage() {
-  return (
+  const {setUser} = useUserStore()
+  const router = useRouter();
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const validToken = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/tokenValidation`,{},{withCredentials:true});
+        if(validToken.status === 200){
+          setUser(validToken.data.safeData)
+          router.replace("/home/dashboard")
+        }
+      } catch (error: any) {
+        console.log(error?.response?.data?.message || "Something Went Wrong!!!")
+      }
+    };
+    checkToken();
+  }, []);
+return (
     <>
       <div className="relative w-full your-class ">
         <header className="py-8 w-[95%] mx-auto hidden lg:flex justify-between items-center">

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Mailer } from "../Config/mailer";
 import { randomBytes } from "crypto";
 import { sign, verify } from "jsonwebtoken";
-import { getAdminByEmailPassword } from "../Models/adminAccountsModels";
+import { getAdminByEmailPassword, getAdminById } from "../Models/adminAccountsModels";
 import { deleteCodeByEmailOrigin, selectCodeByCodeEmailOrigin, selectExistingCodeByEmailOrigin } from "../Models/securityCodeModels";
 import { TokenPayload } from "../Types/userAuthTypes";
 
@@ -70,13 +70,13 @@ export const adminCodeAuthentication = async (req: Request, res: Response, next:
             res.status(400).json({success:false, message:"Code Expired!!"});
             return;
         }
-        const payload = {role:"admin"} // start token gen
+        const payload = {role:"admin", adminId:validAccount[0].adminId} // start token gen
         const SECRET = process.env.JWT_SECRET as string;
         const token = sign(payload, SECRET,{expiresIn:"7d"})
         res.cookie("token", token, {
             httpOnly:true,
             secure:process.env.NODE_ENV === "production",
-            sameSite:"strict",
+            sameSite:process.env.NODE_ENV === "production"? "none":"lax",
             maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
             path:"/administrator"
         });
@@ -93,18 +93,18 @@ export const adminCodeAuthentication = async (req: Request, res: Response, next:
 
 export const adminTokenAuthentication = async (req: Request, res: Response): Promise<void>=> {
     try {
-        const token = req.cookies.token
+        const token = req.cookies.token;
         if(!token){
             res.status(401).json({success:false, message:"No token"});
             return;
         }
         const verifyToken = verify(token, process.env.JWT_SECRET as string) as TokenPayload
-        console.log(verifyToken)
+        const user = await getAdminById(token.adminId)
         if(verifyToken.role !== "admin"){
             res.status(401).json({success:false, message:"Access Prohibited!"});
             return;
         }
-        res.status(200).json({success:true, message:"Access Granted!"});
+        res.status(200).json({success:true, message:"Access Granted!", safeData: user});
     } catch (error: any) {
         if (error.name === "TokenExpiredError") {
             res.status(401).json({ success: false, message: "Token expired" });

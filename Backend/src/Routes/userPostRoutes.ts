@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { getScholarships, getScholarshipsbyId } from "../Controller/postController";
+import { getAllScholarships, getScholarshipsbyId } from "../Controller/postController";
 
 const UserPostRoutes = Router();
 
-UserPostRoutes.get("/getScholarship", getScholarships);
+UserPostRoutes.get("/getAllScholarships", getAllScholarships);
 UserPostRoutes.post("/getScholarshipsByIdClient", getScholarshipsbyId);
 
 export default UserPostRoutes;

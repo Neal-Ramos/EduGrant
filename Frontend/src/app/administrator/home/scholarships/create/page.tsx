@@ -29,6 +29,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
+import {createScholarships} from "./axios_fetch";
 
 export default function Create() {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -59,8 +60,8 @@ export default function Create() {
     control,
     name: "documents",
   });
-  const onSubmit = (data: FormData) => {
-    alert(JSON.stringify(data, null, 2));
+  const onSubmit = async (data: FormData) => {
+    createScholarships(data)
   };
   const validateAndOpenDrawer = handleSubmit(() => {
     setOpenDrawer(true);

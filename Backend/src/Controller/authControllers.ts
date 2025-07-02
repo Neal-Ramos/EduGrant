@@ -82,7 +82,7 @@ export const loginAccounts = async (req: Request, res: Response, next: NextFunct
             httpOnly: true,
             secure:process.env.NODE_ENV === "production",
             maxAge: 60000 * 60 * 24 * 7,
-            sameSite: "strict",
+            sameSite: process.env.NODE_ENV === "production"? "none":"lax",
             path:"/"
         });
         const safeData = {
@@ -97,7 +97,6 @@ export const loginAccounts = async (req: Request, res: Response, next: NextFunct
             studentEmail: user[0].studentEmail,
             studentId: user[0].studentId
         }
-
         res.status(200).json({success: true, userData: safeData})
     } catch (error) {
         next(error);
@@ -191,20 +190,29 @@ export const sendAuthCodeLogin = async(req: Request, res: Response, next: NextFu
     }
 }
 export const tokenAuthetication = async (req: Request, res: Response, next: NextFunction): Promise<void>=> {
-    const cookieToken = req.cookies.token
-    if (!cookieToken) {
-        res.status(401).json({success: false, message: "No Token Provided or Invalid Format"});
-        return;
-    }
     try {
-        const SECRET = process.env.JWT_SECRET as string
-        const verifiedUser = verify(cookieToken, SECRET) as Types.TokenPayload
-        if(verifiedUser.role === "admin"){
-            res.status(401).json({success:false, message:"Token Prohibited!!!"});
+        const token = req.cookies.token
+        if (!token) {
+            res.status(401).json({success: false, message: "No Token Provided or Invalid Format"});
             return;
         }
+        const SECRET = process.env.JWT_SECRET as string
+        const verifiedUser = verify(token, SECRET) as Types.TokenPayload
         const userData = await getUserByID(verifiedUser.userID)
-        res.status(200).json({success: true, userData})
+        const user = await getUserByID(verifiedUser.userID)
+        const safeData = {
+            contactNumber: user[0].contactNumber,
+            firstName: user[0].firstName,
+            middleName: user[0].middleName,
+            lastName: user[0].lastName,
+            gender: user[0].gender,
+            dateOfBirth: user[0].dateOfBirth,
+            address: user[0].address,
+            studentCourseYearSection: user[0].studentCourseYearSection,
+            studentEmail: user[0].studentEmail,
+            studentId: user[0].studentId
+        }
+        res.status(200).json({success: true, userData, safeData})
     } catch (error) {
         next(error);
     }

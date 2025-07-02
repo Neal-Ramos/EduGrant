@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,23 @@ type FormData = {
 };
 
 export default function Admin() {
+  const {setUser} = useUserStore()
   const router = useRouter();
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const validToken = await axios.post(`${process.env.NEXT_PUBLIC_ADMIN_API}/adminTokenAuthentication`,{},{withCredentials:true});
+        if(validToken.status === 200){
+          setUser(validToken.data.safeData[0]) 
+          router.replace("/administrator/home/dashboard")
+        }
+      } catch (error: any) {
+        console.log(error?.response?.data?.message || "Something Went Wrong!!!");
+        console.log(error)
+      }
+    };
+    checkToken();
+  }, []);
   const [showVerification, setShowVerification] = useState(false);
 
   const {
@@ -28,8 +44,6 @@ export default function Admin() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-
-  const {setUser} = useUserStore()
 
   const onSubmit = async (data: FormData) => {
     if (!showVerification) {

@@ -142,7 +142,7 @@ export default function LoginClient() {
       }
     } catch (error: any) {
       console.log(error)
-      error.response.data.message? alert(error.response.data.message) : alert("Something Went Wrong!!!!")
+      error?.response?.data?.message? alert(error.response.data.message) : alert("Something Went Wrong!!!!")
     }
   }
 

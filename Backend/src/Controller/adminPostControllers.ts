@@ -4,35 +4,37 @@ import cloudinary from "../Config/cloudinary";
 import {v4 as uuidv4} from "uuid";
 import { getAllScholarships, getScholarshipsById, insertScholarships } from "../Models/scholarshipsModels";
 import { createReadStream } from "streamifier";
+import { json } from "stream/consumers";
 
 export const adminAddScholarships = async (req: Request, res: Response): Promise<void>=> {
-    const {
-      newScholarName,
-      newScholarDeadline,
-      newScholarDescription,
-      requirements,
-    } = req.body as adminAddScholarshipsData;
-  
-    const sponsorLogo = (req.files as Express.Multer.File[]).find(file => file.fieldname === 'sponsorLogo');
-    const coverImg = (req.files as Express.Multer.File[]).find(file => file.fieldname === 'coverImg');
-    const applicationForm = (req.files as Express.Multer.File[]).find(file => file.fieldname === 'applicationForm');
-  
-    if (
-      !newScholarName ||
-      !newScholarDeadline ||
-      !newScholarDescription ||
-      !sponsorLogo ||
-      !coverImg ||
-      !applicationForm
-    ) {
-        res.status(400).json({
-        success: false,
-        message: 'Fill all Credentials!',
-      });
-      return;
-    }
-  
     try {
+      const {
+        newScholarTitle,
+        newScholarProvider,
+        newScholarDeadline,
+        newScholarDescription,
+        requirements,
+      } = req.body as adminAddScholarshipsData;
+    
+      const sponsorLogo = (req.files as Express.Multer.File[]).find(file => file.fieldname === 'sponsorLogo');
+      const coverImg = (req.files as Express.Multer.File[]).find(file => file.fieldname === 'coverImg');
+      // const applicationForm = (req.files as Express.Multer.File[]).find(file => file.fieldname === 'applicationForm');
+    
+      if (
+        !newScholarTitle ||
+        !newScholarProvider||
+        !newScholarDeadline ||
+        !newScholarDescription ||
+        !sponsorLogo ||
+        !coverImg 
+        //|| !applicationForm
+      ) {
+          res.status(400).json({
+          success: false,
+          message: 'Fill all Credentials!',
+        });
+        return;
+      }
       const streamUpload = (fileBuffer: any, folderName: any) => {
         return new Promise((resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(
@@ -50,18 +52,18 @@ export const adminAddScholarships = async (req: Request, res: Response): Promise
         });
       };
   
-      const sponsorResult: any = await streamUpload(sponsorLogo.buffer, `${newScholarName}-Logo`);
-      const coverResult: any = await streamUpload(coverImg.buffer, `${newScholarName}-Cover`);
-      const formResult: any = await streamUpload(applicationForm.buffer, `${newScholarName}-Form`);
+      const sponsorResult: any = await streamUpload(sponsorLogo.buffer, `${newScholarTitle}-Logo`);
+      const coverResult: any = await streamUpload(coverImg.buffer, `${newScholarTitle}-Cover`);
 
       const insertScholarshipsData = await insertScholarships(
-        newScholarName,
-        newScholarDeadline,
+        newScholarTitle,
+        newScholarProvider,
+        new Date(newScholarDeadline),
         newScholarDescription,
-        requirements,
+        JSON.parse(req.body.requirements),
         sponsorResult.secure_url,
         coverResult.secure_url,
-        formResult.secure_url
+        // formResult.secure_url
       );
       if(!insertScholarshipsData){
         res.status(500).json({success: false, message: "Database Errro"});
@@ -69,17 +71,17 @@ export const adminAddScholarships = async (req: Request, res: Response): Promise
       }
       res.status(200).json({success: true,message: 'Scholarship Added!'});
     } catch (error) {
+      console.log(error)
       res.status(500).json({success: false,message: 'Scholarship Not Added!',error: (error as {message: string}).message,});
     }
 };
 
 export const getScholarships = async (req: Request, res: Response): Promise<void>=> {
   try {
-      const getScholarshipsData = await getAllScholarships()
-      console.log(getScholarshipsData)
-      res.status(200).json(getScholarshipsData)
+    const getScholarshipsData = await getAllScholarships()
+    res.status(200).json(getScholarshipsData)
   } catch (error) {
-      res.status(500).json({success:false, message:"Internal Server Error!!!", error:(error as {message: string}).message})
+    res.status(500).json({success:false, message:"Internal Server Error!!!", error:(error as {message: string}).message})
   }
 }
 

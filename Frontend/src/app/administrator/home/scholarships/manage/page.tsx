@@ -30,10 +30,10 @@ const headers = [
   { label: "Status" },
   { label: "Deadline" },
 ];
+
 export default function Manage() {
   const { data, loading } = useData();
-  console.log(data);
-
+  console.log(data)
   return (
     <div className="pl-1 pr-2 your-class  h-screen">
       <header className="flex w-full items-center justify-between your-class2 border-b rounded-md top-2 relative">
@@ -93,23 +93,23 @@ export default function Manage() {
                 </TableRow>
               ) : (
                 data.map((row) => (
-                  <TableRow key={row.id}>
+                  <TableRow key={row.scholarshipId}>
                     <TableCell className="font-medium underline">
                       <Link
-                        href={`/administrator/home/scholarships/manage/${row.id}`}
+                        href={`/administrator/home/scholarships/manage/${row.scholarshipId}`}
                         prefetch={true}
                       >
                         {" "}
-                        {row.title}
+                        {row.scholarshipTitle}
                       </Link>
                     </TableCell>
-                    <TableCell className="">{row.provider}</TableCell>
+                    <TableCell className="">{row.scholarshipProvider}</TableCell>
                     <TableCell className="">
                       <Badge className="bg-green-900 text-gray-300">
                         {row.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="">{row.deadline}</TableCell>
+                    <TableCell className="">{row.scholarshipDealine}</TableCell>
                   </TableRow>
                 ))
               )}
