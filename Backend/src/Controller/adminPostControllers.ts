@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { adminAddScholarshipsData, getScholarshipsData } from "../Types/adminPostTypes";
 import cloudinary from "../Config/cloudinary";
 import {v4 as uuidv4} from "uuid";
-import { getAllScholarships, getScholarshipsById, insertScholarships } from "../Models/scholarshipsModels";
+import { deleteScholarshipById, getAllScholarships, getScholarshipsById, insertScholarships } from "../Models/scholarshipsModels";
 import { createReadStream } from "streamifier";
 import { json } from "stream/consumers";
 
@@ -86,15 +86,33 @@ export const getScholarships = async (req: Request, res: Response): Promise<void
 }
 
 export const GetScholarshipsById = async (req: Request, res: Response): Promise<void>=> {
-  const {scholarshipId} = req.body as getScholarshipsData;
-  if(!scholarshipId){
-    res.status(400).json({success:false, message:"No Id"});
-    return;
-  }
   try {
-      const getScholarshipsByIdData = await getScholarshipsById(scholarshipId)
+    const {scholarshipId} = req.body as getScholarshipsData;
+    if(!scholarshipId){
+      res.status(400).json({success:false, message:"No Id"});
+      return;
+    }
+      const getScholarshipsByIdData = await getScholarshipsById(scholarshipId);
       res.status(200).json({success:true, message:"Get Success!", getScholarshipsByIdData});
   } catch (error) {
       res.status(500).json({success:false, message:"Server Error"});
+  }
+}
+
+export const deleteScholarship = async (req: Request, res: Response, next: NextFunction): Promise<void>=>{
+  try {
+    const { scholarshipId } = req.body
+    if(!scholarshipId){
+      res.status(401).json({success: false, message: "No Id Provided!!"});
+      return;
+    }
+    const DeleteScholarship = await deleteScholarshipById(scholarshipId);
+    if(!DeleteScholarship){
+      res.status(401).json({success: false, message: "The Scholarship is Already Deleted!!"});
+      return;
+    }
+    res.status(200).json({success: true, message: "Scholarship Deleted!!"})
+  } catch (error) {
+    next(error)
   }
 }

@@ -42,4 +42,12 @@ export const getScholarshipsById = async (id: number): Promise<scholarships[]>=>
     });
     return result;
 }
+export const deleteScholarshipById = async (scholarshipId: number): Promise<number>=> {
+    const result = await prisma.scholarships.deleteMany({
+        where:{
+            scholarshipId: scholarshipId
+        }
+    });
+    return result.count;
+}
  

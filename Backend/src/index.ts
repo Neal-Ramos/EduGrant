@@ -42,7 +42,7 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use(apiLimiter)
+// app.use(apiLimiter)
 
 app.use("/EduGrant",UserAuthRoutes);
 app.use("/EduGrant",UserPostRoutes);
