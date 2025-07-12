@@ -5,7 +5,13 @@ import { reqUserData } from "../Types/userPostTypes";
 
 export const logoutUser = async (req: Request, res: Response, next: NextFunction): Promise<void>=> {
     try {
-        res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "strict" });
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure:process.env.NODE_ENV === "production",
+            maxAge: 60000 * 60 * 24 * 7,
+            sameSite: process.env.NODE_ENV === "production"? "none":"lax",
+            path:"/"
+        });
         res.status(200).json({ success: true, message: "Logged out successfully!" });
     } catch (error) {
         next(error);

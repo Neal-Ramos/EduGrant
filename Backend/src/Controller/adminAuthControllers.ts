@@ -77,7 +77,7 @@ export const adminCodeAuthentication = async (req: Request, res: Response, next:
             httpOnly:true,
             secure:process.env.NODE_ENV === "production",
             sameSite:process.env.NODE_ENV === "production"? "none":"lax",
-            maxAge:60000 * 60 * 24 * 7, //expires in days// cookies
+            maxAge:60000 * 60 * 24 * 7,
             path:"/administrator"
         });
         const deleteRecentCode = await deleteCodeByEmailOrigin(adminEmail, "adminLogin");

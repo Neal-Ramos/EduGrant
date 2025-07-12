@@ -1,30 +1,46 @@
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  if (pathname.startsWith("/administrator/home")) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API}/adminTokenAuthentication`, {
+        method: "POST",
+        headers: {
+          cookie: request.headers.get("cookie") || "",
+        },
+        credentials:"include"
+      });
+      console.log(res)
+      if (res.status != 200) {
+        return NextResponse.redirect(new URL("/administrator", request.url));
+      }
+    } catch (error) {
+      console.error("Error validating admin token", error);
+      return NextResponse.redirect(new URL("/administrator", request.url));
+    }
+  }
+  if (pathname.startsWith("/home")) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_USER_API}/tokenValidation`, {
+        method: "POST",
+        headers: {
+          cookie: request.headers.get("cookie") || "",
+        },
+        credentials:"include"
+      });
 
-export async function middleware(request: NextRequest){
-    const { pathname } = request.nextUrl;
-    // console.log("👀 Middleware is running!")
-    if(pathname.startsWith("/administrator/home")){
-        try {
-            const ValidToken = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/adminTokenAuthentication`,{},{withCredentials:true});
-            if(ValidToken.status !== 200){
-                return NextResponse.redirect(new URL("/administrator", request.url))
-            }
-        } catch (error) {
-        }
+      if (res.status != 200) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    } catch (error) {
+      console.error("Error validating user token", error);
+      return NextResponse.redirect(new URL("/", request.url));
     }
-    if(pathname.startsWith("/home")){
-        try {
-            const ValidToken = await axios.post(`${process.env.NEXT_PUBLIC_USER_API}/tokenValidation`,{},{withCredentials:true});
-            if(ValidToken.status !== 200){
-                return NextResponse.redirect(new URL("/", request.url))
-            }
-        } catch (error) {
-        }
-    }
-    return NextResponse.next()
+  }
+  return NextResponse.next();
 }
+
 
 export const config = {
     matcher:["/administrator/home/:path*", "/home/:path*"],
